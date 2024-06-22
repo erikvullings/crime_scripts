@@ -71,7 +71,7 @@ class RoutingService {
 
   public href(page: Pages, params = '' as string | number) {
     const dashboard = this.pages.filter((d) => d.id === page).shift();
-    return dashboard ? `#!${dashboard.route.replace(/:\w*/, '')}${params}` : this.defaultRoute;
+    return dashboard ? `#!${dashboard.route.replace(/:\w*/, '')}?${params}` : this.defaultRoute;
   }
 
   public switchTo(

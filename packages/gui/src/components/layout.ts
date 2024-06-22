@@ -6,6 +6,7 @@ import { routingSvc } from '../services/routing-service';
 import { APP_TITLE, MeiosisComponent } from '../services';
 import { SideNav, SideNavTrigger } from './ui/sidenav';
 import { TextInputWithClear } from './ui/text-input-with-clear';
+import { SlimdownView } from 'mithril-ui-form';
 
 export const Layout: MeiosisComponent = () => {
   const style = 'font-size: 2.2rem; width: 4rem;';
@@ -21,7 +22,7 @@ export const Layout: MeiosisComponent = () => {
 
   return {
     view: ({ children, attrs: { state, actions } }) => {
-      const { page, searchFilter, searchResults } = state;
+      const { page, searchFilter, searchResults, model } = state;
       const { changePage, setSearchFilter } = actions;
       const curPage = routingSvc
         .getList()
@@ -124,8 +125,24 @@ export const Layout: MeiosisComponent = () => {
                     searchResults.length > 1 && [m('p', `${searchResults.length} results found`)],
                     searchResults.length > 0 && [
                       m(
-                        'ul',
-                        searchResults.map((r) => m('li', [JSON.stringify(r)]))
+                        'ol',
+                        searchResults.map(({ crimeSceneIdx, resultMd, type }) =>
+                          m('li', [
+                            m(
+                              'a.truncate',
+                              {
+                                style: { cursor: 'pointer' },
+                                href: routingSvc.href(Pages.HOME, `id=${model.crimeScenes[crimeSceneIdx].id}`),
+                                onclick: () => searchDialog.close(),
+                              },
+                              `${model.crimeScenes[crimeSceneIdx].label} > ${type}`
+                            ),
+                            m(SlimdownView, { md: resultMd, removeParagraphs: true }),
+                            // m('span', `Crime scene: ${model.crimeScenes[crimeSceneIdx].label}`),
+                            // m('span', ', '),
+                            // m('span', `Type: ${type}`),
+                          ])
+                        )
                       ),
                     ],
                   ],

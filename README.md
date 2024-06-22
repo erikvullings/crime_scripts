@@ -12,3 +12,10 @@ The application is a mono-repository, developed in TypeScript. It typically cons
 pnpm i
 npm start
 ```
+
+
+## TODO
+
+[ ] When clicking on a search result, navigate to the exact location (add act, phase, activity or condition)
+[ ] Add measures to counteract the activity or condition
+[ ] Translate to Dutch
