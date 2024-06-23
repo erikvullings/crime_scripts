@@ -22,4 +22,5 @@ npm start
 - [x] When clicking on a search result, navigate to the exact location (add act, phase)
 - [x] Add option to specify and view literature
 - [ ] Add measures to counteract the activity or condition
+- [ ] Add option to use it with a case
 - [ ] Translate to Dutch
