@@ -1,5 +1,5 @@
 {
-  "name": "crime scene scripting",
+  "name": "crime_scrips",
   "version": "0.0.1",
   "description": "GUI for creating and editing crime scene scripts",
   "scripts": {

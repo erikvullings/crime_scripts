@@ -13,7 +13,7 @@ config();
 
 const devMode = (process.env as any).NODE_ENV === 'development';
 const isProduction = !devMode;
-const outputPath = resolve(__dirname, isProduction ? '../server/public' : 'dist');
+const outputPath = resolve(__dirname, isProduction ? '../../docs' : 'dist');
 const SERVER = process.env.SERVER;
 const publicPath = isProduction ? 'https://erikvullings.github.io/crime_scripts' : '';
 const APP_TITLE = 'Crime Scripting';
