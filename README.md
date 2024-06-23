@@ -19,7 +19,7 @@ npm start
 - [x] Create project scaffold: Single Page Application with JSON in- and output
 - [x] Create editor for crime scripts: scripts, acts, phases, activities, cast, attributes
 - [x] Add option to add images
-- [ ] Add option to specify and view literature
-- [ ] When clicking on a search result, navigate to the exact location (add act, phase, activity or condition)
+- [x] When clicking on a search result, navigate to the exact location (add act, phase)
+- [x] Add option to specify and view literature
 - [ ] Add measures to counteract the activity or condition
 - [ ] Translate to Dutch

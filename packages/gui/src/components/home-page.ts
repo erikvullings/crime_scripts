@@ -12,10 +12,12 @@ import {
   IconOpts,
   Pages,
 } from '../models';
-import { MeiosisComponent, routingSvc } from '../services';
+import { MeiosisComponent, State, routingSvc } from '../services';
 import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel } from 'mithril-materialized';
 import { FormAttributes, LayoutForm, SlimdownView, UIForm } from 'mithril-ui-form';
-import { labelForm } from '../models/forms';
+import { labelForm, literatureForm } from '../models/forms';
+import { Patch } from 'meiosis-setup/types';
+import { ReferenceListComponent } from './ui/reference';
 
 export const HomePage: MeiosisComponent = () => {
   let id = '';
@@ -33,7 +35,7 @@ export const HomePage: MeiosisComponent = () => {
     },
     view: ({ attrs: { state, actions } }) => {
       id = m.route.param('id') || '';
-      const { model, role } = state;
+      const { model, role, curActIdx, curPhaseIdx } = state;
       const { crimeScenes = [], cast = [], attributes = [] } = model;
       const crimeScene = crimeScenes.find((c) => c.id === id);
 
@@ -78,7 +80,19 @@ export const HomePage: MeiosisComponent = () => {
                       ]
                 ),
               crimeScene &&
-                m('.crime-scene', m(edit ? CrimeSceneEditor : CrimeSceneView, { crimeScene, cast, attributes })),
+                m(
+                  '.crime-scene',
+                  edit
+                    ? m(CrimeSceneEditor, { crimeScene, cast, attributes })
+                    : m(CrimeSceneView, {
+                        crimeScene,
+                        cast,
+                        attributes,
+                        curActIdx,
+                        curPhaseIdx,
+                        update: actions.update,
+                      })
+                ),
             ]
           : [
               isAdmin &&
@@ -207,25 +221,32 @@ export const CrimeSceneView: FactoryComponent<{
   crimeScene: CrimeScene;
   cast: Cast[];
   attributes: CrimeSceneAttributes[];
+  curActIdx?: number;
+  curPhaseIdx?: number;
+  update: (patch: Patch<State>) => void;
 }> = () => {
-  let selectedActId = 0;
-
   return {
-    view: ({ attrs: { crimeScene, cast, attributes } }) => {
-      const { label = '...', acts = [] } = crimeScene;
+    view: ({ attrs: { crimeScene, cast, attributes, curActIdx = 0, curPhaseIdx = 0, update } }) => {
+      const { label = '...', description, literature, acts = [] } = crimeScene;
       const selectedActContent = acts
-        .filter((_, index) => selectedActId === index)
+        .filter((_, index) => curActIdx === index)
         .map(({ label = '...', preparation, preactivity, activity, postactivity }) => {
           preparation.label = 'Preparation phase';
           preactivity.label = 'Preactivity phase';
           activity.label = 'Activity phase';
           postactivity.label = 'Postactivity phase';
           const contentTabs = [preparation, preactivity, activity, postactivity]
-            .filter((ap) => ap && ((ap.activities && ap.activities.length) || (ap.conditions && ap.conditions.length)))
+            // .filter((ap) => ap && ((ap.activities && ap.activities.length) || (ap.conditions && ap.conditions.length)))
             .map(({ label, activities = [], conditions }) => {
               const castIds = Array.from(
                 activities.reduce((acc, { cast: curCast }) => {
                   if (curCast) curCast.forEach((id) => acc.add(id));
+                  return acc;
+                }, new Set<ID>())
+              );
+              const attributeIds = Array.from(
+                activities.reduce((acc, { attributes: curAttr }) => {
+                  if (curAttr) curAttr.forEach((id) => acc.add(id));
                   return acc;
                 }, new Set<ID>())
               );
@@ -240,6 +261,10 @@ ${castIds.map((id) => '- ' + cast.find((cast) => cast.id === id)?.label).join('\
 ##### Conditions
 
 ${conditions.map((cond) => '- ' + cond.label).join('\n')}
+
+##### Attributes
+
+${attributeIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).join('\n')}
 `;
               return {
                 title: label,
@@ -251,9 +276,10 @@ ${conditions.map((cond) => '- ' + cond.label).join('\n')}
             vnode: contentTabs.length
               ? m(Tabs, {
                   tabs: contentTabs.map(
-                    ({ title, md }) =>
+                    ({ title, md }, index) =>
                       ({
                         title,
+                        active: index === curPhaseIdx,
                         vnode: m(SlimdownView, { md }),
                       } as ITabItem)
                   ),
@@ -266,6 +292,23 @@ ${conditions.map((cond) => '- ' + cond.label).join('\n')}
 
       return m('.col.s12', [
         m('h4', label),
+        description && m('p', description),
+        literature &&
+          literature.length > 0 && [
+            m('h5', 'References'),
+            m(ReferenceListComponent, { references: literature }),
+            // m(
+            //   'ol',
+            //   literature.map((l) =>
+            //     m(
+            //       'li',
+            //       m('a', { href: l.url, target: '_blank', alt: l.label }, l.label),
+            //       l.authors && m('span', ', by ' + l.authors),
+            //       l.description && m('p', l.description)
+            //     )
+            //   )
+            // ),
+          ],
         m(
           '.card-container',
           acts.map(({ label = '...', icon, url, description }, index) => {
@@ -291,7 +334,7 @@ ${conditions.map((cond) => '- ' + cond.label).join('\n')}
                 ),
               ]),
               m('.card-content', m(SlimdownView, { md: description })),
-              m('.card-action', m(FlatButton, { label: 'MORE', onclick: () => (selectedActId = index) })),
+              m('.card-action', m(FlatButton, { label: 'MORE', onclick: () => update({ curActIdx: index }) })),
             ]);
           })
         ),
@@ -381,7 +424,11 @@ export const CrimeSceneEditor: FactoryComponent<{
       ];
       return m('.col.s12', [
         m(LayoutForm, {
-          form: [...labelForm, ...actsForm],
+          form: [
+            ...labelForm,
+            ...actsForm,
+            { id: 'literature', type: literatureForm, repeat: true, label: 'References' },
+          ],
           obj: crimeScene,
           onchange: () => {},
         } as FormAttributes<Partial<CrimeScene>>),

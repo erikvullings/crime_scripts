@@ -1,5 +1,12 @@
 import { UIForm } from 'mithril-ui-form';
-import { CastTypeOptions, Cast, CrimeScene, CrimeSceneAttributes, AttributeTypeOptions } from './data-model';
+import {
+  CastTypeOptions,
+  Cast,
+  CrimeScene,
+  CrimeSceneAttributes,
+  AttributeTypeOptions,
+  Literature,
+} from './data-model';
 
 export const castForm = [
   {
@@ -55,3 +62,11 @@ export const labelForm = [
   { id: 'url', type: 'base64', className: 'col s6', label: 'Image' },
   { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
 ] as UIForm<Partial<CrimeScene>>;
+
+export const literatureForm = [
+  { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+  { id: 'label', type: 'text', className: 'col s6', label: 'Title' },
+  { id: 'authors', type: 'text', className: 'col s6', label: 'Authors' },
+  { id: 'url', type: 'url', className: 'col s12', label: 'Link' },
+  { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
+] as UIForm<Partial<Literature>>;

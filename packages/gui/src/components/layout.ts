@@ -126,14 +126,17 @@ export const Layout: MeiosisComponent = () => {
                     searchResults.length > 0 && [
                       m(
                         'ol',
-                        searchResults.map(({ crimeSceneIdx, resultMd, type }) =>
+                        searchResults.map(({ crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
                           m('li', [
                             m(
                               'a.truncate',
                               {
                                 style: { cursor: 'pointer' },
                                 href: routingSvc.href(Pages.HOME, `id=${model.crimeScenes[crimeSceneIdx].id}`),
-                                onclick: () => searchDialog.close(),
+                                onclick: () => {
+                                  searchDialog.close();
+                                  actions.setLocation(model.crimeScenes[crimeSceneIdx].id, actIdx, phaseIdx);
+                                },
                               },
                               `${model.crimeScenes[crimeSceneIdx].label} > ${type}`
                             ),

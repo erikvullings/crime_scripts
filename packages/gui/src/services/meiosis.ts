@@ -28,6 +28,8 @@ export interface State {
   role: UserRole;
   settings: Settings;
   currentCrimeSceneId?: ID;
+  curActIdx?: number;
+  curPhaseIdx?: number;
   searchFilter: string;
   searchResults: SearchResult[];
 }
@@ -45,6 +47,7 @@ export interface Actions {
   login: () => void;
   update: (patch: Patch<State>) => void;
   setSearchFilter: (searchFilter?: string) => Promise<void>;
+  setLocation: (currentCrimeSceneId: ID, actIdx: number, phaseIdx: number) => void;
 }
 
 export type MeiosisComponent<T extends { [key: string]: any } = {}> = FactoryComponent<{
@@ -99,6 +102,9 @@ export const appActions: (cell: MeiosisCell<State>) => Actions = ({ update /* st
     } else {
       update({ searchFilter: undefined });
     }
+  },
+  setLocation: (currentCrimeSceneId, curActIdx, curPhaseIdx) => {
+    update({ currentCrimeSceneId, curActIdx, curPhaseIdx });
   },
 });
 

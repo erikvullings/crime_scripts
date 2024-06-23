@@ -76,7 +76,8 @@ export type Labeled = {
 };
 
 export type Literature = Labeled & {
-  type: LITERATURE_TYPE;
+  authors?: string;
+  type?: LITERATURE_TYPE;
 };
 
 export type CrimeScene = Labeled & {
