@@ -12,3 +12,10 @@ The application is a mono-repository, developed in TypeScript. It typically cons
 pnpm i
 npm start
 ```
+
+## Deployment to GitHub docs
+
+```bash
+pnpm i
+npm run build:domain
+```
