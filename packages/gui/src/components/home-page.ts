@@ -4,6 +4,7 @@ import {
   Activity,
   ActivityTypeOptions,
   Cast,
+  CastType,
   Condition,
   CrimeScene,
   CrimeSceneAttributes,
@@ -11,9 +12,10 @@ import {
   ID,
   IconOpts,
   Pages,
+  attributeTypeToIconMap,
 } from '../models';
 import { MeiosisComponent, State, routingSvc } from '../services';
-import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel } from 'mithril-materialized';
+import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel, IOptions } from 'mithril-materialized';
 import { FormAttributes, LayoutForm, SlimdownView, UIForm } from 'mithril-ui-form';
 import { labelForm, literatureForm } from '../models/forms';
 import { Patch } from 'meiosis-setup/types';
@@ -228,6 +230,19 @@ export const CrimeSceneView: FactoryComponent<{
   return {
     view: ({ attrs: { crimeScene, cast, attributes, curActIdx = 0, curPhaseIdx = 0, update } }) => {
       const { label = '...', description, literature, acts = [] } = crimeScene;
+      const [allCastIds, allAttrIds] = acts.reduce(
+        (acc, act) => {
+          [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase) =>
+            phase.activities.forEach((activity) => {
+              activity.cast?.forEach((id) => acc[0].add(id));
+              activity.attributes?.forEach((id) => acc[1].add(id));
+            })
+          );
+          return acc;
+        },
+        [new Set<ID>(), new Set<ID>()] as [cast: Set<ID>, attr: Set<ID>]
+      );
+
       const selectedActContent = acts
         .filter((_, index) => curActIdx === index)
         .map(({ label = '...', preparation, preactivity, activity, postactivity }) => {
@@ -244,7 +259,7 @@ export const CrimeSceneView: FactoryComponent<{
                   return acc;
                 }, new Set<ID>())
               );
-              const attributeIds = Array.from(
+              const attrIds = Array.from(
                 activities.reduce((acc, { attributes: curAttr }) => {
                   if (curAttr) curAttr.forEach((id) => acc.add(id));
                   return acc;
@@ -254,17 +269,17 @@ export const CrimeSceneView: FactoryComponent<{
 
 ${activities.map((act) => '- ' + act.label).join('\n')}
 
-##### Cast
+${castIds.length > 0 ? '##### Cast' : ''}
 
 ${castIds.map((id) => '- ' + cast.find((cast) => cast.id === id)?.label).join('\n')}
 
-##### Conditions
+${conditions.length > 0 ? '##### Conditions' : ''}
 
 ${conditions.map((cond) => '- ' + cond.label).join('\n')}
 
-##### Attributes
+${attrIds.length > 0 ? '##### Attributes' : ''}
 
-${attributeIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).join('\n')}
+${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).join('\n')}
 `;
               return {
                 title: label,
@@ -293,22 +308,22 @@ ${attributeIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.lab
       return m('.col.s12', [
         m('h4', label),
         description && m('p', description),
+        allCastIds.size > 0 && [
+          m('h5', 'Cast'),
+          m(
+            'ol',
+            Array.from(allCastIds).map((id) => m('li', cast.find((c) => c.id === id)?.label))
+          ),
+        ],
+        allAttrIds.size > 0 && [
+          m('h5', 'Attributes'),
+          m(
+            'ol',
+            Array.from(allAttrIds).map((id) => m('li', attributes.find((c) => c.id === id)?.label))
+          ),
+        ],
         literature &&
-          literature.length > 0 && [
-            m('h5', 'References'),
-            m(ReferenceListComponent, { references: literature }),
-            // m(
-            //   'ol',
-            //   literature.map((l) =>
-            //     m(
-            //       'li',
-            //       m('a', { href: l.url, target: '_blank', alt: l.label }, l.label),
-            //       l.authors && m('span', ', by ' + l.authors),
-            //       l.description && m('p', l.description)
-            //     )
-            //   )
-            // ),
-          ],
+          literature.length > 0 && [m('h5', 'References'), m(ReferenceListComponent, { references: literature })],
         m(
           '.card-container',
           acts.map(({ label = '...', icon, url, description }, index) => {
@@ -333,7 +348,11 @@ ${attributeIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.lab
                   `${index + 1}. ${label}`
                 ),
               ]),
-              m('.card-content', m(SlimdownView, { md: description })),
+              m(
+                '.card-content',
+                { style: { padding: '12px', 'overflow-y': 'auto', 'max-height': '55%' } },
+                m(SlimdownView, { md: description })
+              ),
               m('.card-action', m(FlatButton, { label: 'MORE', onclick: () => update({ curActIdx: index }) })),
             ]);
           })
@@ -349,8 +368,26 @@ export const CrimeSceneEditor: FactoryComponent<{
   cast: Cast[];
   attributes: CrimeSceneAttributes[];
 }> = () => {
+  type InputOptions = {
+    id: string;
+    label?: string;
+    group?: string;
+    icon?: string;
+  };
+
+  let castOptions: Array<InputOptions> = [];
+  let attrOptions: Array<InputOptions> = [];
+
   return {
-    view: ({ attrs: { crimeScene, cast, attributes } }) => {
+    oninit: ({ attrs: { cast, attributes } }) => {
+      castOptions = cast.map(({ id, label, type }) => ({
+        id,
+        label,
+        group: type === CastType.Individual ? 'person' : 'group',
+      }));
+      attrOptions = attributes.map(({ id, label, type }) => ({ id, label, group: attributeTypeToIconMap.get(type) }));
+    },
+    view: ({ attrs: { crimeScene } }) => {
       // const { cast } = crimeScene;
 
       const activityForm: UIForm<any> = [
@@ -374,7 +411,7 @@ export const CrimeSceneEditor: FactoryComponent<{
               type: 'select',
               className: 'col s12 m6',
               multiple: true,
-              options: cast,
+              options: castOptions,
               label: 'Cast',
             },
             {
@@ -383,7 +420,7 @@ export const CrimeSceneEditor: FactoryComponent<{
               type: 'select',
               className: 'col s12 m6',
               multiple: true,
-              options: attributes,
+              options: attrOptions,
               label: 'Attributes',
             },
           ] as UIForm<Activity>,

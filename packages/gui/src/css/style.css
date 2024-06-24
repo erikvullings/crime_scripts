@@ -810,13 +810,24 @@ li input[type='text'] {
 
 .card-container {
   display: flex;
-  overflow-x: auto;
-  white-space: nowrap;
+  overflow-y: auto;
+  /* white-space: nowrap; */
   padding-left: 2px;
 }
 
 .card-container .card {
-  min-width: 300px;
+  width: 350px;
   margin-right: 10px;
   flex: none; /* Prevent cards from shrinking */
 }
+/* 
+.card.xlarge {
+  height: calc(100vh - 200px);
+}
+
+.card.xlarge .card-action {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+} */
