@@ -63,6 +63,16 @@ export enum LITERATURE_TYPE {
   META_ANALYSIS_PR,
 }
 
+export type SearchResult = {
+  crimeSceneIdx: number;
+  actIdx: number;
+  phaseIdx: number;
+  activityIdx: number;
+  conditionIdx: number;
+  resultMd: string;
+  type: 'crimeScene' | 'act' | 'activity' | 'condition' | 'cast' | 'attribute';
+};
+
 export type ID = string;
 
 export type Labeled = {
@@ -124,6 +134,17 @@ export enum ATTRIBUTE_TYPE {
   CYBER,
   OTHER,
 }
+
+export const attributeTypeToIconMap = new Map<ATTRIBUTE_TYPE, string>([
+  [ATTRIBUTE_TYPE.EQUIPMENT, 'build'],
+  [ATTRIBUTE_TYPE.TOOLS, 'construction'],
+  [ATTRIBUTE_TYPE.GEAR, 'settings'],
+  [ATTRIBUTE_TYPE.DEVICES, 'devices'],
+  [ATTRIBUTE_TYPE.ACCESSORIES, 'style'],
+  [ATTRIBUTE_TYPE.DOCUMENTATION, 'description'],
+  [ATTRIBUTE_TYPE.CYBER, 'security'],
+  [ATTRIBUTE_TYPE.OTHER, 'more_horiz'],
+]);
 
 export const AttributeTypeOptions = [
   {

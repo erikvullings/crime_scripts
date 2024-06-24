@@ -141,9 +141,6 @@ export const Layout: MeiosisComponent = () => {
                               `${model.crimeScenes[crimeSceneIdx].label} > ${type}`
                             ),
                             m(SlimdownView, { md: resultMd, removeParagraphs: true }),
-                            // m('span', `Crime scene: ${model.crimeScenes[crimeSceneIdx].label}`),
-                            // m('span', ', '),
-                            // m('span', `Type: ${type}`),
                           ])
                         )
                       ),

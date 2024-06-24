@@ -2,7 +2,7 @@ import { meiosisSetup } from 'meiosis-setup';
 import { MeiosisCell, MeiosisConfig, Patch, Service } from 'meiosis-setup/types';
 import m, { FactoryComponent } from 'mithril';
 import { routingSvc, t } from '.';
-import { Cast, CrimeSceneAttributes, DataModel, ID, Pages, Settings } from '../models';
+import { Cast, CrimeSceneAttributes, DataModel, ID, Pages, SearchResult, Settings } from '../models';
 import { User, UserRole } from './login-service';
 import { scrollToTop } from '../utils';
 
@@ -10,16 +10,6 @@ import { scrollToTop } from '../utils';
 const MODEL_KEY = 'CSS_MODEL';
 const USER_ROLE = 'USER_ROLE';
 export const APP_TITLE = 'Crime Scripting';
-
-type SearchResult = {
-  crimeSceneIdx: number;
-  actIdx: number;
-  phaseIdx: number;
-  activityIdx: number;
-  conditionIdx: number;
-  resultMd: string;
-  type: 'crimeScene' | 'act' | 'activity' | 'condition' | 'cast' | 'attribute';
-};
 
 export interface State {
   page: Pages;
