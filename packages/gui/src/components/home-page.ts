@@ -15,7 +15,7 @@ import {
   attributeTypeToIconMap,
 } from '../models';
 import { MeiosisComponent, State, routingSvc } from '../services';
-import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel, IOptions } from 'mithril-materialized';
+import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel } from 'mithril-materialized';
 import { FormAttributes, LayoutForm, SlimdownView, UIForm } from 'mithril-ui-form';
 import { labelForm, literatureForm } from '../models/forms';
 import { Patch } from 'meiosis-setup/types';
