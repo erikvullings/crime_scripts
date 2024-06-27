@@ -443,13 +443,8 @@ img.thumbnail {
   width: 250px;
 }
 
-ul.person-details > li > i.material-icons {
-  vertical-align: middle;
-  margin: 3px 10px 3px 0;
-}
-
-ul.projects > li {
-  margin: 4px 0;
+ul.pagination {
+  margin: 0;
 }
 
 ul.projects > li > span.project-id {
