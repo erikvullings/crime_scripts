@@ -2,6 +2,7 @@ import m from 'mithril';
 import { ISelectOptions, Select } from 'mithril-materialized';
 import { Pages } from '../models';
 import { MeiosisComponent, UserRole, t } from '../services';
+import { SlimdownView } from 'mithril-ui-form';
 
 export const AboutPage: MeiosisComponent = () => {
   return {
@@ -33,7 +34,7 @@ export const AboutPage: MeiosisComponent = () => {
             setRole(role[0]);
           },
         } as ISelectOptions<UserRole>),
-        m('.col.s12', 'About'),
+        m('.col.s12', [m('h4', t('ABOUT', 'TITLE')), m(SlimdownView, { md: t('ABOUT', 'TEXT') })]),
       ]);
     },
   };
