@@ -21,6 +21,7 @@ npm start
 - [x] Add option to add images
 - [x] When clicking on a search result, navigate to the exact location (add act, phase)
 - [x] Add option to specify and view literature
-- [ ] Add measures to counteract the activity or condition
+- [x] Zip the model file
+- [ ] Add measures to counteract the activity or condition: use Situational Crime Prevention (SCP) to structure the measures.
 - [ ] Add option to use it with a case
 - [ ] Translate to Dutch

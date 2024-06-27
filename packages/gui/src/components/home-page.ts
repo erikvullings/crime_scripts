@@ -2,6 +2,7 @@ import m, { FactoryComponent } from 'mithril';
 import {
   Act,
   Activity,
+  ActivityPhase,
   ActivityTypeOptions,
   Cast,
   CastType,
@@ -11,6 +12,7 @@ import {
   ICONS,
   ID,
   IconOpts,
+  Literature,
   Pages,
   attributeTypeToIconMap,
 } from '../models';
@@ -452,58 +454,76 @@ export const CrimeSceneEditor: FactoryComponent<{
             { id: 'icon', type: 'select', className: 'col s6 m3', label: 'Image', options: IconOpts },
             { id: 'url', type: 'base64', className: 'col s12 m3', label: 'Image', show: ['icon=1'] },
             { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
-            { id: 'preparation', type: activityForm, className: 'col s12 section', label: 'Preparation' },
-            { id: 'preactivity', type: activityForm, className: 'col s12 section', label: 'Pre-activity' },
-            { id: 'activity', type: activityForm, className: 'col s12 section', label: 'Activity' },
-            { id: 'postactivity', type: activityForm, className: 'col s12 section', label: 'Post-activity' },
+            // { id: 'preparation', type: activityForm, className: 'col s12 section', label: 'Preparation' },
+            // { id: 'preactivity', type: activityForm, className: 'col s12 section', label: 'Pre-activity' },
+            // { id: 'activity', type: activityForm, className: 'col s12 section', label: 'Activity' },
+            // { id: 'postactivity', type: activityForm, className: 'col s12 section', label: 'Post-activity' },
           ] as UIForm<Partial<Act>>,
         },
       ];
+
+      const preventionMeasuresForm: UIForm<any> = [];
+
+      const curActIdx = +(m.route.param('acts') || 1) - 1;
+      const curAct = crimeScene.acts && curActIdx < crimeScene.acts.length && crimeScene.acts[curActIdx];
+      console.log(`Act id: ${curActIdx}`);
+
       return m('.col.s12', [
         m(LayoutForm, {
           form: [
             ...labelForm,
-            ...actsForm,
             { id: 'literature', type: literatureForm, repeat: true, label: 'References' },
+            ...actsForm,
           ],
           obj: crimeScene,
           onchange: () => {},
         } as FormAttributes<Partial<CrimeScene>>),
-        // m(Tabs, {
-        //   tabs: [
-        //     {
-        //       title: 'Acts',
-        //       vnode: m('.acts', [
-        //         m(LayoutForm, {
-        //           form: actsForm,
-        //           obj: crimeScene,
-        //           onchange: () => {},
-        //         } as FormAttributes<Partial<CrimeScene>>),
-        //         // m(Tabs, {
-        //         //   tabs: [
-        //         //     {
-        //         //       title: 'Preparation',
-        //         //       vnode: m(LayoutForm, {
-        //         //         form: actForm,
-        //         //         obj: crimeScene,
-        //         //         section: 'preparation',
-        //         //         onchange: () => {},
-        //         //       } as FormAttributes<Partial<CrimeScene>>),
-        //         //     },
-        //         //   ],
-        //         // }),
-        //       ]),
-        //     },
-        //     {
-        //       title: 'Cast',
-        //       vnode: m(LayoutForm, {
-        //         form: castForm,
-        //         obj: crimeScene,
-        //         onchange: () => {},
-        //       } as FormAttributes<Partial<CrimeScene>>),
-        //     },
-        //   ],
-        // }),
+
+        curAct &&
+          m(Tabs, {
+            tabs: [
+              {
+                title: 'Preparation phase',
+                vnode: m('.acts', [
+                  m(LayoutForm, {
+                    form: activityForm,
+                    obj: curAct.preparation,
+                    onchange: () => {},
+                  } as FormAttributes<Partial<ActivityPhase>>),
+                ]),
+              },
+              {
+                title: 'Pre-activity phase',
+                vnode: m('.acts', [
+                  m(LayoutForm, {
+                    form: activityForm,
+                    obj: curAct.preactivity,
+                    onchange: () => {},
+                  } as FormAttributes<Partial<ActivityPhase>>),
+                ]),
+              },
+              {
+                title: 'Activity phase',
+                vnode: m('.acts', [
+                  m(LayoutForm, {
+                    form: activityForm,
+                    obj: curAct.activity,
+                    onchange: () => {},
+                  } as FormAttributes<Partial<ActivityPhase>>),
+                ]),
+              },
+              {
+                title: 'Post-activity phase',
+                vnode: m('.acts', [
+                  m(LayoutForm, {
+                    form: activityForm,
+                    obj: curAct.postactivity,
+                    onchange: () => {},
+                  } as FormAttributes<Partial<ActivityPhase>>),
+                ]),
+              },
+            ],
+          }),
       ]);
     },
   };
