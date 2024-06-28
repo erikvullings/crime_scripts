@@ -3,7 +3,7 @@ import {
   CastTypeOptions,
   Cast,
   CrimeScript,
-  CrimeSceneAttributes,
+  CrimeScriptAttributes,
   AttributeTypeOptions,
   Literature,
 } from './data-model';
@@ -52,9 +52,9 @@ export const attributesForm = [
       { id: 'id', type: 'autogenerate', autogenerate: 'id' },
       { id: 'label', type: 'text', className: 'col s8', label: 'Name' },
       { id: 'type', type: 'select', className: 'col s4', label: 'Type', options: AttributeTypeOptions },
-    ] as UIForm<CrimeSceneAttributes>,
+    ] as UIForm<CrimeScriptAttributes>,
   },
-] as UIForm<{ attributes: CrimeSceneAttributes[] }>;
+] as UIForm<{ attributes: CrimeScriptAttributes[] }>;
 
 export const labelForm = [
   { id: 'id', type: 'autogenerate', autogenerate: 'id' },

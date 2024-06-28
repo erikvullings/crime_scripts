@@ -8,12 +8,13 @@ import {
   CastType,
   Condition,
   CrimeScript,
-  CrimeSceneAttributes,
+  CrimeScriptAttributes,
   ICONS,
   ID,
   IconOpts,
   Pages,
   attributeTypeToIconMap,
+  Stage,
 } from '../models';
 import { MeiosisComponent, State, routingSvc } from '../services';
 import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel, Select, ISelectOptions } from 'mithril-materialized';
@@ -34,14 +35,14 @@ export const HomePage: MeiosisComponent = () => {
       },
     }) => {
       id = m.route.param('id') || '';
-      update({ currentCrimeSceneId: id });
+      update({ currentCrimeScriptId: id });
       setPage(Pages.HOME);
     },
     view: ({ attrs: { state, actions } }) => {
       id = m.route.param('id') || '';
       const { model, role, curActIdx, curPhaseIdx } = state;
-      const { crimeScenes = [], cast = [], acts = [], attributes = [] } = model;
-      const crimeScene = crimeScenes.find((c) => c.id === id);
+      const { crimeScripts = [], cast = [], acts = [], attributes = [] } = model;
+      const crimeScript = crimeScripts.find((c) => c.id === id);
 
       const isAdmin = role === 'admin';
       const isEditor = role === 'admin' || role === 'editor';
@@ -60,8 +61,8 @@ export const HomePage: MeiosisComponent = () => {
                         className: 'small',
                         onclick: () => {
                           edit = false;
-                          if (crimeScene) {
-                            model.crimeScenes = model.crimeScenes.map((c) => (c.id === id ? crimeScene : c));
+                          if (crimeScript) {
+                            model.crimeScripts = model.crimeScripts.map((c) => (c.id === id ? crimeScript : c));
                             actions.saveModel(model);
                           }
                         },
@@ -83,13 +84,13 @@ export const HomePage: MeiosisComponent = () => {
                         }),
                       ]
                 ),
-              crimeScene &&
+              crimeScript &&
                 m(
                   '.crime-scene',
                   edit
-                    ? m(CrimeSceneEditor, { crimeScene, cast, acts, attributes })
-                    : m(CrimeSceneView, {
-                        crimeScene,
+                    ? m(CrimeScriptEditor, { crimeScript: crimeScript, cast, acts, attributes })
+                    : m(CrimeScriptView, {
+                        crimeScript: crimeScript,
                         cast,
                         acts,
                         attributes,
@@ -108,32 +109,32 @@ export const HomePage: MeiosisComponent = () => {
                     iconName: 'add',
                     className: 'small',
                     onclick: () => {
-                      const newCrimeScene = { id: uniqueId() } as CrimeScript;
-                      model.crimeScenes.push(newCrimeScene);
+                      const newCrimeScript = { id: uniqueId() } as CrimeScript;
+                      model.crimeScripts.push(newCrimeScript);
                       actions.saveModel(model);
-                      actions.changePage(Pages.HOME, { id: newCrimeScene.id });
+                      actions.changePage(Pages.HOME, { id: newCrimeScript.id });
                     },
                   })
                 ),
               m(
                 '.crime-scenes',
-                crimeScenes.map((crimeScene) =>
-                  m(CrimeScriptCard, { crimeScene, cast, acts, changePage: actions.changePage })
+                crimeScripts.map((crimeScript) =>
+                  m(CrimeScriptCard, { crimeScript, cast, acts, changePage: actions.changePage })
                 )
               ),
             ],
         m(ModalPanel, {
           id: 'deleteScript',
           title: 'Delete script',
-          description: `Are you sure you want to delete ${crimeScene?.label}?`,
+          description: `Are you sure you want to delete ${crimeScript?.label}?`,
           buttons: [
             { label: 'Cancel', iconName: 'cancel' },
             {
               label: 'Delete',
               iconName: 'delete',
               onclick: () => {
-                if (crimeScene) {
-                  model.crimeScenes = model.crimeScenes.filter((c) => c.id !== id);
+                if (crimeScript) {
+                  model.crimeScripts = model.crimeScripts.filter((c) => c.id !== id);
                   actions.saveModel(model);
                   actions.changePage(Pages.HOME);
                 }
@@ -147,7 +148,7 @@ export const HomePage: MeiosisComponent = () => {
 };
 
 export const CrimeScriptCard: FactoryComponent<{
-  crimeScene: CrimeScript;
+  crimeScript: CrimeScript;
   cast: Cast[];
   acts: Act[];
   changePage: (
@@ -157,8 +158,8 @@ export const CrimeScriptCard: FactoryComponent<{
   ) => void;
 }> = () => {
   return {
-    view: ({ attrs: { crimeScene, cast = [], acts: allActs = [], changePage } }) => {
-      const { id, url, label: name = 'New act', actVariants: actVariants = [], description } = crimeScene;
+    view: ({ attrs: { crimeScript, cast = [], acts: allActs = [], changePage } }) => {
+      const { id, url, label: name = 'New act', stages: actVariants = [], description } = crimeScript;
 
       const acts = actVariants.map((variant) => allActs.find((a) => a.id === variant.id) || ({} as Act));
       const allCast = Array.from(
@@ -175,7 +176,7 @@ export const CrimeScriptCard: FactoryComponent<{
       return m(
         '.col.s12.m6.l4',
         m(
-          '.card.medium.cursor-pointer',
+          '.card.large.cursor-pointer',
           {
             onclick: () => {
               changePage(Pages.HOME, { id });
@@ -214,21 +215,21 @@ export const CrimeScriptCard: FactoryComponent<{
   };
 };
 
-export const CrimeSceneView: FactoryComponent<{
-  crimeScene: CrimeScript;
+export const CrimeScriptView: FactoryComponent<{
+  crimeScript: CrimeScript;
   cast: Cast[];
   acts: Act[];
-  attributes: CrimeSceneAttributes[];
+  attributes: CrimeScriptAttributes[];
   curActIdx?: number;
   curPhaseIdx?: number;
   update: (patch: Patch<State>) => void;
 }> = () => {
   return {
-    view: ({ attrs: { crimeScene, cast, acts: allActs, attributes, curActIdx = 0, curPhaseIdx = 0, update } }) => {
-      const { label = '...', description, literature, actVariants = [] } = crimeScene;
+    view: ({ attrs: { crimeScript, cast, acts, attributes, curActIdx = 0, curPhaseIdx = 0, update } }) => {
+      const { label = '...', description, literature, stages: actVariants = [] } = crimeScript;
       const [allCastIds, allAttrIds] = actVariants.reduce(
         (acc, variant) => {
-          const act = allActs.find((a) => a.id === variant.id);
+          const act = acts.find((a) => a.id === variant.id);
           if (act) {
             [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase) =>
               phase.activities.forEach((activity) => {
@@ -245,7 +246,7 @@ export const CrimeSceneView: FactoryComponent<{
       const selectedActContent = actVariants
         .filter((_, index) => curActIdx === index)
         .map((variant) => {
-          return allActs.find((a) => a.id === variant.id) || ({} as Act);
+          return acts.find((a) => a.id === variant.id) || ({} as Act);
         })
         .map(({ label = '...', preparation, preactivity, activity, postactivity } = {} as Act) => {
           preparation.label = 'Preparation phase';
@@ -335,7 +336,7 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
         m(
           '.card-container',
           actVariants
-            .map(({ id }) => allActs.find((a) => a.id === id) || ({} as Act))
+            .map(({ id }) => acts.find((a) => a.id === id) || ({} as Act))
             .map(({ id, label = '...', icon, url, description }, index) => {
               const imgSrc = icon === ICONS.OTHER ? url : IconOpts.find((i) => i.id === icon)?.img;
               const ids = actVariants[index].ids;
@@ -410,11 +411,11 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
   };
 };
 
-export const CrimeSceneEditor: FactoryComponent<{
-  crimeScene: CrimeScript;
+export const CrimeScriptEditor: FactoryComponent<{
+  crimeScript: CrimeScript;
   cast: Cast[];
   acts: Act[];
-  attributes: CrimeSceneAttributes[];
+  attributes: CrimeScriptAttributes[];
 }> = () => {
   type InputOptions = {
     id: string;
@@ -435,9 +436,7 @@ export const CrimeSceneEditor: FactoryComponent<{
       }));
       attrOptions = attributes.map(({ id, label, type }) => ({ id, label, group: attributeTypeToIconMap.get(type) }));
     },
-    view: ({ attrs: { acts, crimeScene } }) => {
-      // const { cast } = crimeScene;
-
+    view: ({ attrs: { acts, crimeScript } }) => {
       const activityForm: UIForm<any> = [
         {
           id: 'activities',
@@ -486,36 +485,23 @@ export const CrimeSceneEditor: FactoryComponent<{
           label: 'Conditions',
         },
       ];
-      // console.log(activityForm);
 
       const actsForm: UIForm<any> = [
-        // ...castForm,
         {
-          id: 'actVariants',
+          id: 'stages',
           repeat: true,
           pageSize: 1,
-          label: 'Steps',
-          type: [
-            // { id: 'label', type: 'text', className: 'col s6 m6', label: 'Name' },
-            // { id: 'icon', type: 'select', className: 'col s6 m3', label: 'Image', options: IconOpts },
-            // { id: 'url', type: 'base64', className: 'col s12 m3', label: 'Image', show: ['icon=1'] },
-            // { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
-            // { id: 'preparation', type: activityForm, className: 'col s12 section', label: 'Preparation' },
-            // { id: 'preactivity', type: activityForm, className: 'col s12 section', label: 'Pre-activity' },
-            // { id: 'activity', type: activityForm, className: 'col s12 section', label: 'Activity' },
-            // { id: 'postactivity', type: activityForm, className: 'col s12 section', label: 'Post-activity' },
-          ] as UIForm<Partial<Act>>,
+          label: 'Stages',
+          type: [] as UIForm<Partial<Stage>>,
         },
       ];
 
       // const preventionMeasuresForm: UIForm<any> = [];
 
-      const curActIdx = +(m.route.param('actVariants') || 1) - 1;
-      const curActIds =
-        crimeScene.actVariants && curActIdx < crimeScene.actVariants.length && crimeScene.actVariants[curActIdx];
+      const curActIdx = +(m.route.param('stages') || 1) - 1;
+      const curActIds = crimeScript.stages && curActIdx < crimeScript.stages.length && crimeScript.stages[curActIdx];
       const curActId = curActIds && curActIds.id;
       const curAct = curActId && acts.find((a) => a.id === curActId);
-      console.log(`Act ids: ${curActIdx}`);
 
       return m('.col.s12', [
         m(LayoutForm, {
@@ -524,7 +510,7 @@ export const CrimeSceneEditor: FactoryComponent<{
             { id: 'literature', type: literatureForm, repeat: true, label: 'References' },
             ...actsForm,
           ],
-          obj: crimeScene,
+          obj: crimeScript,
           onchange: () => {},
         } as FormAttributes<Partial<CrimeScript>>),
 
@@ -543,7 +529,7 @@ export const CrimeSceneEditor: FactoryComponent<{
                   selectAll: false,
                   listAll: true,
                   onchange: (selectedIds) => {
-                    crimeScene.actVariants[curActIdx] = {
+                    crimeScript.stages[curActIdx] = {
                       id: selectedIds.length > 0 ? selectedIds[0] : '',
                       ids: selectedIds,
                     };
@@ -561,7 +547,7 @@ export const CrimeSceneEditor: FactoryComponent<{
                     // disabled: curActIds.ids.length === 1,
                     options: acts.filter((a) => curActIds.ids.includes(a.id)),
                     onchange: (id) => {
-                      crimeScene.actVariants[curActIdx].id = id[0];
+                      crimeScript.stages[curActIdx].id = id[0];
                     },
                   } as ISelectOptions<ID>),
                 ],
@@ -580,11 +566,11 @@ export const CrimeSceneEditor: FactoryComponent<{
                     postactivity: {},
                   } as Act;
                   acts.push(newAct);
-                  crimeScene.actVariants[curActIdx].id = id;
-                  if (crimeScene.actVariants[curActIdx].ids) {
-                    crimeScene.actVariants[curActIdx].ids.push(id);
+                  crimeScript.stages[curActIdx].id = id;
+                  if (crimeScript.stages[curActIdx].ids) {
+                    crimeScript.stages[curActIdx].ids.push(id);
                   } else {
-                    crimeScene.actVariants[curActIdx].ids = [id];
+                    crimeScript.stages[curActIdx].ids = [id];
                   }
                 },
               }),

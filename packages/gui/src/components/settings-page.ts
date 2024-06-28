@@ -3,7 +3,7 @@ import {
   Cast,
   CastType,
   CrimeScript,
-  CrimeSceneAttributes,
+  CrimeScriptAttributes,
   ID,
   Pages,
   SearchResult,
@@ -36,16 +36,9 @@ export const SettingsPage: MeiosisComponent = () => {
     },
     view: ({ attrs: { state, actions } }) => {
       const { model, role } = state;
-      const { cast = [], acts = [], crimeScenes = [], attributes = [] } = model;
+      const { cast = [], acts = [], crimeScripts = [], attributes = [] } = model;
 
       const isAdmin = role === 'admin';
-      // const cast = model.crimeScenes
-      //   .filter((c) => c.cast)
-      //   .reduce((acc, cur) => {
-      //     acc = [...acc, ...cur.cast];
-      //     return acc;
-      //   }, [] as Cast[]);
-      // const obj = { cast };
 
       return m(
         '#settings-page.settings.page',
@@ -69,7 +62,7 @@ export const SettingsPage: MeiosisComponent = () => {
                     obj: model,
                     onchange: () => actions.saveModel(model),
                   } as FormAttributes<{ cast: Cast[] }>)
-                : m(CastView, { cast, acts, crimeScenes, setLocation: actions.setLocation }),
+                : m(CastView, { cast, acts, crimeScripts: crimeScripts, setLocation: actions.setLocation }),
             },
             {
               title: 'Attributes',
@@ -78,8 +71,8 @@ export const SettingsPage: MeiosisComponent = () => {
                     form: attributesForm,
                     obj: model,
                     onchange: () => actions.saveModel(model),
-                  } as FormAttributes<{ attributes: CrimeSceneAttributes[] }>)
-                : m(AttributesView, { attributes, acts, crimeScenes, setLocation: actions.setLocation }),
+                  } as FormAttributes<{ attributes: CrimeScriptAttributes[] }>)
+                : m(AttributesView, { attributes, acts, crimeScripts: crimeScripts, setLocation: actions.setLocation }),
             },
           ],
         })
@@ -91,17 +84,17 @@ export const SettingsPage: MeiosisComponent = () => {
 const CastView: FactoryComponent<{
   cast: Cast[];
   acts: Act[];
-  crimeScenes: CrimeScript[];
-  setLocation: (currentCrimeSceneId: ID, actIdx: number, phaseIdx: number) => void;
+  crimeScripts: CrimeScript[];
+  setLocation: (currentCrimeScriptId: ID, actIdx: number, phaseIdx: number) => void;
 }> = () => {
   return {
-    view: ({ attrs: { cast, acts, crimeScenes: crimeScripts, setLocation } }) => {
+    view: ({ attrs: { cast, acts, crimeScripts, setLocation } }) => {
       return m(
         '.cast',
         m(Collapsible, {
           items: cast.map((c) => {
             const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
-              cs.actVariants?.forEach(({ ids }) => {
+              cs.stages?.forEach(({ ids }) => {
                 ids.forEach((actId) => {
                   const actIdx = acts.findIndex((a) => a.id === actId);
                   if (actIdx < 0) return;
@@ -134,18 +127,18 @@ const CastView: FactoryComponent<{
                 '.cast-content',
                 m(
                   'ol',
-                  searchResults.map(({ crimeScriptIdx: crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
+                  searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd, type }) =>
                     m('li', [
                       m(
                         'a.truncate',
                         {
                           style: { cursor: 'pointer' },
-                          href: routingSvc.href(Pages.HOME, `id=${crimeScripts[crimeSceneIdx].id}`),
+                          href: routingSvc.href(Pages.HOME, `id=${crimeScripts[crimeScriptIdx].id}`),
                           onclick: () => {
-                            setLocation(crimeScripts[crimeSceneIdx].id, actIdx, phaseIdx);
+                            setLocation(crimeScripts[crimeScriptIdx].id, actIdx, phaseIdx);
                           },
                         },
-                        `${crimeScripts[crimeSceneIdx].label} > ${type}`
+                        `${crimeScripts[crimeScriptIdx].label} > ${type}`
                       ),
                       m(SlimdownView, { md: resultMd, removeParagraphs: true }),
                     ])
@@ -162,18 +155,18 @@ const CastView: FactoryComponent<{
 
 const AttributesView: FactoryComponent<{
   acts: Act[];
-  attributes: CrimeSceneAttributes[];
-  crimeScenes: CrimeScript[];
-  setLocation: (currentCrimeSceneId: ID, actIdx: number, phaseIdx: number) => void;
+  attributes: CrimeScriptAttributes[];
+  crimeScripts: CrimeScript[];
+  setLocation: (currentCrimeScriptId: ID, actIdx: number, phaseIdx: number) => void;
 }> = () => {
   return {
-    view: ({ attrs: { attributes, acts, crimeScenes: crimeScripts, setLocation } }) => {
+    view: ({ attrs: { attributes, acts, crimeScripts, setLocation } }) => {
       return m(
         '.cast',
         m(Collapsible, {
           items: attributes.map((attr) => {
             const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
-              cs.actVariants?.forEach(({ ids }) => {
+              cs.stages?.forEach(({ ids }) => {
                 ids.forEach((actId) => {
                   const actIdx = acts.findIndex((a) => a.id === actId);
                   if (actIdx < 0) return;
@@ -206,18 +199,18 @@ const AttributesView: FactoryComponent<{
                 '.cast-content',
                 m(
                   'ol',
-                  searchResults.map(({ crimeScriptIdx: crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
+                  searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd, type }) =>
                     m('li', [
                       m(
                         'a.truncate',
                         {
                           style: { cursor: 'pointer' },
-                          href: routingSvc.href(Pages.HOME, `id=${crimeScripts[crimeSceneIdx].id}`),
+                          href: routingSvc.href(Pages.HOME, `id=${crimeScripts[crimeScriptIdx].id}`),
                           onclick: () => {
-                            setLocation(crimeScripts[crimeSceneIdx].id, actIdx, phaseIdx);
+                            setLocation(crimeScripts[crimeScriptIdx].id, actIdx, phaseIdx);
                           },
                         },
-                        `${crimeScripts[crimeSceneIdx].label} > ${type}`
+                        `${crimeScripts[crimeScriptIdx].label} > ${type}`
                       ),
                       m(SlimdownView, { md: resultMd, removeParagraphs: true }),
                     ])

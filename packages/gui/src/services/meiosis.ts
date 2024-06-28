@@ -2,7 +2,7 @@ import { meiosisSetup } from 'meiosis-setup';
 import { MeiosisCell, MeiosisConfig, Patch, Service } from 'meiosis-setup/types';
 import m, { FactoryComponent } from 'mithril';
 import { routingSvc, t } from '.';
-import { Cast, CrimeSceneAttributes, DataModel, ID, Pages, SearchResult, Settings } from '../models';
+import { Cast, CrimeScriptAttributes, DataModel, ID, Pages, SearchResult, Settings } from '../models';
 import { User, UserRole } from './login-service';
 import { scrollToTop } from '../utils';
 
@@ -17,7 +17,7 @@ export interface State {
   loggedInUser?: User;
   role: UserRole;
   settings: Settings;
-  currentCrimeSceneId?: ID;
+  currentCrimeScriptId?: ID;
   curActIdx?: number;
   curPhaseIdx?: number;
   searchFilter: string;
@@ -37,7 +37,7 @@ export interface Actions {
   login: () => void;
   update: (patch: Patch<State>) => void;
   setSearchFilter: (searchFilter?: string) => Promise<void>;
-  setLocation: (currentCrimeSceneId: ID, actIdx: number, phaseIdx: number) => void;
+  setLocation: (currentCrimeScriptId: ID, actIdx: number, phaseIdx: number) => void;
 }
 
 export type MeiosisComponent<T extends { [key: string]: any } = {}> = FactoryComponent<{
@@ -93,8 +93,8 @@ export const appActions: (cell: MeiosisCell<State>) => Actions = ({ update /* st
       update({ searchFilter: undefined });
     }
   },
-  setLocation: (currentCrimeSceneId, curActIdx, curPhaseIdx) => {
-    update({ currentCrimeSceneId, curActIdx, curPhaseIdx });
+  setLocation: (currentCrimeScriptId, curActIdx, curPhaseIdx) => {
+    update({ currentCrimeScriptId, curActIdx, curPhaseIdx });
   },
 });
 
@@ -103,7 +103,7 @@ export const setSearchResults: Service<State> = {
   run: (cell) => {
     const state = cell.getState();
     const { model = {} as DataModel } = state;
-    const { crimeScenes = [], cast = [], attributes = [], acts = [] } = model;
+    const { crimeScripts = [], cast = [], attributes = [], acts = [] } = model;
     const searchResults: SearchResult[] = [];
     if (state.searchFilter) {
       const searchFilter = state.searchFilter.toLowerCase();
@@ -115,9 +115,9 @@ export const setSearchResults: Service<State> = {
         .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, Cast>());
       const matchingAttr = attributes
         .filter((attr) => attr.label?.toLowerCase().includes(searchFilter))
-        .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, CrimeSceneAttributes>());
-      crimeScenes.forEach((crimeScene, crimeScriptIdx) => {
-        const { label, description, actVariants = [] } = crimeScene;
+        .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, CrimeScriptAttributes>());
+      crimeScripts.forEach((crimeScript, crimeScriptIdx) => {
+        const { label, description, stages: actVariants = [] } = crimeScript;
         if (label.toLowerCase().includes(searchFilter) || description?.toLowerCase().includes(searchFilter)) {
           searchResults.push({
             crimeScriptIdx,
@@ -125,7 +125,7 @@ export const setSearchResults: Service<State> = {
             phaseIdx: -1,
             activityIdx: -1,
             conditionIdx: -1,
-            type: 'crimeScene',
+            type: 'crimeScript',
             resultMd: highlighter(label.toLowerCase().includes(searchFilter) ? label : description!),
           });
         }
@@ -197,7 +197,7 @@ export const setSearchResults: Service<State> = {
       });
     }
     searchResults.sort((a, b) => {
-      // Compare by crimeSceneIdx
+      // Compare by crimeScriptIdx
       if (a.crimeScriptIdx !== b.crimeScriptIdx) {
         return a.crimeScriptIdx - b.crimeScriptIdx;
       }
@@ -238,26 +238,7 @@ cells.map(() => {
 
 const loadData = async () => {
   const ds = localStorage.getItem(MODEL_KEY);
-  const model: DataModel = ds ? JSON.parse(ds) : { crimeScenes: [] };
-  // model.acts = model.crimeScenes.reduce((acc, cs) => {
-  //   cs.acts &&
-  //     cs.acts.forEach((a: any) => {
-  //       if (!a.id) {
-  //         a.id = uniqueId();
-  //       }
-  //       acc.push(a);
-  //     });
-  //   if (cs.acts) {
-  //     cs.actVariants = cs.acts.map((a: any) => ({ id: a.id, ids: [a.id] })) as any;
-  //     delete cs.acts;
-  //   }
-  //   return acc;
-  // }, [] as any[]);
-  // console.log(model);
-  // const b = localStorage.getItem(BOOKMARKS_KEY);
-  // const bookmarks = b ? JSON.parse(b) : [];
-  // const curUser = localStorage.getItem(CUR_USER_KEY) || '';
-
+  const model: DataModel = ds ? JSON.parse(ds) : { crimeScripts: [] };
   const role = (localStorage.getItem(USER_ROLE) || 'user') as UserRole;
   // const settings = (await settingsSvc.loadList()).shift() || ({} as Settings);
 

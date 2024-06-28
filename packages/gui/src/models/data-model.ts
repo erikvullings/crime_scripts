@@ -3,16 +3,16 @@ import { ICONS } from './icons';
 export type DataModel = {
   version: number;
   lastUpdate: number;
-  crimeScenes: CrimeScript[];
+  crimeScripts: CrimeScript[];
   cast: Cast[];
-  attributes: CrimeSceneAttributes[];
+  attributes: CrimeScriptAttributes[];
   acts: Act[];
 };
 
 export const defaultModel = {
   version: 1,
   lastUpdate: new Date().valueOf(),
-  crimeScenes: [],
+  crimeScripts: [],
   cast: [],
   attributes: [],
   acts: [],
@@ -72,7 +72,7 @@ export type SearchResult = {
   activityIdx: number;
   conditionIdx: number;
   resultMd: string;
-  type: 'crimeScene' | 'act' | 'activity' | 'condition' | 'cast' | 'attribute';
+  type: 'crimeScript' | 'act' | 'activity' | 'condition' | 'cast' | 'attribute';
 };
 
 export type ID = string;
@@ -105,7 +105,7 @@ export type CrimeScript = Labeled & {
   /** Literature referred to in this article */
   literature: Literature[];
   /** Acts in the crime script */
-  actVariants: ActVariants[];
+  stages: Stage[];
 };
 
 export enum ATTRIBUTE_TYPE {
@@ -186,12 +186,17 @@ export const AttributeTypeOptions = [
   { id: ATTRIBUTE_TYPE.OTHER, label: 'Other' },
 ];
 
-export type CrimeSceneAttributes = Labeled & {
+export type CrimeScriptAttributes = Labeled & {
   type: ATTRIBUTE_TYPE;
 };
 
-/** A crime script can have multiple act variants, and each variant can be one or more acts. */
-export type ActVariants = {
+/**
+ * A crime script consists of different stages, where a stage is a distinct segment
+ * in a sequence where various activities (acts) occur, and it also suggests the
+ * possibility of different approaches or methods being used to achieve similar
+ * outcomes within that segment.
+ */
+export type Stage = {
   /** Currently selected Act ID */
   id: ID;
   /** Act IDs of all variants */

@@ -126,19 +126,19 @@ export const Layout: MeiosisComponent = () => {
                     searchResults.length > 0 && [
                       m(
                         'ol',
-                        searchResults.map(({ crimeScriptIdx: crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
+                        searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd, type }) =>
                           m('li', [
                             m(
                               'a.truncate',
                               {
                                 style: { cursor: 'pointer' },
-                                href: routingSvc.href(Pages.HOME, `id=${model.crimeScenes[crimeSceneIdx].id}`),
+                                href: routingSvc.href(Pages.HOME, `id=${model.crimeScripts[crimeScriptIdx].id}`),
                                 onclick: () => {
                                   searchDialog.close();
-                                  actions.setLocation(model.crimeScenes[crimeSceneIdx].id, actIdx, phaseIdx);
+                                  actions.setLocation(model.crimeScripts[crimeScriptIdx].id, actIdx, phaseIdx);
                                 },
                               },
-                              `${model.crimeScenes[crimeSceneIdx].label} > ${type}`
+                              `${model.crimeScripts[crimeScriptIdx].label} > ${type}`
                             ),
                             m(SlimdownView, { md: resultMd, removeParagraphs: true }),
                           ])
