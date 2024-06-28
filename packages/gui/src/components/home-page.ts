@@ -194,7 +194,7 @@ export const CrimeScriptCard: FactoryComponent<{
                 ),
               ]),
             m('.card-content', [
-              !url && m('span.card-title.bold.sharpen', name),
+              !url && m('span.card-title.bold.sharpen', { style: { 'white-space': 'wrap' } }, name),
               description && m('p', description),
               acts &&
                 m(
