@@ -126,7 +126,7 @@ export const Layout: MeiosisComponent = () => {
                     searchResults.length > 0 && [
                       m(
                         'ol',
-                        searchResults.map(({ crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
+                        searchResults.map(({ crimeScriptIdx: crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
                           m('li', [
                             m(
                               'a.truncate',

@@ -2,12 +2,13 @@ import m, { FactoryComponent } from 'mithril';
 import {
   Cast,
   CastType,
-  CrimeScene,
+  CrimeScript,
   CrimeSceneAttributes,
   ID,
   Pages,
   SearchResult,
   attributeTypeToIconMap,
+  Act,
 } from '../models';
 import { MeiosisComponent, routingSvc } from '../services';
 import { FormAttributes, LayoutForm, SlimdownView } from 'mithril-ui-form';
@@ -24,28 +25,20 @@ export const SettingsPage: MeiosisComponent = () => {
         actions: { setPage },
       },
     }) => {
-      if (model.attributes) {
-        model.attributes.sort((a, b) => {
-          // Ensure type is always defined
-          const typeA = a.type !== undefined ? a.type : Infinity;
-          const typeB = b.type !== undefined ? b.type : Infinity;
-
-          // First, sort by type
-          if (typeA < typeB) return -1;
-          if (typeA > typeB) return 1;
-
-          // If types are equal, sort by label
-          return a.label.localeCompare(b.label);
-        });
+      if (model.cast) {
+        model.cast.sort((a, b) => a.label?.localeCompare(b.label || ''));
       }
+      if (model.attributes) {
+        model.attributes.sort((a, b) => a.label?.localeCompare(b.label || ''));
+      }
+
       setPage(Pages.SETTINGS);
     },
     view: ({ attrs: { state, actions } }) => {
       const { model, role } = state;
-      const { cast = [], crimeScenes = [], attributes = [] } = model;
+      const { cast = [], acts = [], crimeScenes = [], attributes = [] } = model;
 
       const isAdmin = role === 'admin';
-      cast.sort((a, b) => a.label?.localeCompare(b.label || ''));
       // const cast = model.crimeScenes
       //   .filter((c) => c.cast)
       //   .reduce((acc, cur) => {
@@ -60,7 +53,7 @@ export const SettingsPage: MeiosisComponent = () => {
           m(FlatButton, {
             label: edit ? 'Stop edit' : 'Edit',
             iconName: edit ? 'save' : 'edit',
-            className: 'small',
+            className: 'right small',
             onclick: () => {
               edit = !edit;
             },
@@ -76,7 +69,7 @@ export const SettingsPage: MeiosisComponent = () => {
                     obj: model,
                     onchange: () => actions.saveModel(model),
                   } as FormAttributes<{ cast: Cast[] }>)
-                : m(CastView, { cast, crimeScenes, setLocation: actions.setLocation }),
+                : m(CastView, { cast, acts, crimeScenes, setLocation: actions.setLocation }),
             },
             {
               title: 'Attributes',
@@ -86,7 +79,7 @@ export const SettingsPage: MeiosisComponent = () => {
                     obj: model,
                     onchange: () => actions.saveModel(model),
                   } as FormAttributes<{ attributes: CrimeSceneAttributes[] }>)
-                : m(AttributesView, { attributes, crimeScenes, setLocation: actions.setLocation }),
+                : m(AttributesView, { attributes, acts, crimeScenes, setLocation: actions.setLocation }),
             },
           ],
         })
@@ -97,30 +90,37 @@ export const SettingsPage: MeiosisComponent = () => {
 
 const CastView: FactoryComponent<{
   cast: Cast[];
-  crimeScenes: CrimeScene[];
+  acts: Act[];
+  crimeScenes: CrimeScript[];
   setLocation: (currentCrimeSceneId: ID, actIdx: number, phaseIdx: number) => void;
 }> = () => {
   return {
-    view: ({ attrs: { cast, crimeScenes, setLocation } }) => {
+    view: ({ attrs: { cast, acts, crimeScenes: crimeScripts, setLocation } }) => {
       return m(
         '.cast',
         m(Collapsible, {
           items: cast.map((c) => {
-            const searchResults = crimeScenes.reduce((acc, cs, crimeSceneIdx) => {
-              cs.acts?.forEach(({ preparation, preactivity, activity, postactivity }, actIdx) => {
-                [preparation, preactivity, activity, postactivity].forEach((p, phaseIdx) => {
-                  p.activities?.forEach((a, activityIdx) => {
-                    if (a.cast?.includes(c.id)) {
-                      acc.push({
-                        crimeSceneIdx,
-                        actIdx,
-                        phaseIdx,
-                        activityIdx,
-                        conditionIdx: -1,
-                        type: 'cast',
-                        resultMd: a.label,
-                      } as SearchResult);
-                    }
+            const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
+              cs.actVariants?.forEach(({ ids }) => {
+                ids.forEach((actId) => {
+                  const actIdx = acts.findIndex((a) => a.id === actId);
+                  if (actIdx < 0) return;
+                  const act = acts[actIdx];
+                  [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
+                    phase.activities?.forEach((activity, activityIdx) => {
+                      const { label, cast = [] } = activity;
+                      if (cast.includes(c.id)) {
+                        acc.push({
+                          crimeScriptIdx,
+                          actIdx,
+                          phaseIdx,
+                          activityIdx,
+                          conditionIdx: -1,
+                          type: 'cast',
+                          resultMd: label,
+                        });
+                      }
+                    });
                   });
                 });
               });
@@ -134,18 +134,18 @@ const CastView: FactoryComponent<{
                 '.cast-content',
                 m(
                   'ol',
-                  searchResults.map(({ crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
+                  searchResults.map(({ crimeScriptIdx: crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
                     m('li', [
                       m(
                         'a.truncate',
                         {
                           style: { cursor: 'pointer' },
-                          href: routingSvc.href(Pages.HOME, `id=${crimeScenes[crimeSceneIdx].id}`),
+                          href: routingSvc.href(Pages.HOME, `id=${crimeScripts[crimeSceneIdx].id}`),
                           onclick: () => {
-                            setLocation(crimeScenes[crimeSceneIdx].id, actIdx, phaseIdx);
+                            setLocation(crimeScripts[crimeSceneIdx].id, actIdx, phaseIdx);
                           },
                         },
-                        `${crimeScenes[crimeSceneIdx].label} > ${type}`
+                        `${crimeScripts[crimeSceneIdx].label} > ${type}`
                       ),
                       m(SlimdownView, { md: resultMd, removeParagraphs: true }),
                     ])
@@ -161,31 +161,38 @@ const CastView: FactoryComponent<{
 };
 
 const AttributesView: FactoryComponent<{
+  acts: Act[];
   attributes: CrimeSceneAttributes[];
-  crimeScenes: CrimeScene[];
+  crimeScenes: CrimeScript[];
   setLocation: (currentCrimeSceneId: ID, actIdx: number, phaseIdx: number) => void;
 }> = () => {
   return {
-    view: ({ attrs: { attributes: cast, crimeScenes, setLocation } }) => {
+    view: ({ attrs: { attributes, acts, crimeScenes: crimeScripts, setLocation } }) => {
       return m(
         '.cast',
         m(Collapsible, {
-          items: cast.map((attr) => {
-            const searchResults = crimeScenes.reduce((acc, cs, crimeSceneIdx) => {
-              cs.acts?.forEach(({ preparation, preactivity, activity, postactivity }, actIdx) => {
-                [preparation, preactivity, activity, postactivity].forEach((p, phaseIdx) => {
-                  p.activities?.forEach((a, activityIdx) => {
-                    if (a.attributes?.includes(attr.id)) {
-                      acc.push({
-                        crimeSceneIdx,
-                        actIdx,
-                        phaseIdx,
-                        activityIdx,
-                        conditionIdx: -1,
-                        type: 'cast',
-                        resultMd: a.label,
-                      } as SearchResult);
-                    }
+          items: attributes.map((attr) => {
+            const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
+              cs.actVariants?.forEach(({ ids }) => {
+                ids.forEach((actId) => {
+                  const actIdx = acts.findIndex((a) => a.id === actId);
+                  if (actIdx < 0) return;
+                  const act = acts[actIdx];
+                  [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
+                    phase.activities?.forEach((activity, activityIdx) => {
+                      const { label, attributes = [] } = activity;
+                      if (attributes.includes(attr.id)) {
+                        acc.push({
+                          crimeScriptIdx,
+                          actIdx,
+                          phaseIdx,
+                          activityIdx,
+                          conditionIdx: -1,
+                          type: 'attribute',
+                          resultMd: label,
+                        });
+                      }
+                    });
                   });
                 });
               });
@@ -199,18 +206,18 @@ const AttributesView: FactoryComponent<{
                 '.cast-content',
                 m(
                   'ol',
-                  searchResults.map(({ crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
+                  searchResults.map(({ crimeScriptIdx: crimeSceneIdx, actIdx, phaseIdx, resultMd, type }) =>
                     m('li', [
                       m(
                         'a.truncate',
                         {
                           style: { cursor: 'pointer' },
-                          href: routingSvc.href(Pages.HOME, `id=${crimeScenes[crimeSceneIdx].id}`),
+                          href: routingSvc.href(Pages.HOME, `id=${crimeScripts[crimeSceneIdx].id}`),
                           onclick: () => {
-                            setLocation(crimeScenes[crimeSceneIdx].id, actIdx, phaseIdx);
+                            setLocation(crimeScripts[crimeSceneIdx].id, actIdx, phaseIdx);
                           },
                         },
-                        `${crimeScenes[crimeSceneIdx].label} > ${type}`
+                        `${crimeScripts[crimeSceneIdx].label} > ${type}`
                       ),
                       m(SlimdownView, { md: resultMd, removeParagraphs: true }),
                     ])

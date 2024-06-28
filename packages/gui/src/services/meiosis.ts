@@ -103,7 +103,7 @@ export const setSearchResults: Service<State> = {
   run: (cell) => {
     const state = cell.getState();
     const { model = {} as DataModel } = state;
-    const { crimeScenes = [], cast = [], attributes = [] } = model;
+    const { crimeScenes = [], cast = [], attributes = [], acts = [] } = model;
     const searchResults: SearchResult[] = [];
     if (state.searchFilter) {
       const searchFilter = state.searchFilter.toLowerCase();
@@ -116,11 +116,11 @@ export const setSearchResults: Service<State> = {
       const matchingAttr = attributes
         .filter((attr) => attr.label?.toLowerCase().includes(searchFilter))
         .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, CrimeSceneAttributes>());
-      crimeScenes.forEach((crimeScene, crimeSceneIdx) => {
-        const { label, description, acts = [] } = crimeScene;
+      crimeScenes.forEach((crimeScene, crimeScriptIdx) => {
+        const { label, description, actVariants = [] } = crimeScene;
         if (label.toLowerCase().includes(searchFilter) || description?.toLowerCase().includes(searchFilter)) {
           searchResults.push({
-            crimeSceneIdx,
+            crimeScriptIdx,
             actIdx: -1,
             phaseIdx: -1,
             activityIdx: -1,
@@ -129,62 +129,67 @@ export const setSearchResults: Service<State> = {
             resultMd: highlighter(label.toLowerCase().includes(searchFilter) ? label : description!),
           });
         }
-        acts.forEach((act, actIdx) => {
-          [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
-            phase.activities?.forEach((activity, activityIdx) => {
-              const { label, description, conditions = [], cast = [], attributes = [] } = activity;
-              cast.forEach((id) => {
-                const include = matchingCast.get(id);
-                if (include) {
-                  searchResults.push({
-                    crimeSceneIdx,
-                    actIdx,
-                    phaseIdx,
-                    activityIdx,
-                    conditionIdx: -1,
-                    type: 'cast',
-                    resultMd: highlighter(include.label),
-                  });
-                }
-              });
-              attributes.forEach((id) => {
-                const include = matchingAttr.get(id);
-                if (include) {
-                  searchResults.push({
-                    crimeSceneIdx,
-                    actIdx,
-                    phaseIdx,
-                    activityIdx,
-                    conditionIdx: -1,
-                    type: 'attribute',
-                    resultMd: highlighter(include.label),
-                  });
-                }
-              });
-              if (label.toLowerCase().includes(searchFilter) || description?.toLowerCase().includes(searchFilter)) {
-                searchResults.push({
-                  crimeSceneIdx,
-                  actIdx,
-                  phaseIdx,
-                  activityIdx,
-                  conditionIdx: -1,
-                  type: 'activity',
-                  resultMd: highlighter(label.toLowerCase().includes(searchFilter) ? label : description!),
+        actVariants.forEach(({ ids }) => {
+          ids.forEach((actId) => {
+            const actIdx = acts.findIndex((a) => a.id === actId);
+            if (actIdx < 0) return;
+            const act = acts[actIdx];
+            [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
+              phase.activities?.forEach((activity, activityIdx) => {
+                const { label, description, conditions = [], cast = [], attributes = [] } = activity;
+                cast.forEach((id) => {
+                  const include = matchingCast.get(id);
+                  if (include) {
+                    searchResults.push({
+                      crimeScriptIdx: crimeScriptIdx,
+                      actIdx,
+                      phaseIdx,
+                      activityIdx,
+                      conditionIdx: -1,
+                      type: 'cast',
+                      resultMd: highlighter(include.label),
+                    });
+                  }
                 });
-              }
-              conditions?.forEach((condition, conditionIdx) => {
-                const { label } = condition;
-                if (label?.toLowerCase().includes(searchFilter)) {
+                attributes.forEach((id) => {
+                  const include = matchingAttr.get(id);
+                  if (include) {
+                    searchResults.push({
+                      crimeScriptIdx: crimeScriptIdx,
+                      actIdx,
+                      phaseIdx,
+                      activityIdx,
+                      conditionIdx: -1,
+                      type: 'attribute',
+                      resultMd: highlighter(include.label),
+                    });
+                  }
+                });
+                if (label.toLowerCase().includes(searchFilter) || description?.toLowerCase().includes(searchFilter)) {
                   searchResults.push({
-                    crimeSceneIdx,
+                    crimeScriptIdx: crimeScriptIdx,
                     actIdx,
                     phaseIdx,
                     activityIdx,
-                    conditionIdx,
-                    type: 'condition',
-                    resultMd: highlighter(label),
+                    conditionIdx: -1,
+                    type: 'activity',
+                    resultMd: highlighter(label.toLowerCase().includes(searchFilter) ? label : description!),
                   });
                 }
+                conditions?.forEach((condition, conditionIdx) => {
+                  const { label } = condition;
+                  if (label?.toLowerCase().includes(searchFilter)) {
+                    searchResults.push({
+                      crimeScriptIdx: crimeScriptIdx,
+                      actIdx,
+                      phaseIdx,
+                      activityIdx,
+                      conditionIdx,
+                      type: 'condition',
+                      resultMd: highlighter(label),
+                    });
+                  }
+                });
               });
             });
           });
@@ -193,8 +198,8 @@ export const setSearchResults: Service<State> = {
     }
     searchResults.sort((a, b) => {
       // Compare by crimeSceneIdx
-      if (a.crimeSceneIdx !== b.crimeSceneIdx) {
-        return a.crimeSceneIdx - b.crimeSceneIdx;
+      if (a.crimeScriptIdx !== b.crimeScriptIdx) {
+        return a.crimeScriptIdx - b.crimeScriptIdx;
       }
       // Compare by actIdx
       if (a.actIdx !== b.actIdx) {
@@ -234,6 +239,20 @@ cells.map(() => {
 const loadData = async () => {
   const ds = localStorage.getItem(MODEL_KEY);
   const model: DataModel = ds ? JSON.parse(ds) : { crimeScenes: [] };
+  // model.acts = model.crimeScenes.reduce((acc, cs) => {
+  //   cs.acts &&
+  //     cs.acts.forEach((a: any) => {
+  //       if (!a.id) {
+  //         a.id = uniqueId();
+  //       }
+  //       acc.push(a);
+  //     });
+  //   if (cs.acts) {
+  //     cs.actVariants = cs.acts.map((a: any) => ({ id: a.id, ids: [a.id] })) as any;
+  //     delete cs.acts;
+  //   }
+  //   return acc;
+  // }, [] as any[]);
   // console.log(model);
   // const b = localStorage.getItem(BOOKMARKS_KEY);
   // const bookmarks = b ? JSON.parse(b) : [];

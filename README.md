@@ -21,7 +21,10 @@ npm start
 - [x] Add option to add images
 - [x] When clicking on a search result, navigate to the exact location (add act, phase)
 - [x] Add option to specify and view literature
-- [x] Zip the model file
+- [x] Allow the user to select multiple acts in each step
+- [ ] Search should preferably also select the act variant
+- [ ] Zip the model file
+- [ ] Use the crime script image, e.g. next to the description
 - [ ] Add measures to counteract the activity or condition: use Situational Crime Prevention (SCP) to structure the measures.
 - [ ] Add option to use it with a case
 - [ ] Translate to Dutch

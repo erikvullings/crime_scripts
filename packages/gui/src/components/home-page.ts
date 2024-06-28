@@ -7,21 +7,21 @@ import {
   Cast,
   CastType,
   Condition,
-  CrimeScene,
+  CrimeScript,
   CrimeSceneAttributes,
   ICONS,
   ID,
   IconOpts,
-  Literature,
   Pages,
   attributeTypeToIconMap,
 } from '../models';
 import { MeiosisComponent, State, routingSvc } from '../services';
-import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel } from 'mithril-materialized';
+import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel, Select, ISelectOptions } from 'mithril-materialized';
 import { FormAttributes, LayoutForm, SlimdownView, UIForm } from 'mithril-ui-form';
 import { labelForm, literatureForm } from '../models/forms';
 import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from './ui/reference';
+import { MultiSelectDropdown } from './ui/multi-select';
 
 export const HomePage: MeiosisComponent = () => {
   let id = '';
@@ -40,7 +40,7 @@ export const HomePage: MeiosisComponent = () => {
     view: ({ attrs: { state, actions } }) => {
       id = m.route.param('id') || '';
       const { model, role, curActIdx, curPhaseIdx } = state;
-      const { crimeScenes = [], cast = [], attributes = [] } = model;
+      const { crimeScenes = [], cast = [], acts = [], attributes = [] } = model;
       const crimeScene = crimeScenes.find((c) => c.id === id);
 
       const isAdmin = role === 'admin';
@@ -87,10 +87,11 @@ export const HomePage: MeiosisComponent = () => {
                 m(
                   '.crime-scene',
                   edit
-                    ? m(CrimeSceneEditor, { crimeScene, cast, attributes })
+                    ? m(CrimeSceneEditor, { crimeScene, cast, acts, attributes })
                     : m(CrimeSceneView, {
                         crimeScene,
                         cast,
+                        acts,
                         attributes,
                         curActIdx,
                         curPhaseIdx,
@@ -107,7 +108,7 @@ export const HomePage: MeiosisComponent = () => {
                     iconName: 'add',
                     className: 'small',
                     onclick: () => {
-                      const newCrimeScene = { id: uniqueId() } as CrimeScene;
+                      const newCrimeScene = { id: uniqueId() } as CrimeScript;
                       model.crimeScenes.push(newCrimeScene);
                       actions.saveModel(model);
                       actions.changePage(Pages.HOME, { id: newCrimeScene.id });
@@ -116,7 +117,9 @@ export const HomePage: MeiosisComponent = () => {
                 ),
               m(
                 '.crime-scenes',
-                crimeScenes.map((crimeScene) => m(CrimeSceneCard, { crimeScene, cast, changePage: actions.changePage }))
+                crimeScenes.map((crimeScene) =>
+                  m(CrimeScriptCard, { crimeScene, cast, acts, changePage: actions.changePage })
+                )
               ),
             ],
         m(ModalPanel, {
@@ -143,9 +146,10 @@ export const HomePage: MeiosisComponent = () => {
   };
 };
 
-export const CrimeSceneCard: FactoryComponent<{
-  crimeScene: CrimeScene;
+export const CrimeScriptCard: FactoryComponent<{
+  crimeScene: CrimeScript;
   cast: Cast[];
+  acts: Act[];
   changePage: (
     page: Pages,
     params?: Record<string, string | number | undefined>,
@@ -153,9 +157,10 @@ export const CrimeSceneCard: FactoryComponent<{
   ) => void;
 }> = () => {
   return {
-    view: ({ attrs: { crimeScene, cast = [], changePage } }) => {
-      const { id, url, label: name, acts = [], description } = crimeScene;
+    view: ({ attrs: { crimeScene, cast = [], acts: allActs = [], changePage } }) => {
+      const { id, url, label: name = 'New act', actVariants: actVariants = [], description } = crimeScene;
 
+      const acts = actVariants.map((variant) => allActs.find((a) => a.id === variant.id) || ({} as Act));
       const allCast = Array.from(
         acts.reduce((acc, { preparation, preactivity, activity, postactivity }) => {
           [preparation, preactivity, activity, postactivity].forEach((ap) => {
@@ -184,23 +189,11 @@ export const CrimeSceneCard: FactoryComponent<{
                   {
                     href: routingSvc.href(Pages.HOME, `?id=${id}`),
                   },
-                  [
-                    m('img', { src: url, alt: name }),
-                    m(
-                      'span.card-title.bold.sharpen',
-                      // { className: isBookmarked ? 'amber-text' : 'black-text' },
-                      name || 'DEFAULT'
-                    ),
-                  ]
+                  [m('img', { src: url, alt: name }), m('span.card-title.bold.sharpen', name)]
                 ),
               ]),
             m('.card-content', [
-              !url &&
-                m(
-                  'span.card-title.bold.sharpen',
-                  // { className: isBookmarked ? 'amber-text' : 'black-text' },
-                  name || 'DEFAULT'
-                ),
+              !url && m('span.card-title.bold.sharpen', name),
               description && m('p', description),
               acts &&
                 m(
@@ -222,36 +215,43 @@ export const CrimeSceneCard: FactoryComponent<{
 };
 
 export const CrimeSceneView: FactoryComponent<{
-  crimeScene: CrimeScene;
+  crimeScene: CrimeScript;
   cast: Cast[];
+  acts: Act[];
   attributes: CrimeSceneAttributes[];
   curActIdx?: number;
   curPhaseIdx?: number;
   update: (patch: Patch<State>) => void;
 }> = () => {
   return {
-    view: ({ attrs: { crimeScene, cast, attributes, curActIdx = 0, curPhaseIdx = 0, update } }) => {
-      const { label = '...', description, literature, acts = [] } = crimeScene;
-      const [allCastIds, allAttrIds] = acts.reduce(
-        (acc, act) => {
-          [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase) =>
-            phase.activities.forEach((activity) => {
-              activity.cast?.forEach((id) => acc[0].add(id));
-              activity.attributes?.forEach((id) => acc[1].add(id));
-            })
-          );
+    view: ({ attrs: { crimeScene, cast, acts: allActs, attributes, curActIdx = 0, curPhaseIdx = 0, update } }) => {
+      const { label = '...', description, literature, actVariants = [] } = crimeScene;
+      const [allCastIds, allAttrIds] = actVariants.reduce(
+        (acc, variant) => {
+          const act = allActs.find((a) => a.id === variant.id);
+          if (act) {
+            [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase) =>
+              phase.activities.forEach((activity) => {
+                activity.cast?.forEach((id) => acc[0].add(id));
+                activity.attributes?.forEach((id) => acc[1].add(id));
+              })
+            );
+          }
           return acc;
         },
         [new Set<ID>(), new Set<ID>()] as [cast: Set<ID>, attr: Set<ID>]
       );
 
-      const selectedActContent = acts
+      const selectedActContent = actVariants
         .filter((_, index) => curActIdx === index)
-        .map(({ label = '...', preparation, preactivity, activity, postactivity }) => {
+        .map((variant) => {
+          return allActs.find((a) => a.id === variant.id) || ({} as Act);
+        })
+        .map(({ label = '...', preparation, preactivity, activity, postactivity } = {} as Act) => {
           preparation.label = 'Preparation phase';
-          preactivity.label = 'Preactivity phase';
+          preactivity.label = 'Pre-activity phase';
           activity.label = 'Activity phase';
-          postactivity.label = 'Postactivity phase';
+          postactivity.label = 'Post-activity phase';
           const contentTabs = [preparation, preactivity, activity, postactivity]
             // .filter((ap) => ap && ((ap.activities && ap.activities.length) || (ap.conditions && ap.conditions.length)))
             .map(({ label, activities = [], conditions }) => {
@@ -305,59 +305,104 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
           };
           return tabItem;
         })
-        .pop();
+        .shift();
 
       return m('.col.s12', [
         m('h4', label),
         description && m('p', description),
-        allCastIds.size > 0 && [
-          m('h5', 'Cast'),
-          m(
-            'ol',
-            Array.from(allCastIds).map((id) => m('li', cast.find((c) => c.id === id)?.label))
-          ),
-        ],
-        allAttrIds.size > 0 && [
-          m('h5', 'Attributes'),
-          m(
-            'ol',
-            Array.from(allAttrIds).map((id) => m('li', attributes.find((c) => c.id === id)?.label))
-          ),
-        ],
+        m('.row', [
+          m('.col.s6', [
+            allCastIds.size > 0 && [
+              m('h5', 'Cast'),
+              m(
+                'ol',
+                Array.from(allCastIds).map((id) => m('li', cast.find((c) => c.id === id)?.label))
+              ),
+            ],
+          ]),
+          m('.col.s6', [
+            allAttrIds.size > 0 && [
+              m('h5', 'Attributes'),
+              m(
+                'ol',
+                Array.from(allAttrIds).map((id) => m('li', attributes.find((c) => c.id === id)?.label))
+              ),
+            ],
+          ]),
+        ]),
         literature &&
           literature.length > 0 && [m('h5', 'References'), m(ReferenceListComponent, { references: literature })],
         m(
           '.card-container',
-          acts.map(({ label = '...', icon, url, description }, index) => {
-            const imgSrc = icon === ICONS.OTHER ? url : IconOpts.find((i) => i.id === icon)?.img;
-            return m('.card.large', [
-              m('.card-image', [
-                imgSrc &&
-                  m('img', {
-                    alt: label,
-                    src: imgSrc,
-                    style: {
-                      width: 'auto',
-                      margin: 'auto',
-                      'padding-top': '10px',
-                      'padding-bottom': '2.8rem',
-                      'max-height': '200px',
-                    },
-                  }),
-                m(
-                  'span.card-title.white.black-text',
-                  { style: { padding: '5px 10px', 'border-radius': '10px' } },
-                  `${index + 1}. ${label}`
-                ),
-              ]),
-              m(
-                '.card-content',
-                { style: { padding: '12px', 'overflow-y': 'auto', 'max-height': '55%' } },
-                m(SlimdownView, { md: description })
-              ),
-              m('.card-action', m(FlatButton, { label: 'MORE', onclick: () => update({ curActIdx: index }) })),
-            ]);
-          })
+          actVariants
+            .map(({ id }) => allActs.find((a) => a.id === id) || ({} as Act))
+            .map(({ id, label = '...', icon, url, description }, index) => {
+              const imgSrc = icon === ICONS.OTHER ? url : IconOpts.find((i) => i.id === icon)?.img;
+              const ids = actVariants[index].ids;
+              const hasVariants = ids.length > 1;
+              const curVariantIdx = ids.indexOf(id);
+              const prevVariantIdx = curVariantIdx > 0 && ids[curVariantIdx - 1];
+              const nextVariantIdx = curVariantIdx < ids.length - 1 && ids[curVariantIdx + 1];
+
+              return m(
+                '.card.large',
+                {
+                  class: ids.length > 1 ? 'multiple-variants' : '',
+                },
+                [
+                  m('.card-image', [
+                    imgSrc &&
+                      m('img', {
+                        alt: label,
+                        src: imgSrc,
+                        style: {
+                          width: 'auto',
+                          margin: 'auto',
+                          'padding-top': '10px',
+                          'padding-bottom': '2.8rem',
+                          'max-height': '200px',
+                        },
+                      }),
+                    m(
+                      'span.card-title.white.black-text',
+                      { style: { padding: '5px 10px', 'border-radius': '10px' } },
+                      `${index + 1}. ${label}`
+                    ),
+                  ]),
+                  m(
+                    '.card-content',
+                    { style: { padding: '12px', 'overflow-y': 'auto', 'max-height': '55%' } },
+                    m(SlimdownView, { md: description })
+                  ),
+                  m('.card-action', [
+                    m(FlatButton, {
+                      label: 'Details',
+                      className: 'right',
+                      onclick: () => update({ curActIdx: index }),
+                    }),
+                    hasVariants && [
+                      m(FlatButton, {
+                        label: '<',
+                        disabled: !prevVariantIdx,
+                        style: { 'margin-right': 0 },
+                        onclick: () => {
+                          if (typeof prevVariantIdx === 'string') actVariants[index].id = prevVariantIdx;
+                        },
+                      }),
+                      m('span', { style: { 'line-height': '36px' } }, `${curVariantIdx + 1}/${ids.length}`),
+                      m(FlatButton, {
+                        label: '>',
+                        disabled: !nextVariantIdx,
+                        style: { 'margin-right': 0 },
+                        onclick: () => {
+                          if (typeof nextVariantIdx === 'string') actVariants[index].id = nextVariantIdx;
+                        },
+                      }),
+                    ],
+                  ]),
+                ]
+              );
+            })
         ),
         selectedActContent && [m('h4', selectedActContent.title), selectedActContent.vnode],
       ]);
@@ -366,8 +411,9 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
 };
 
 export const CrimeSceneEditor: FactoryComponent<{
-  crimeScene: CrimeScene;
+  crimeScene: CrimeScript;
   cast: Cast[];
+  acts: Act[];
   attributes: CrimeSceneAttributes[];
 }> = () => {
   type InputOptions = {
@@ -389,7 +435,7 @@ export const CrimeSceneEditor: FactoryComponent<{
       }));
       attrOptions = attributes.map(({ id, label, type }) => ({ id, label, group: attributeTypeToIconMap.get(type) }));
     },
-    view: ({ attrs: { crimeScene } }) => {
+    view: ({ attrs: { acts, crimeScene } }) => {
       // const { cast } = crimeScene;
 
       const activityForm: UIForm<any> = [
@@ -445,15 +491,15 @@ export const CrimeSceneEditor: FactoryComponent<{
       const actsForm: UIForm<any> = [
         // ...castForm,
         {
-          id: 'acts',
+          id: 'actVariants',
           repeat: true,
           pageSize: 1,
-          label: 'Acts',
+          label: 'Steps',
           type: [
-            { id: 'label', type: 'text', className: 'col s6 m6', label: 'Name' },
-            { id: 'icon', type: 'select', className: 'col s6 m3', label: 'Image', options: IconOpts },
-            { id: 'url', type: 'base64', className: 'col s12 m3', label: 'Image', show: ['icon=1'] },
-            { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
+            // { id: 'label', type: 'text', className: 'col s6 m6', label: 'Name' },
+            // { id: 'icon', type: 'select', className: 'col s6 m3', label: 'Image', options: IconOpts },
+            // { id: 'url', type: 'base64', className: 'col s12 m3', label: 'Image', show: ['icon=1'] },
+            // { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
             // { id: 'preparation', type: activityForm, className: 'col s12 section', label: 'Preparation' },
             // { id: 'preactivity', type: activityForm, className: 'col s12 section', label: 'Pre-activity' },
             // { id: 'activity', type: activityForm, className: 'col s12 section', label: 'Activity' },
@@ -462,11 +508,14 @@ export const CrimeSceneEditor: FactoryComponent<{
         },
       ];
 
-      const preventionMeasuresForm: UIForm<any> = [];
+      // const preventionMeasuresForm: UIForm<any> = [];
 
-      const curActIdx = +(m.route.param('acts') || 1) - 1;
-      const curAct = crimeScene.acts && curActIdx < crimeScene.acts.length && crimeScene.acts[curActIdx];
-      console.log(`Act id: ${curActIdx}`);
+      const curActIdx = +(m.route.param('actVariants') || 1) - 1;
+      const curActIds =
+        crimeScene.actVariants && curActIdx < crimeScene.actVariants.length && crimeScene.actVariants[curActIdx];
+      const curActId = curActIds && curActIds.id;
+      const curAct = curActId && acts.find((a) => a.id === curActId);
+      console.log(`Act ids: ${curActIdx}`);
 
       return m('.col.s12', [
         m(LayoutForm, {
@@ -477,53 +526,129 @@ export const CrimeSceneEditor: FactoryComponent<{
           ],
           obj: crimeScene,
           onchange: () => {},
-        } as FormAttributes<Partial<CrimeScene>>),
+        } as FormAttributes<Partial<CrimeScript>>),
 
-        curAct &&
-          m(Tabs, {
-            tabs: [
-              {
-                title: 'Preparation phase',
-                vnode: m('.acts', [
-                  m(LayoutForm, {
-                    form: activityForm,
-                    obj: curAct.preparation,
-                    onchange: () => {},
-                  } as FormAttributes<Partial<ActivityPhase>>),
-                ]),
-              },
-              {
-                title: 'Pre-activity phase',
-                vnode: m('.acts', [
-                  m(LayoutForm, {
-                    form: activityForm,
-                    obj: curAct.preactivity,
-                    onchange: () => {},
-                  } as FormAttributes<Partial<ActivityPhase>>),
-                ]),
-              },
-              {
-                title: 'Activity phase',
-                vnode: m('.acts', [
-                  m(LayoutForm, {
-                    form: activityForm,
-                    obj: curAct.activity,
-                    onchange: () => {},
-                  } as FormAttributes<Partial<ActivityPhase>>),
-                ]),
-              },
-              {
-                title: 'Post-activity phase',
-                vnode: m('.acts', [
-                  m(LayoutForm, {
-                    form: activityForm,
-                    obj: curAct.postactivity,
-                    onchange: () => {},
-                  } as FormAttributes<Partial<ActivityPhase>>),
-                ]),
-              },
-            ],
-          }),
+        curActIds &&
+          m(
+            '.col.s12',
+            m('.row', [
+              m(
+                '.col.s12',
+                m(MultiSelectDropdown, {
+                  items: acts,
+                  selectedIds: curActIds.ids,
+                  label: 'Select one or more acts for this step',
+                  max: 5,
+                  search: true,
+                  selectAll: false,
+                  listAll: true,
+                  onchange: (selectedIds) => {
+                    crimeScene.actVariants[curActIdx] = {
+                      id: selectedIds.length > 0 ? selectedIds[0] : '',
+                      ids: selectedIds,
+                    };
+                    m.redraw();
+                  },
+                })
+              ),
+              curActIds.ids &&
+                curActIds.ids.length > 0 && [
+                  m(Select, {
+                    key: curAct ? curAct.label : curActIds.id,
+                    label: 'Select act to edit',
+                    className: 'col s6',
+                    initialValue: curActIds.id,
+                    // disabled: curActIds.ids.length === 1,
+                    options: acts.filter((a) => curActIds.ids.includes(a.id)),
+                    onchange: (id) => {
+                      crimeScene.actVariants[curActIdx].id = id[0];
+                    },
+                  } as ISelectOptions<ID>),
+                ],
+              m(FlatButton, {
+                label: 'Create new act',
+                className: 'col s6',
+                iconName: 'add',
+                onclick: () => {
+                  const id = uniqueId();
+                  const newAct = {
+                    id,
+                    label: 'New act',
+                    activity: {},
+                    preparation: {},
+                    preactivity: {},
+                    postactivity: {},
+                  } as Act;
+                  acts.push(newAct);
+                  crimeScene.actVariants[curActIdx].id = id;
+                  if (crimeScene.actVariants[curActIdx].ids) {
+                    crimeScene.actVariants[curActIdx].ids.push(id);
+                  } else {
+                    crimeScene.actVariants[curActIdx].ids = [id];
+                  }
+                },
+              }),
+            ])
+          ),
+
+        curAct && [
+          m('.cur-act', { key: curAct.id }, [
+            m(LayoutForm, {
+              form: [
+                { id: 'label', type: 'text', className: 'col s6 m6', label: 'Name' },
+                { id: 'icon', type: 'select', className: 'col s6 m3', label: 'Image', options: IconOpts },
+                { id: 'url', type: 'base64', className: 'col s12 m3', label: 'Image', show: ['icon=1'] },
+                { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
+              ],
+              obj: curAct,
+              onchange: () => {},
+            } as FormAttributes<Partial<Act>>),
+            m(Tabs, {
+              tabs: [
+                {
+                  title: 'Preparation phase',
+                  vnode: m('.acts', [
+                    m(LayoutForm, {
+                      form: activityForm,
+                      obj: curAct.preparation,
+                      onchange: () => {},
+                    } as FormAttributes<Partial<ActivityPhase>>),
+                  ]),
+                },
+                {
+                  title: 'Pre-activity phase',
+                  vnode: m('.acts', [
+                    m(LayoutForm, {
+                      form: activityForm,
+                      obj: curAct.preactivity,
+                      onchange: () => {},
+                    } as FormAttributes<Partial<ActivityPhase>>),
+                  ]),
+                },
+                {
+                  title: 'Activity phase',
+                  vnode: m('.acts', [
+                    m(LayoutForm, {
+                      form: activityForm,
+                      obj: curAct.activity,
+                      onchange: () => {},
+                    } as FormAttributes<Partial<ActivityPhase>>),
+                  ]),
+                },
+                {
+                  title: 'Post-activity phase',
+                  vnode: m('.acts', [
+                    m(LayoutForm, {
+                      form: activityForm,
+                      obj: curAct.postactivity,
+                      onchange: () => {},
+                    } as FormAttributes<Partial<ActivityPhase>>),
+                  ]),
+                },
+              ],
+            }),
+          ]),
+        ],
       ]);
     },
   };

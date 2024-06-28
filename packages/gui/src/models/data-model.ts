@@ -3,9 +3,10 @@ import { ICONS } from './icons';
 export type DataModel = {
   version: number;
   lastUpdate: number;
-  crimeScenes: CrimeScene[];
+  crimeScenes: CrimeScript[];
   cast: Cast[];
   attributes: CrimeSceneAttributes[];
+  acts: Act[];
 };
 
 export const defaultModel = {
@@ -14,6 +15,7 @@ export const defaultModel = {
   crimeScenes: [],
   cast: [],
   attributes: [],
+  acts: [],
 } as DataModel;
 
 export enum CATEGORY {
@@ -64,7 +66,7 @@ export enum LITERATURE_TYPE {
 }
 
 export type SearchResult = {
-  crimeSceneIdx: number;
+  crimeScriptIdx: number;
   actIdx: number;
   phaseIdx: number;
   activityIdx: number;
@@ -90,7 +92,7 @@ export type Literature = Labeled & {
   type?: LITERATURE_TYPE;
 };
 
-export type CrimeScene = Labeled & {
+export type CrimeScript = Labeled & {
   owner: ID;
   /** Epoch time when last updated */
   updated: number;
@@ -103,7 +105,7 @@ export type CrimeScene = Labeled & {
   /** Literature referred to in this article */
   literature: Literature[];
   /** Acts in the crime script */
-  acts: Act[];
+  actVariants: ActVariants[];
 };
 
 export enum ATTRIBUTE_TYPE {
@@ -186,6 +188,14 @@ export const AttributeTypeOptions = [
 
 export type CrimeSceneAttributes = Labeled & {
   type: ATTRIBUTE_TYPE;
+};
+
+/** A crime script can have multiple act variants, and each variant can be one or more acts. */
+export type ActVariants = {
+  /** Currently selected Act ID */
+  id: ID;
+  /** Act IDs of all variants */
+  ids: ID[];
 };
 
 export type Act = Labeled & {

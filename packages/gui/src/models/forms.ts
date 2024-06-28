@@ -2,7 +2,7 @@ import { UIForm } from 'mithril-ui-form';
 import {
   CastTypeOptions,
   Cast,
-  CrimeScene,
+  CrimeScript,
   CrimeSceneAttributes,
   AttributeTypeOptions,
   Literature,
@@ -61,7 +61,7 @@ export const labelForm = [
   { id: 'label', type: 'text', className: 'col s6', label: 'Name' },
   { id: 'url', type: 'base64', className: 'col s6', label: 'Image' },
   { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
-] as UIForm<Partial<CrimeScene>>;
+] as UIForm<Partial<CrimeScript>>;
 
 export const literatureForm = [
   { id: 'id', type: 'autogenerate', autogenerate: 'id' },
