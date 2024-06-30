@@ -25,6 +25,6 @@ npm start
 - [ ] Search should preferably also select the act variant
 - [ ] Zip the model file
 - [ ] Use the crime script image, e.g. next to the description
-- [ ] Add measures to counteract the activity or condition: use Situational Crime Prevention (SCP) to structure the measures.
+- [x] Add measures to counteract the activity or condition: use Situational Crime Prevention (SCP) to structure the measures.
 - [ ] Add option to use it with a case
 - [ ] Translate to Dutch

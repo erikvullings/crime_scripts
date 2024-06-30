@@ -100,12 +100,15 @@ export type CrimeScript = Labeled & {
   status: STATUS;
   /** Specific application */
   category: CATEGORY;
-  /** Similar technologies */
-  similar: ID[];
   /** Literature referred to in this article */
   literature: Literature[];
-  /** Acts in the crime script */
+  /** Stages in the crime script */
   stages: Stage[];
+};
+
+export type Measure = Labeled & {
+  /** Category the measure belongs to, e.g. situational crime prevention or other */
+  cat: string;
 };
 
 export enum ATTRIBUTE_TYPE {
@@ -208,6 +211,8 @@ export type Act = Labeled & {
   preactivity: ActivityPhase;
   activity: ActivityPhase;
   postactivity: ActivityPhase;
+  /** Measures to prevent or stop crime */
+  measures: Measure[];
 };
 
 export type ActivityPhase = {

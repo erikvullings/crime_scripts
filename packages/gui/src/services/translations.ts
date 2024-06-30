@@ -18,6 +18,7 @@ export const messages = {
   NO: 'No',
   OK: 'Ok',
   NAME: 'Name',
+  MISC: 'Miscellaneous',
   DESCRIPTION: 'Description',
   DELETE_ITEM: {
     TITLE: 'Delete {item}',
@@ -149,6 +150,7 @@ export const messagesNL: typeof messages = {
   NO: 'Nee',
   OK: 'Ok',
   NAME: 'Naam',
+  MISC: 'Overig',
   DESCRIPTION: 'Beschrijving',
   DELETE_ITEM: {
     TITLE: '{item} verwijderen',

@@ -15,6 +15,7 @@ import {
   Pages,
   attributeTypeToIconMap,
   Stage,
+  Measure,
 } from '../models';
 import { MeiosisComponent, State, routingSvc } from '../services';
 import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel, Select, ISelectOptions } from 'mithril-materialized';
@@ -23,6 +24,7 @@ import { labelForm, literatureForm } from '../models/forms';
 import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from './ui/reference';
 import { MultiSelectDropdown } from './ui/multi-select';
+import { crimeMeasureOptions } from '../models/situational-crime-prevention';
 
 export const HomePage: MeiosisComponent = () => {
   let id = '';
@@ -426,6 +428,7 @@ export const CrimeScriptEditor: FactoryComponent<{
 
   let castOptions: Array<InputOptions> = [];
   let attrOptions: Array<InputOptions> = [];
+  let measOptions: Array<InputOptions> = crimeMeasureOptions();
 
   return {
     oninit: ({ attrs: { cast, attributes } }) => {
@@ -496,12 +499,26 @@ export const CrimeScriptEditor: FactoryComponent<{
         },
       ];
 
-      // const preventionMeasuresForm: UIForm<any> = [];
+      const measureForm: UIForm<Measure> = [
+        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+        { id: 'cat', type: 'select', options: measOptions, className: 'col s12 m5 l4', label: 'Category' },
+        { id: 'label', type: 'text', className: 'col s12 m7 l8', label: 'Name' },
+        // { id: 'description', type: 'textarea', className: 'col s12', label: 'Description' },
+      ];
+
+      const measuresForm: UIForm<any> = [{ id: 'measures', type: measureForm, repeat: true, label: 'Measures' }];
 
       const curActIdx = +(m.route.param('stages') || 1) - 1;
       const curActIds = crimeScript.stages && curActIdx < crimeScript.stages.length && crimeScript.stages[curActIdx];
       const curActId = curActIds && curActIds.id;
       const curAct = curActId && acts.find((a) => a.id === curActId);
+      if (curAct) {
+        if (!curAct.preparation) curAct.preparation = {} as ActivityPhase;
+        if (!curAct.preactivity) curAct.preactivity = {} as ActivityPhase;
+        if (!curAct.activity) curAct.activity = {} as ActivityPhase;
+        if (!curAct.postactivity) curAct.postactivity = {} as ActivityPhase;
+        if (!curAct.measures) curAct.measures = [];
+      }
 
       return m('.col.s12', [
         m(LayoutForm, {
@@ -627,6 +644,16 @@ export const CrimeScriptEditor: FactoryComponent<{
                     m(LayoutForm, {
                       form: activityForm,
                       obj: curAct.postactivity,
+                      onchange: () => {},
+                    } as FormAttributes<Partial<ActivityPhase>>),
+                  ]),
+                },
+                {
+                  title: 'Measures',
+                  vnode: m('.acts', [
+                    m(LayoutForm, {
+                      form: measuresForm,
+                      obj: curAct.measures,
                       onchange: () => {},
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
