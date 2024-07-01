@@ -57,7 +57,7 @@ export const LandingPage: MeiosisComponent = () => {
           m(Button, {
             iconName: 'download',
             className: 'btn-large',
-            label: 'Download',
+            label: 'Download JSON',
             onclick: () => {
               const dlAnchorElem = document.getElementById('downloadAnchorElem');
               if (!dlAnchorElem) {
@@ -67,11 +67,34 @@ export const LandingPage: MeiosisComponent = () => {
               const dataStr =
                 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify({ ...model, version }, null, 2));
               dlAnchorElem.setAttribute('href', dataStr);
-              dlAnchorElem.setAttribute('download', `${formatDate()}_v${padLeft(version, 3)}_crime_scene_scripts.json`);
+              dlAnchorElem.setAttribute('download', `${formatDate()}_v${padLeft(version, 3)}_crime_scripts.json`);
               dlAnchorElem.click();
             },
           }),
-          m('input#selectFiles[type=file]', { style: 'display:none' }),
+          m(Button, {
+            iconName: 'download',
+            className: 'btn-large',
+            label: 'Download Binary',
+            onclick: () => {
+              const dlBinaryAnchorElem = document.getElementById('downloadAnchorElem');
+              if (!dlBinaryAnchorElem) {
+                return;
+              }
+              const version = typeof model.version === 'undefined' ? 1 : model.version++;
+              const binaryData = lz.compressToUint8Array(JSON.stringify({ ...model, version }));
+              // const binaryData = new Uint8Array(compressedData.length);
+              // for (let i = 0; i < compressedData.length; i++) {
+              //   binaryData[i] = compressedData.charCodeAt(i);
+              // }
+              const blob = new Blob([binaryData], { type: 'application/octet-stream' });
+              const url = URL.createObjectURL(blob);
+              dlBinaryAnchorElem.setAttribute('href', url);
+              dlBinaryAnchorElem.setAttribute('download', `${formatDate()}_v${padLeft(version, 3)}_crime_scripts.bin`);
+              dlBinaryAnchorElem.click();
+              URL.revokeObjectURL(url);
+            },
+          }),
+          m('input#selectFiles[type=file][accept=.json]', { style: 'display:none' }),
           readerAvailable &&
             m(Button, {
               iconName: 'upload',
@@ -96,6 +119,45 @@ export const LandingPage: MeiosisComponent = () => {
                   const data = files && files.item(0);
                   data && reader.readAsText(data);
                   routingSvc.switchTo(Pages.HOME);
+                };
+                fileInput.click();
+              },
+            }),
+          m('input#selectBinFiles[type=file][accept=.bin]', { style: 'display:none' }),
+          readerAvailable &&
+            m(Button, {
+              iconName: 'upload',
+              className: 'btn-large',
+              label: 'Upload Binary File',
+              onclick: () => {
+                const fileInput = document.getElementById('selectBinFiles') as HTMLInputElement;
+                fileInput.onchange = () => {
+                  if (!fileInput || !fileInput.files || fileInput.files.length <= 0) {
+                    return;
+                  }
+
+                  const reader = new FileReader();
+                  reader.onload = (e: ProgressEvent<FileReader>) => {
+                    if (e.target && e.target.result) {
+                      const arrayBuffer = e.target.result as ArrayBuffer;
+                      const uint8Array = new Uint8Array(arrayBuffer);
+                      const decompressedString = lz.decompressFromUint8Array(uint8Array);
+                      console.log(decompressedString);
+                      try {
+                        const result = JSON.parse(decompressedString) as DataModel;
+                        if (result && result.version) {
+                          saveModel(result);
+                          routingSvc.switchTo(Pages.HOME);
+                        } else {
+                          console.error('Invalid file format');
+                        }
+                      } catch (error) {
+                        console.error('Error parsing file:', error);
+                      }
+                    }
+                  };
+
+                  reader.readAsArrayBuffer(fileInput.files[0]);
                 };
                 fileInput.click();
               },
