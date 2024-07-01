@@ -42,12 +42,12 @@ export const Layout: MeiosisComponent = () => {
                   'a.brand-logo.hide-on-med-and-down',
                   {
                     title: APP_TITLE,
-                    style: 'margin-left: 20px; color: black;',
+                    style: 'margin-left: 20px; color: black; height: 64px',
                     href: routingSvc.href(Pages.LANDING),
                   },
                   [
                     m(`img[width=50][height=50][src=${logo}][alt=logo]`, {
-                      style: 'margin-bottom: 6px; margin-left: -5px;',
+                      style: 'margin-bottom: 6px; margin-left: -6px;',
                     }),
                     m('span', { style: 'margin-left: 20px; vertical-align: top;' }, APP_TITLE),
                     m('.tooltip', [
@@ -149,7 +149,7 @@ export const Layout: MeiosisComponent = () => {
               ]),
             ]
           ),
-          m('.container', { style: 'padding-top: 1rem' }, children),
+          m('.container', { style: 'padding-top: 5px' }, children),
         ]),
       ];
     },

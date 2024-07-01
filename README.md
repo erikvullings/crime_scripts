@@ -28,3 +28,5 @@ npm start
 - [x] Add measures to counteract the activity or condition: use Situational Crime Prevention (SCP) to structure the measures.
 - [ ] Add option to use it with a case
 - [x] Translate to Dutch
+- [ ] Export to Word per script
+- [ ] Export to Word all scripts

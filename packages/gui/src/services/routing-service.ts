@@ -17,6 +17,8 @@ class RoutingService {
         title: t('LANDING', 'TITLE'),
         route: t('LANDING', 'ROUTE'),
         visible: false,
+        default: true,
+        hasSidebar: true,
         component: LandingPage,
       },
       {
@@ -25,7 +27,7 @@ class RoutingService {
         title: t('HOME', 'TITLE'),
         route: t('HOME', 'ROUTE'),
         visible: true,
-        default: true,
+        hasSidebar: true,
         component: HomePage,
       },
       {
