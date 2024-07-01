@@ -24,7 +24,7 @@ import { labelForm, literatureForm } from '../models/forms';
 import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from './ui/reference';
 import { MultiSelectDropdown } from './ui/multi-select';
-import { crimeMeasureOptions } from '../models/situational-crime-prevention';
+import { crimeMeasureOptions, lookupCrimeMeasure } from '../models/situational-crime-prevention';
 
 export const HomePage: MeiosisComponent = () => {
   let id = '';
@@ -226,6 +226,8 @@ export const CrimeScriptView: FactoryComponent<{
   curPhaseIdx?: number;
   update: (patch: Patch<State>) => void;
 }> = () => {
+  const findCrimeMeasure = lookupCrimeMeasure();
+
   return {
     view: ({ attrs: { crimeScript, cast, acts, attributes, curActIdx = 0, curPhaseIdx = 0, update } }) => {
       const { label = '...', description, literature, stages: actVariants = [] } = crimeScript;
@@ -250,7 +252,7 @@ export const CrimeScriptView: FactoryComponent<{
         .map((variant) => {
           return acts.find((a) => a.id === variant.id) || ({} as Act);
         })
-        .map(({ label = '...', preparation, preactivity, activity, postactivity } = {} as Act) => {
+        .map(({ label = '...', preparation, preactivity, activity, postactivity, measures = [] } = {} as Act) => {
           preparation.label = 'Preparation phase';
           preactivity.label = 'Pre-activity phase';
           activity.label = 'Activity phase';
@@ -291,6 +293,15 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
                 md,
               };
             });
+          if (measures.length > 0) {
+            contentTabs.push({
+              title: 'Measures',
+              md: `##### Measures
+                
+${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measure.label}`).join('\n')}
+                `,
+            });
+          }
           const tabItem: ITabItem = {
             title: label,
             vnode: contentTabs.length
@@ -426,9 +437,19 @@ export const CrimeScriptEditor: FactoryComponent<{
     icon?: string;
   };
 
+  const actsForm: UIForm<any> = [
+    {
+      id: 'stages',
+      repeat: true,
+      pageSize: 1,
+      label: 'Stages',
+      type: [] as UIForm<Partial<Stage>>,
+    },
+  ];
+
   let castOptions: Array<InputOptions> = [];
   let attrOptions: Array<InputOptions> = [];
-  let measOptions: Array<InputOptions> = crimeMeasureOptions();
+  let measuresForm: UIForm<any> = [];
 
   return {
     oninit: ({ attrs: { cast, attributes } }) => {
@@ -438,6 +459,16 @@ export const CrimeScriptEditor: FactoryComponent<{
         group: type === CastType.Individual ? 'person' : 'group',
       }));
       attrOptions = attributes.map(({ id, label, type }) => ({ id, label, group: attributeTypeToIconMap.get(type) }));
+      const measOptions = crimeMeasureOptions();
+
+      const measureForm: UIForm<Measure> = [
+        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+        { id: 'cat', type: 'select', options: measOptions, className: 'col s12 m5 l4', label: 'Category' },
+        { id: 'label', type: 'text', className: 'col s12 m7 l8', label: 'Name' },
+        // { id: 'description', type: 'textarea', className: 'col s12', label: 'Description' },
+      ];
+
+      measuresForm = [{ id: 'measures', type: measureForm, repeat: true, label: 'Measures' }];
     },
     view: ({ attrs: { acts, crimeScript } }) => {
       const activityForm: UIForm<any> = [
@@ -488,25 +519,6 @@ export const CrimeScriptEditor: FactoryComponent<{
           label: 'Conditions',
         },
       ];
-
-      const actsForm: UIForm<any> = [
-        {
-          id: 'stages',
-          repeat: true,
-          pageSize: 1,
-          label: 'Stages',
-          type: [] as UIForm<Partial<Stage>>,
-        },
-      ];
-
-      const measureForm: UIForm<Measure> = [
-        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-        { id: 'cat', type: 'select', options: measOptions, className: 'col s12 m5 l4', label: 'Category' },
-        { id: 'label', type: 'text', className: 'col s12 m7 l8', label: 'Name' },
-        // { id: 'description', type: 'textarea', className: 'col s12', label: 'Description' },
-      ];
-
-      const measuresForm: UIForm<any> = [{ id: 'measures', type: measureForm, repeat: true, label: 'Measures' }];
 
       const curActIdx = +(m.route.param('stages') || 1) - 1;
       const curActIds = crimeScript.stages && curActIdx < crimeScript.stages.length && crimeScript.stages[curActIdx];
@@ -653,8 +665,10 @@ export const CrimeScriptEditor: FactoryComponent<{
                   vnode: m('.acts', [
                     m(LayoutForm, {
                       form: measuresForm,
-                      obj: curAct.measures,
-                      onchange: () => {},
+                      obj: curAct,
+                      onchange: () => {
+                        console.log(curAct);
+                      },
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
                 },
