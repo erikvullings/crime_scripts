@@ -96,7 +96,7 @@ export const Layout: MeiosisComponent = () => {
               ])
             )
           ),
-          curPage && curPage.hasSidebar && [m(SideNavTrigger, {}), m(SideNav, { state, actions })],
+          curPage && curPage.hasSidebar && [m(SideNavTrigger, { state, actions }), m(SideNav, { state, actions })],
           m(
             '#searchDialog.modal',
             {

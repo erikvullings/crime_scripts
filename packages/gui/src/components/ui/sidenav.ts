@@ -1,9 +1,10 @@
 import m, { FactoryComponent } from 'mithril';
-import { MeiosisComponent, routingSvc } from '../../services';
-import { FlatButton, padLeft } from 'mithril-materialized';
-import { DataModel, Pages } from '../../models';
+import { Languages, MeiosisComponent, UserRole, i18n, routingSvc, t } from '../../services';
+import { FlatButton, ISelectOptions, ModalPanel, Select, padLeft } from 'mithril-materialized';
+import { DataModel, Pages, defaultModel } from '../../models';
 import { formatDate } from '../../utils';
 import { compressToEncodedURIComponent, compressToUint8Array, decompressFromUint8Array } from 'lz-string';
+import { LanguageSwitcher } from './language-switcher';
 
 export const SideNav: MeiosisComponent = () => {
   const handleFileUpload = (binary: boolean, saveModel: (model: DataModel) => void) => (e: Event) => {
@@ -41,7 +42,8 @@ export const SideNav: MeiosisComponent = () => {
   const handleSelection = (option: string, model: DataModel, saveModel: (model: DataModel) => void) => {
     switch (option) {
       case 'clear':
-        // Implement clear functionality
+        console.log('CLEARING DATAS');
+        saveModel(defaultModel);
         break;
       case 'download_json': {
         const version = typeof model.version === 'undefined' ? 1 : model.version++;
@@ -106,12 +108,13 @@ export const SideNav: MeiosisComponent = () => {
   return {
     view: ({
       attrs: {
-        state: { model },
-        actions: { saveModel },
+        state: { model, role },
+        actions: { saveModel, setRole },
       },
-    }) =>
-      m(
-        'ul#slide-out.sidenav',
+    }) => {
+      const roleIcon = role === 'user' ? 'person' : role === 'editor' ? 'edit' : 'manage_accounts';
+      return m(
+        'ul#slide-out.sidenav.row',
         {
           oncreate: ({ dom }) => {
             M.Sidenav.init(dom);
@@ -120,7 +123,11 @@ export const SideNav: MeiosisComponent = () => {
         [
           m(
             'li',
-            m(FlatButton, { label: 'Clear', onclick: handleSelection('clear', model, saveModel), iconName: 'clear' })
+            m(FlatButton, {
+              label: 'Clear',
+              iconName: 'clear',
+              modalId: 'clear_model',
+            })
           ),
           m(
             'li',
@@ -162,23 +169,86 @@ export const SideNav: MeiosisComponent = () => {
               iconName: 'link',
             })
           ),
+          m(
+            'li',
+            m(Select, {
+              checkedId: role,
+              label: t('ROLE'),
+              iconName: roleIcon,
+              options: [
+                { id: 'user', label: t('USER') },
+                { id: 'editor', label: t('EDITOR') },
+                { id: 'admin', label: t('ADMIN') },
+              ],
+              onchange: (role) => {
+                setRole(role[0]);
+              },
+            } as ISelectOptions<UserRole>)
+          ),
+          m(
+            'li',
+            m(LanguageSwitcher, {
+              onLanguageChange: async (language: Languages) => {
+                await i18n.loadAndSetLocale(language as Languages);
+              },
+              currentLanguage: i18n.currentLocale,
+            })
+          ),
         ]
-      ),
+        // m(ModalPanel, {
+        //   id: 'clear_model',
+        //   title: t('DELETE_ITEM', 'TITLE', { item: t('MODEL') }),
+        //   description: t('DELETE_ITEM', 'DESCRIPTION', { item: t('MODEL').toLowerCase() }),
+        //   buttons: [
+        //     { label: t('CANCEL'), iconName: 'cancel' },
+        //     {
+        //       label: t('DELETE'),
+        //       iconName: 'delete',
+        //       onclick: () => {
+        //         handleSelection('clear', model, saveModel);
+        //       },
+        //     },
+        //   ],
+        // })
+      );
+    },
   };
 };
 
-export const SideNavTrigger: FactoryComponent<{}> = () => {
+export const SideNavTrigger: MeiosisComponent<{}> = () => {
   return {
-    view: () =>
-      m(
-        'a',
-        {
-          href: '#!',
-          'data-target': 'slide-out',
-          class: 'sidenav-trigger',
-          style: 'position: absolute;margin-left: 10px;top: 75px;',
-        },
-        m('i.material-icons', 'menu')
-      ),
+    view: ({
+      attrs: {
+        actions: { saveModel },
+      },
+    }) => {
+      return [
+        m(
+          'a',
+          {
+            href: '#!',
+            'data-target': 'slide-out',
+            class: 'sidenav-trigger',
+            style: 'position: absolute;margin-left: 10px;top: 75px;',
+          },
+          m('i.material-icons', 'menu')
+        ),
+        m(ModalPanel, {
+          id: 'clear_model',
+          title: t('DELETE_ITEM', 'TITLE', { item: t('MODEL') }),
+          description: t('DELETE_ITEM', 'DESCRIPTION', { item: t('MODEL').toLowerCase() }),
+          buttons: [
+            { label: t('CANCEL'), iconName: 'cancel' },
+            {
+              label: t('DELETE'),
+              iconName: 'delete',
+              onclick: () => {
+                saveModel(defaultModel);
+              },
+            },
+          ],
+        }),
+      ];
+    },
   };
 };

@@ -537,7 +537,7 @@ export const CrimeScriptEditor: FactoryComponent<{
         m(LayoutForm, {
           form: [
             ...labelForm(),
-            { id: 'literature', type: literatureForm, repeat: true, label: t('REFERENCES') },
+            { id: 'literature', type: literatureForm(), repeat: true, label: t('REFERENCES') },
             ...actsForm,
           ],
           obj: crimeScript,

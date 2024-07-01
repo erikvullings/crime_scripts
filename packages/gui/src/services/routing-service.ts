@@ -44,6 +44,7 @@ class RoutingService {
         iconClass: 'blue-text',
         title: t('SETTINGS', 'TITLE'),
         route: t('SETTINGS', 'ROUTE'),
+        hasSidebar: true,
         visible: ({ role }) => role === 'admin',
         component: SettingsPage,
       },

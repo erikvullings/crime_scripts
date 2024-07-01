@@ -11,6 +11,7 @@ export const LanguageSwitcher: FactoryComponent<LanguageSwitcherAttrs> = () => {
   return {
     view: ({ attrs: { currentLanguage, onLanguageChange, className } }) => {
       return m(Select, {
+        iconName: 'language',
         initialValue: currentLanguage,
         className,
         options: [

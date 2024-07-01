@@ -111,10 +111,14 @@ a {
   width: 250px;
   top: 66px;
 }
+.sidenav li {
+  line-height: normal;
+}
+.sidenav li > a > i.material-icons {
+  margin-right: 16px;
+}
 .sidenav a[type='button'] {
   padding: 0;
-  margin-top: 0;
-  margin-bottom: 0;
 }
 .buttons a {
   margin: 5px;
@@ -510,7 +514,8 @@ ul.projects > li > span.project-id {
   margin-bottom: 0;
 }
 .page {
-  min-height: 95vh;
+  min-height: calc(100vh - 90px);
+  /* min-height: 95vh; */
   padding-bottom: 20px;
 }
 label,

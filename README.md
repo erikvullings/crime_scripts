@@ -22,8 +22,9 @@ npm start
 - [x] When clicking on a search result, navigate to the exact location (add act, phase)
 - [x] Add option to specify and view literature
 - [x] Allow the user to select multiple acts in each step
+- [x] Add sidenav menu
 - [ ] Search should preferably also select the act variant
-- [ ] Zip the model file
+- [x] Zip the model file
 - [ ] Use the crime script image, e.g. next to the description
 - [x] Add measures to counteract the activity or condition: use Situational Crime Prevention (SCP) to structure the measures.
 - [ ] Add option to use it with a case
