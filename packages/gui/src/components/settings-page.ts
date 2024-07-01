@@ -10,7 +10,7 @@ import {
   attributeTypeToIconMap,
   Act,
 } from '../models';
-import { MeiosisComponent, routingSvc } from '../services';
+import { MeiosisComponent, routingSvc, t } from '../services';
 import { FormAttributes, LayoutForm, SlimdownView } from 'mithril-ui-form';
 import { Collapsible, FlatButton, Tabs } from 'mithril-materialized';
 import { attributesForm, castForm } from '../models/forms';
@@ -44,7 +44,7 @@ export const SettingsPage: MeiosisComponent = () => {
         '#settings-page.settings.page',
         isAdmin && [
           m(FlatButton, {
-            label: edit ? 'Stop edit' : 'Edit',
+            label: edit ? t('SAVE_BUTTON', 'LABEL') : t('EDIT_BUTTON', 'LABEL'),
             iconName: edit ? 'save' : 'edit',
             className: 'right small',
             onclick: () => {
@@ -55,20 +55,20 @@ export const SettingsPage: MeiosisComponent = () => {
         m(Tabs, {
           tabs: [
             {
-              title: 'Cast',
+              title: t('CAST'),
               vnode: edit
                 ? m(LayoutForm, {
-                    form: castForm,
+                    form: castForm(),
                     obj: model,
                     onchange: () => actions.saveModel(model),
                   } as FormAttributes<{ cast: Cast[] }>)
                 : m(CastView, { cast, acts, crimeScripts: crimeScripts, setLocation: actions.setLocation }),
             },
             {
-              title: 'Attributes',
+              title: t('ATTRIBUTES'),
               vnode: edit
                 ? m(LayoutForm, {
-                    form: attributesForm,
+                    form: attributesForm(),
                     obj: model,
                     onchange: () => actions.saveModel(model),
                   } as FormAttributes<{ attributes: CrimeScriptAttributes[] }>)

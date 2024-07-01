@@ -25,6 +25,7 @@ import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from './ui/reference';
 import { MultiSelectDropdown } from './ui/multi-select';
 import { crimeMeasureOptions, lookupCrimeMeasure } from '../models/situational-crime-prevention';
+import { t } from '../services/translations';
 
 export const HomePage: MeiosisComponent = () => {
   let id = '';
@@ -58,7 +59,7 @@ export const HomePage: MeiosisComponent = () => {
                   '.right-align',
                   edit
                     ? m(FlatButton, {
-                        label: 'Save script',
+                        label: t('SAVE_SCRIPT'),
                         iconName: 'save',
                         className: 'small',
                         onclick: () => {
@@ -71,7 +72,7 @@ export const HomePage: MeiosisComponent = () => {
                       })
                     : [
                         m(FlatButton, {
-                          label: 'Edit script',
+                          label: t('EDIT_SCRIPT'),
                           iconName: 'edit',
                           className: 'small',
                           onclick: () => {
@@ -79,7 +80,7 @@ export const HomePage: MeiosisComponent = () => {
                           },
                         }),
                         m(FlatButton, {
-                          label: 'Delete script',
+                          label: t('DELETE_SCRIPT'),
                           iconName: 'delete',
                           className: 'small',
                           modalId: 'deleteScript',
@@ -107,7 +108,7 @@ export const HomePage: MeiosisComponent = () => {
                 m(
                   '.right-align',
                   m(FlatButton, {
-                    label: 'Nieuw script',
+                    label: t('NEW_SCRIPT'),
                     iconName: 'add',
                     className: 'small',
                     onclick: () => {
@@ -127,12 +128,12 @@ export const HomePage: MeiosisComponent = () => {
             ],
         m(ModalPanel, {
           id: 'deleteScript',
-          title: 'Delete script',
-          description: `Are you sure you want to delete ${crimeScript?.label}?`,
+          title: t('DELETE_SCRIPT'),
+          description: t('DELETE_SCRIPT_CONFIRM', { name: crimeScript?.label }),
           buttons: [
-            { label: 'Cancel', iconName: 'cancel' },
+            { label: t('CANCEL'), iconName: 'cancel' },
             {
-              label: 'Delete',
+              label: t('DELETE'),
               iconName: 'delete',
               onclick: () => {
                 if (crimeScript) {
@@ -161,7 +162,7 @@ export const CrimeScriptCard: FactoryComponent<{
 }> = () => {
   return {
     view: ({ attrs: { crimeScript, cast = [], acts: allActs = [], changePage } }) => {
-      const { id, url, label: name = 'New act', stages: actVariants = [], description } = crimeScript;
+      const { id, url, label: name = t('NEW_ACT'), stages: actVariants = [], description } = crimeScript;
 
       const acts = actVariants.map((variant) => allActs.find((a) => a.id === variant.id) || ({} as Act));
       const allCast = Array.from(
@@ -208,7 +209,7 @@ export const CrimeScriptCard: FactoryComponent<{
                 ),
               allCast &&
                 allCast.length > 0 &&
-                m('p', m('span.bold', 'Cast: '), allCast.map(({ label }) => label).join(', ')),
+                m('p', m('span.bold', `${t('CAST')}: `), allCast.map(({ label }) => label).join(', ')),
             ]),
           ]
         )
@@ -253,13 +254,12 @@ export const CrimeScriptView: FactoryComponent<{
           return acts.find((a) => a.id === variant.id) || ({} as Act);
         })
         .map(({ label = '...', preparation, preactivity, activity, postactivity, measures = [] } = {} as Act) => {
-          preparation.label = 'Preparation phase';
-          preactivity.label = 'Pre-activity phase';
-          activity.label = 'Activity phase';
-          postactivity.label = 'Post-activity phase';
-          const contentTabs = [preparation, preactivity, activity, postactivity]
-            // .filter((ap) => ap && ((ap.activities && ap.activities.length) || (ap.conditions && ap.conditions.length)))
-            .map(({ label, activities = [], conditions }) => {
+          preparation.label = t('PREPARATION_PHASE');
+          preactivity.label = t('PRE_ACTIVITY_PHASE');
+          activity.label = t('ACTIVITY_PHASE');
+          postactivity.label = t('POST_ACTIVITY_PHASE');
+          const contentTabs = [preparation, preactivity, activity, postactivity].map(
+            ({ label, activities = [], conditions }) => {
               const castIds = Array.from(
                 activities.reduce((acc, { cast: curCast }) => {
                   if (curCast) curCast.forEach((id) => acc.add(id));
@@ -272,19 +272,19 @@ export const CrimeScriptView: FactoryComponent<{
                   return acc;
                 }, new Set<ID>())
               );
-              const md = `##### Activities
+              const md = `##### ${t('ACTIVITIES')}
 
 ${activities.map((act) => '- ' + act.label).join('\n')}
 
-${castIds.length > 0 ? '##### Cast' : ''}
+${castIds.length > 0 ? `##### ${t('CAST')}` : ''}
 
 ${castIds.map((id) => '- ' + cast.find((cast) => cast.id === id)?.label).join('\n')}
 
-${conditions.length > 0 ? '##### Conditions' : ''}
+${conditions.length > 0 ? `##### ${t('CONDITIONS')}` : ''}
 
 ${conditions.map((cond) => '- ' + cond.label).join('\n')}
 
-${attrIds.length > 0 ? '##### Attributes' : ''}
+${attrIds.length > 0 ? `##### ${t('ATTRIBUTES')}` : ''}
 
 ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).join('\n')}
 `;
@@ -292,11 +292,12 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
                 title: label,
                 md,
               };
-            });
+            }
+          );
           if (measures.length > 0) {
             contentTabs.push({
-              title: 'Measures',
-              md: `##### Measures
+              title: t('MEASURES'),
+              md: `##### ${t('MEASURES')}
                 
 ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measure.label}`).join('\n')}
                 `,
@@ -327,7 +328,7 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
         m('.row', [
           m('.col.s6', [
             allCastIds.size > 0 && [
-              m('h5', 'Cast'),
+              m('h5', t('CAST')),
               m(
                 'ol',
                 Array.from(allCastIds).map((id) => m('li', cast.find((c) => c.id === id)?.label))
@@ -336,7 +337,7 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
           ]),
           m('.col.s6', [
             allAttrIds.size > 0 && [
-              m('h5', 'Attributes'),
+              m('h5', t('ATTRIBUTES')),
               m(
                 'ol',
                 Array.from(allAttrIds).map((id) => m('li', attributes.find((c) => c.id === id)?.label))
@@ -345,7 +346,7 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
           ]),
         ]),
         literature &&
-          literature.length > 0 && [m('h5', 'References'), m(ReferenceListComponent, { references: literature })],
+          literature.length > 0 && [m('h5', t('REFERENCES')), m(ReferenceListComponent, { references: literature })],
         m(
           '.card-container',
           actVariants
@@ -390,7 +391,7 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
                   ),
                   m('.card-action', [
                     m(FlatButton, {
-                      label: 'Details',
+                      label: t('DETAILS'),
                       className: 'right',
                       onclick: () => update({ curActIdx: index }),
                     }),
@@ -442,7 +443,7 @@ export const CrimeScriptEditor: FactoryComponent<{
       id: 'stages',
       repeat: true,
       pageSize: 1,
-      label: 'Stages',
+      label: t('STAGES'),
       type: [] as UIForm<Partial<Stage>>,
     },
   ];
@@ -463,12 +464,12 @@ export const CrimeScriptEditor: FactoryComponent<{
 
       const measureForm: UIForm<Measure> = [
         { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-        { id: 'cat', type: 'select', options: measOptions, className: 'col s12 m5 l4', label: 'Category' },
-        { id: 'label', type: 'text', className: 'col s12 m7 l8', label: 'Name' },
-        // { id: 'description', type: 'textarea', className: 'col s12', label: 'Description' },
+        { id: 'cat', type: 'select', options: measOptions, className: 'col s12 m5 l4', label: t('CATEGORY') },
+        { id: 'label', type: 'text', className: 'col s12 m7 l8', label: t('NAME') },
+        // { id: 'description', type: 'textarea', className: 'col s12', label: t('DESCRIPTION') },
       ];
 
-      measuresForm = [{ id: 'measures', type: measureForm, repeat: true, label: 'Measures' }];
+      measuresForm = [{ id: 'measures', type: measureForm, repeat: true, label: t('MEASURES') }];
     },
     view: ({ attrs: { acts, crimeScript } }) => {
       const activityForm: UIForm<any> = [
@@ -477,12 +478,12 @@ export const CrimeScriptEditor: FactoryComponent<{
           repeat: true,
           type: [
             { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-            { id: 'label', type: 'textarea', className: 'col s8 m9 xl10', label: 'Activity' },
+            { id: 'label', type: 'textarea', className: 'col s8 m9 xl10', label: t('ACTIVITY') },
             {
               id: 'type',
               type: 'options',
               className: 'col s4 m3 xl2',
-              label: 'Specify',
+              label: t('SPECIFY'),
               options: ActivityTypeOptions,
               checkboxClass: 'col s6',
             },
@@ -493,7 +494,7 @@ export const CrimeScriptEditor: FactoryComponent<{
               className: 'col s12 m6',
               multiple: true,
               options: castOptions,
-              label: 'Cast',
+              label: t('CAST'),
             },
             {
               id: 'attributes',
@@ -502,21 +503,21 @@ export const CrimeScriptEditor: FactoryComponent<{
               className: 'col s12 m6',
               multiple: true,
               options: attrOptions,
-              label: 'Attributes',
+              label: t('ATTRIBUTES'),
             },
           ] as UIForm<Activity>,
           className: 'col s12',
-          label: 'Activities',
+          label: t('ACTIVITIES'),
         },
         {
           id: 'conditions',
           repeat: true,
           type: [
             { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-            { id: 'label', type: 'textarea', className: 'col s12', label: 'Condition' },
+            { id: 'label', type: 'textarea', className: 'col s12', label: t('CONDITION') },
           ] as UIForm<Condition>,
           className: 'col s12',
-          label: 'Conditions',
+          label: t('CONDITIONS'),
         },
       ];
 
@@ -535,8 +536,8 @@ export const CrimeScriptEditor: FactoryComponent<{
       return m('.col.s12', [
         m(LayoutForm, {
           form: [
-            ...labelForm,
-            { id: 'literature', type: literatureForm, repeat: true, label: 'References' },
+            ...labelForm(),
+            { id: 'literature', type: literatureForm, repeat: true, label: t('REFERENCES') },
             ...actsForm,
           ],
           obj: crimeScript,
@@ -552,7 +553,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                 m(MultiSelectDropdown, {
                   items: acts,
                   selectedIds: curActIds.ids,
-                  label: 'Select one or more acts for this step',
+                  label: t('SELECT_ACT_N'),
                   max: 5,
                   search: true,
                   selectAll: false,
@@ -570,7 +571,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                 curActIds.ids.length > 0 && [
                   m(Select, {
                     key: curAct ? curAct.label : curActIds.id,
-                    label: 'Select act to edit',
+                    label: t('SELECT_ACT'),
                     className: 'col s6',
                     initialValue: curActIds.id,
                     // disabled: curActIds.ids.length === 1,
@@ -581,14 +582,14 @@ export const CrimeScriptEditor: FactoryComponent<{
                   } as ISelectOptions<ID>),
                 ],
               m(FlatButton, {
-                label: 'Create new act',
+                label: t('ACT'),
                 className: 'col s6',
                 iconName: 'add',
                 onclick: () => {
                   const id = uniqueId();
                   const newAct = {
                     id,
-                    label: 'New act',
+                    label: t('ACT'),
                     activity: {},
                     preparation: {},
                     preactivity: {},
@@ -610,10 +611,10 @@ export const CrimeScriptEditor: FactoryComponent<{
           m('.cur-act', { key: curAct.id }, [
             m(LayoutForm, {
               form: [
-                { id: 'label', type: 'text', className: 'col s6 m6', label: 'Name' },
-                { id: 'icon', type: 'select', className: 'col s6 m3', label: 'Image', options: IconOpts },
-                { id: 'url', type: 'base64', className: 'col s12 m3', label: 'Image', show: ['icon=1'] },
-                { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
+                { id: 'label', type: 'text', className: 'col s6 m6', label: t('NAME') },
+                { id: 'icon', type: 'select', className: 'col s6 m3', label: t('IMAGE'), options: IconOpts },
+                { id: 'url', type: 'base64', className: 'col s12 m3', label: t('IMAGE'), show: ['icon=1'] },
+                { id: 'description', type: 'textarea', className: 'col s12', label: t('SUMMARY') },
               ],
               obj: curAct,
               onchange: () => {},
@@ -621,7 +622,7 @@ export const CrimeScriptEditor: FactoryComponent<{
             m(Tabs, {
               tabs: [
                 {
-                  title: 'Preparation phase',
+                  title: t('PREPARATION_PHASE'),
                   vnode: m('.acts', [
                     m(LayoutForm, {
                       form: activityForm,
@@ -631,7 +632,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                   ]),
                 },
                 {
-                  title: 'Pre-activity phase',
+                  title: t('PRE_ACTIVITY_PHASE'),
                   vnode: m('.acts', [
                     m(LayoutForm, {
                       form: activityForm,
@@ -641,7 +642,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                   ]),
                 },
                 {
-                  title: 'Activity phase',
+                  title: t('ACTIVITY_PHASE'),
                   vnode: m('.acts', [
                     m(LayoutForm, {
                       form: activityForm,
@@ -651,7 +652,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                   ]),
                 },
                 {
-                  title: 'Post-activity phase',
+                  title: t('POST_ACTIVITY_PHASE'),
                   vnode: m('.acts', [
                     m(LayoutForm, {
                       form: activityForm,
@@ -661,7 +662,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                   ]),
                 },
                 {
-                  title: 'Measures',
+                  title: t('MEASURES'),
                   vnode: m('.acts', [
                     m(LayoutForm, {
                       form: measuresForm,

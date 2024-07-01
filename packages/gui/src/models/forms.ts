@@ -7,66 +7,71 @@ import {
   AttributeTypeOptions,
   Literature,
 } from './data-model';
+import { t } from '../services';
 
-export const castForm = [
-  {
-    id: 'cast',
-    label: 'Cast',
-    className: 'col s12',
-    repeat: true,
-    // pageSize: 100,
-    type: [
-      { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-      { id: 'label', type: 'text', className: 'col s8', label: 'Name' },
-      { id: 'type', type: 'select', className: 'col s4', label: 'Cast type', options: CastTypeOptions },
-      // {
-      //   id: 'skills',
-      //   repeat: true,
-      //   pageSize: 100,
-      //   type: [
-      //     { id: 'label', type: 'text', className: 'col s6', label: 'Name' },
-      //     { id: 'description', type: 'textarea', className: 'col s12', label: 'Description' },
-      //     {
-      //       id: 'level',
-      //       type: 'select',
-      //       className: 'col s6',
-      //       label: 'Cast type',
-      //       options: LevelTypeOptions,
-      //     },
-      //   ],
-      //   className: 'col s12',
-      //   label: 'Skills',
-      // },
-    ] as UIForm<Cast>,
-  },
-] as UIForm<{ cast: Cast[] }>;
+export const castForm = () =>
+  [
+    {
+      id: 'cast',
+      label: t('CAST'),
+      className: 'col s12',
+      repeat: true,
+      // pageSize: 100,
+      type: [
+        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+        { id: 'label', type: 'text', className: 'col s8', label: t('NAME') },
+        { id: 'type', type: 'select', className: 'col s4', label: t('CAST_TYPE'), options: CastTypeOptions },
+        // {
+        //   id: 'skills',
+        //   repeat: true,
+        //   pageSize: 100,
+        //   type: [
+        //     { id: 'label', type: 'text', className: 'col s6', label: t('NAME') },
+        //     { id: 'description', type: 'textarea', className: 'col s12', label: t('DESCRIPTION') },
+        //     {
+        //       id: 'level',
+        //       type: 'select',
+        //       className: 'col s6',
+        //       label: t('CAST )type',
+        //       options: LevelTypeOptions,
+        //     },
+        //   ],
+        //   className: 'col s12',
+        //   label: t('SKILLS'),
+        // },
+      ] as UIForm<Cast>,
+    },
+  ] as UIForm<{ cast: Cast[] }>;
 
-export const attributesForm = [
-  {
-    id: 'attributes',
-    label: 'Attributes',
-    className: 'col s12',
-    repeat: true,
-    // pageSize: 100,
-    type: [
-      { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-      { id: 'label', type: 'text', className: 'col s8', label: 'Name' },
-      { id: 'type', type: 'select', className: 'col s4', label: 'Type', options: AttributeTypeOptions },
-    ] as UIForm<CrimeScriptAttributes>,
-  },
-] as UIForm<{ attributes: CrimeScriptAttributes[] }>;
+export const attributesForm = () =>
+  [
+    {
+      id: 'attributes',
+      label: t('ATTRIBUTES'),
+      className: 'col s12',
+      repeat: true,
+      // pageSize: 100,
+      type: [
+        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+        { id: 'label', type: 'text', className: 'col s8', label: t('NAME') },
+        { id: 'type', type: 'select', className: 'col s4', label: t('TYPE'), options: AttributeTypeOptions },
+      ] as UIForm<CrimeScriptAttributes>,
+    },
+  ] as UIForm<{ attributes: CrimeScriptAttributes[] }>;
 
-export const labelForm = [
-  { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-  { id: 'label', type: 'text', className: 'col s6', label: 'Name' },
-  { id: 'url', type: 'base64', className: 'col s6', label: 'Image' },
-  { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
-] as UIForm<Partial<CrimeScript>>;
+export const labelForm = () =>
+  [
+    { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+    { id: 'label', type: 'text', className: 'col s6', label: t('NAME') },
+    { id: 'url', type: 'base64', className: 'col s6', label: t('IMAGE') },
+    { id: 'description', type: 'textarea', className: 'col s12', label: t('SUMMARY') },
+  ] as UIForm<Partial<CrimeScript>>;
 
-export const literatureForm = [
-  { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-  { id: 'label', type: 'text', className: 'col s6', label: 'Title' },
-  { id: 'authors', type: 'text', className: 'col s6', label: 'Authors' },
-  { id: 'url', type: 'url', className: 'col s12', label: 'Link' },
-  { id: 'description', type: 'textarea', className: 'col s12', label: 'Summary' },
-] as UIForm<Partial<Literature>>;
+export const literatureForm = () =>
+  [
+    { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+    { id: 'label', type: 'text', className: 'col s6', label: t('TITLE') },
+    { id: 'authors', type: 'text', className: 'col s6', label: t('AUTHORS') },
+    { id: 'url', type: 'url', className: 'col s12', label: t('LINK') },
+    { id: 'description', type: 'textarea', className: 'col s12', label: t('SUMMARY') },
+  ] as UIForm<Partial<Literature>>;

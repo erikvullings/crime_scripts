@@ -1,8 +1,9 @@
 import m from 'mithril';
 import { ISelectOptions, Select } from 'mithril-materialized';
 import { Pages } from '../models';
-import { MeiosisComponent, UserRole, t } from '../services';
+import { Languages, MeiosisComponent, UserRole, i18n, t } from '../services';
 import { SlimdownView } from 'mithril-ui-form';
+import { LanguageSwitcher } from './ui/language-switcher';
 
 export const AboutPage: MeiosisComponent = () => {
   return {
@@ -24,7 +25,9 @@ export const AboutPage: MeiosisComponent = () => {
       return m('#about-page.row.about.page', [
         m(Select, {
           checkedId: role,
+          label: t('ROLE'),
           iconName: roleIcon,
+          className: 'col s6',
           options: [
             { id: 'user', label: t('USER') },
             { id: 'editor', label: t('EDITOR') },
@@ -34,6 +37,13 @@ export const AboutPage: MeiosisComponent = () => {
             setRole(role[0]);
           },
         } as ISelectOptions<UserRole>),
+        m(LanguageSwitcher, {
+          className: 'col s6',
+          onLanguageChange: async (language: Languages) => {
+            await i18n.loadAndSetLocale(language as Languages);
+          },
+          currentLanguage: i18n.currentLocale,
+        }),
         m('.col.s12', [m('h4', t('ABOUT', 'TITLE')), m(SlimdownView, { md: t('ABOUT', 'TEXT') })]),
       ]);
     },

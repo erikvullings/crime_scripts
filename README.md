@@ -27,4 +27,4 @@ npm start
 - [ ] Use the crime script image, e.g. next to the description
 - [x] Add measures to counteract the activity or condition: use Situational Crime Prevention (SCP) to structure the measures.
 - [ ] Add option to use it with a case
-- [ ] Translate to Dutch
+- [x] Translate to Dutch
