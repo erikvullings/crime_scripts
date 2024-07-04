@@ -359,10 +359,13 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
               const prevVariantIdx = curVariantIdx > 0 && ids[curVariantIdx - 1];
               const nextVariantIdx = curVariantIdx < ids.length - 1 && ids[curVariantIdx + 1];
 
+              const className =
+                (curActIdx === index ? 'selected-card' : '') + (ids.length > 1 ? ' multiple-variants' : '');
+
               return m(
                 '.card.large',
                 {
-                  class: ids.length > 1 ? 'multiple-variants' : '',
+                  class: className,
                 },
                 [
                   m('.card-image', [
