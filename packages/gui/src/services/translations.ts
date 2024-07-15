@@ -62,6 +62,7 @@ export const messages = {
   SELECT: 'Select',
   CREATE: 'Create',
   STAGES: 'Stages',
+  STAGE: 'Stage',
   SELECT_ACT_TO_EDIT: 'Select act to edit',
   CREATE_NEW_ACT: 'Create new act',
   REFERENCES: 'References',
@@ -177,6 +178,8 @@ export const messages = {
     TITLE: 'Control drugs and alcohol',
     DESC: 'Breathalyzers in bars, Server intervention programs, Alcohol-free events',
   },
+  EXPORT_TO_WORD: 'Export to Word',
+  INTRODUCTION: 'Introduction',
 };
 
 export const messagesNL: typeof messages = {
@@ -237,6 +240,7 @@ export const messagesNL: typeof messages = {
   SELECT: 'Selecteren',
   CREATE: 'Maken',
   STAGES: 'Fasen',
+  STAGE: 'Fase',
   SELECT_ACT_TO_EDIT: 'Selecteer handeling om te bewerken',
   CREATE_NEW_ACT: 'Nieuwe handeling maken',
   REFERENCES: 'Referenties',
@@ -353,6 +357,8 @@ export const messagesNL: typeof messages = {
     TITLE: 'Beheers drugs en alcohol',
     DESC: "Ademanalysers in bars, Interventie programma's voor barpersoneel, Alcoholvrije evenementen",
   },
+  EXPORT_TO_WORD: 'Exporteer naar Word',
+  INTRODUCTION: 'Introductie',
 };
 
 const setGuiLanguage = (language: Languages) => {

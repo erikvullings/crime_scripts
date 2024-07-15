@@ -26,6 +26,8 @@ import { ReferenceListComponent } from './ui/reference';
 import { MultiSelectDropdown } from './ui/multi-select';
 import { crimeMeasureOptions, lookupCrimeMeasure } from '../models/situational-crime-prevention';
 import { t } from '../services/translations';
+import { toWord } from '../utils/word';
+import { formatDate } from '../utils';
 
 export const HomePage: MeiosisComponent = () => {
   let id = '';
@@ -49,6 +51,8 @@ export const HomePage: MeiosisComponent = () => {
 
       const isAdmin = role === 'admin';
       const isEditor = role === 'admin' || role === 'editor';
+
+      const filename = `${formatDate(Date.now(), '')}_${crimeScript?.label}_v${model.version}.docx`;
 
       return m(
         '#home-page.row.home.page',
@@ -85,6 +89,14 @@ export const HomePage: MeiosisComponent = () => {
                           className: 'small',
                           modalId: 'deleteScript',
                         }),
+                        crimeScript &&
+                          m(FlatButton, {
+                            title: 'Export to Word',
+                            label: t('EXPORT_TO_WORD'),
+                            className: 'small',
+                            iconName: 'download',
+                            onclick: () => toWord(filename, crimeScript, model),
+                          }),
                       ]
                 ),
               crimeScript &&
