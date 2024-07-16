@@ -28,9 +28,9 @@ export const debounce = (func: (...args: any) => void, timeout: number) => {
   };
 };
 
-export const formatDate = (date: number | Date = new Date()) => {
+export const formatDate = (date: number | Date = new Date(), separator = '-') => {
   const d = new Date(date);
-  return `${d.getFullYear()}-${padLeft(d.getMonth() + 1)}-${padLeft(d.getDate())}`;
+  return `${d.getFullYear()}${separator}${padLeft(d.getMonth() + 1)}${separator}${padLeft(d.getDate())}`;
 };
 
 /**
@@ -185,4 +185,11 @@ export const scrollToTop = (): void => {
     top: 0,
     behavior: 'smooth',
   });
+};
+
+export const addLeadingSpaces = (str: string, numSpaces: number): string => {
+  // Create a string with the specified number of spaces
+  const spaces = ' '.repeat(numSpaces);
+  // Concatenate the spaces with the original string
+  return spaces + str;
 };

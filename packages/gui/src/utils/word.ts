@@ -10,14 +10,15 @@ import {
   convertInchesToTwip,
 } from 'docx';
 import { saveAs } from 'file-saver';
-import { CrimeScript, DataModel } from '../models';
+import { ActivityType, CrimeScript, DataModel } from '../models';
 import { t } from '../services';
+import { addLeadingSpaces } from '.';
 
 const blue = '2F5496';
 
 export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: DataModel) => {
-  const { label: title, description, stages = [] } = cs;
-  const { acts } = model;
+  const { label: title, description, stages = [], literature } = cs;
+  const { acts, cast, attributes } = model;
 
   const toMarkdown = () => {
     const phaseNames = [t('PREPARATION_PHASE'), t('PRE_ACTIVITY_PHASE'), t('ACTIVITY_PHASE'), t('POST_ACTIVITY_PHASE')];
@@ -30,7 +31,7 @@ export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: 
       const stageActs = stage.ids.map((id) => acts.find((a) => a.id === id)).filter((a) => typeof a !== 'undefined');
       md.push(`# ${t('STAGE')} ${i + 1}: ${stageActs.map((a) => a.label).join(' | ')}\n`);
       stageActs.forEach((act) => {
-        md.push(`## ${act.label}\n`);
+        md.push(`\n## ${act.label}\n`);
         act.description && md.push(act.description);
         [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((a, i) => {
           if (a && ((a.activities && a.activities.length > 0) || (a.conditions && a.conditions.length > 0))) {
@@ -39,6 +40,25 @@ export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: 
               md.push(`#### ${t('ACTIVITIES')}\n`);
               const activitiesTxt = a.activities.reduce((list, activity, idx) => {
                 list.push(`${idx + 1}. ${activity.label}`);
+                const type = activity.type
+                  ? Array.isArray(activity.type)
+                    ? activity.type
+                    : [activity.type]
+                  : undefined;
+                if (type && type.includes(ActivityType.HAS_CAST)) {
+                  const castNames = activity.cast.map((c) => {
+                    const found = cast.find((cast) => cast.id === c);
+                    return found ? found.label : c;
+                  });
+                  list.push(addLeadingSpaces(`${t('CAST')}: ${castNames.join(',')}`, idx < 9 ? 3 : 4));
+                }
+                if (type && type.includes(ActivityType.HAS_ATTRIBUTES)) {
+                  const attrNames = activity.attributes.map((c) => {
+                    const found = attributes.find((attr) => attr.id === c);
+                    return found ? found.label : c;
+                  });
+                  list.push(addLeadingSpaces(`${t('CAST')}: ${attrNames.join(',')}`, idx < 9 ? 3 : 4));
+                }
                 return list;
               }, [] as string[]);
               md.push(...activitiesTxt);
@@ -56,10 +76,20 @@ export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: 
         });
       });
     });
+    if (literature) {
+      md.push(`\n# ${t('REFERENCES')}\n`);
+      literature.forEach((l, i) => {
+        const title = l.url ? `[${l.label}](l.url)` : l.label;
+        md.push(`${i + 1}. ${title} (${l.authors || ''})`);
+        l.description && md.push(addLeadingSpaces(l.description, i < 9 ? 3 : 4));
+      });
+    }
     return md.join('\n');
   };
 
   const markdown = toMarkdown();
+
+  console.log(markdown);
 
   const doc = new Document({
     creator: 'TNO',

@@ -237,7 +237,7 @@ export const ActivityTypeOptions = [
 ];
 
 export type Activity = Labeled & {
-  type?: ActivityType[];
+  type?: ActivityType | ActivityType[];
   cast: ID[];
   attributes: ID[];
   conditions: Condition[];
