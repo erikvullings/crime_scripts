@@ -34,6 +34,7 @@ const configuration: Configuration = {
   devServer: {
     port: APP_PORT,
   },
+  devtool: devMode ? 'inline-source-map' : 'source-map',
   plugins: [
     new DefinePlugin({
       'process.env.SERVER': isProduction ? `'${publicPath}'` : "'http://localhost:4545'",
