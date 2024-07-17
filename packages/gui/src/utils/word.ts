@@ -16,82 +16,105 @@ import { addLeadingSpaces } from '.';
 
 const blue = '2F5496';
 
-export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: DataModel) => {
-  const { label: title, description, stages = [], literature } = cs;
+/** Convert a crime script to a markdown string. */
+export const crimeScriptToMarkdown = (crimeScript: Partial<CrimeScript>, model: DataModel) => {
+  const { description, stages = [], literature } = crimeScript;
   const { acts, cast, attributes } = model;
+  const phaseNames = [t('PREPARATION_PHASE'), t('PRE_ACTIVITY_PHASE'), t('ACTIVITY_PHASE'), t('POST_ACTIVITY_PHASE')];
 
-  const toMarkdown = () => {
-    const phaseNames = [t('PREPARATION_PHASE'), t('PRE_ACTIVITY_PHASE'), t('ACTIVITY_PHASE'), t('POST_ACTIVITY_PHASE')];
-    const md: string[] = [];
-    if (description) {
-      md.push(`# ${t('INTRODUCTION')}\n`);
-      md.push(description);
-    }
-    stages.forEach((stage, i) => {
-      const stageActs = stage.ids.map((id) => acts.find((a) => a.id === id)).filter((a) => typeof a !== 'undefined');
-      md.push(`# ${t('STAGE')} ${i + 1}: ${stageActs.map((a) => a.label).join(' | ')}\n`);
-      stageActs.forEach((act) => {
-        md.push(`\n## ${act.label}\n`);
-        act.description && md.push(act.description);
-        [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((a, i) => {
-          if (a && ((a.activities && a.activities.length > 0) || (a.conditions && a.conditions.length > 0))) {
-            md.push(`\n### ${phaseNames[i]}\n`);
-            if (a.activities && a.activities.length > 0) {
-              md.push(`#### ${t('ACTIVITIES')}\n`);
-              const activitiesTxt = a.activities.reduce((list, activity, idx) => {
-                list.push(`${idx + 1}. ${activity.label}`);
-                const type = activity.type
-                  ? Array.isArray(activity.type)
-                    ? activity.type
-                    : [activity.type]
-                  : undefined;
-                if (type && type.includes(ActivityType.HAS_CAST)) {
-                  const castNames = activity.cast.map((c) => {
-                    const found = cast.find((cast) => cast.id === c);
-                    return found ? found.label : c;
-                  });
-                  list.push(addLeadingSpaces(`${t('CAST')}: ${castNames.join(',')}`, idx < 9 ? 3 : 4));
-                }
-                if (type && type.includes(ActivityType.HAS_ATTRIBUTES)) {
-                  const attrNames = activity.attributes.map((c) => {
-                    const found = attributes.find((attr) => attr.id === c);
-                    return found ? found.label : c;
-                  });
-                  list.push(addLeadingSpaces(`${t('CAST')}: ${attrNames.join(',')}`, idx < 9 ? 3 : 4));
-                }
-                return list;
-              }, [] as string[]);
-              md.push(...activitiesTxt);
-            }
+  const md: string[] = [];
 
-            if (a.conditions && a.conditions.length > 0) {
-              md.push(`\n#### ${t('CONDITIONS')}\n`);
-              const conditionsTxt = a.conditions.reduce((list, condition, idx) => {
-                list.push(`${idx + 1}. ${condition.label}`);
-                return list;
-              }, [] as string[]);
-              md.push(...conditionsTxt);
-            }
-          }
-        });
-      });
-    });
-    if (literature) {
-      md.push(`\n# ${t('REFERENCES')}\n`);
-      literature.forEach((l, i) => {
-        const title = l.url ? `[${l.label}](l.url)` : l.label;
-        md.push(`${i + 1}. ${title} (${l.authors || ''})`);
-        l.description && md.push(addLeadingSpaces(l.description, i < 9 ? 3 : 4));
-      });
+  const newHeading = (txt: string, level: number) => {
+    const last = md.length - 1;
+    if (last >= 0) {
+      if (md[last] !== '' && !md[last].endsWith('\n')) {
+        md.push('');
+      }
     }
-    return md.join('\n');
+    md.push(`${'#'.repeat(level)} ${txt}\n`);
   };
 
-  const markdown = toMarkdown();
+  const createListItem = (list: string[], item: { label: string }, idx: number): string[] => {
+    const { label = '' } = item;
+    const lines = label.split('\n');
+    list.push(`${idx + 1}. ${lines[0]}`);
+    if (lines.length > 1) {
+      const spaces = idx < 9 ? 3 : 4;
+      for (let i = 1; i < lines.length; i++) {
+        list.push(addLeadingSpaces(lines[i], spaces));
+      }
+    }
+    return list;
+  };
 
-  console.log(markdown);
+  if (description) {
+    newHeading(`${t('INTRODUCTION')}\n`, 1);
+    md.push(description);
+  }
+  stages.forEach((stage, i) => {
+    const stageActs = stage.ids.map((id) => acts.find((a) => a.id === id)).filter((a) => typeof a !== 'undefined');
+    newHeading(`${t('STAGE')} ${i + 1}: ${stageActs.map((a) => a.label).join(' | ')}`, 1);
+    stageActs.forEach((act) => {
+      newHeading(act.label, 2);
+      act.description && md.push(act.description);
 
-  const doc = new Document({
+      [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((a, i) => {
+        if (a && ((a.activities && a.activities.length > 0) || (a.conditions && a.conditions.length > 0))) {
+          newHeading(phaseNames[i], 3);
+          if (a.activities && a.activities.length > 0) {
+            newHeading(t('ACTIVITIES'), 4);
+            const activitiesTxt = a.activities.reduce((list, activity, idx) => {
+              createListItem(list, activity, idx);
+              const type = activity.type ? (Array.isArray(activity.type) ? activity.type : [activity.type]) : undefined;
+              const spaces = idx < 9 ? 3 : 4;
+              if (type && type.includes(ActivityType.HAS_CAST)) {
+                const castNames = activity.cast
+                  .map((c) => {
+                    const found = cast.find((cast) => cast.id === c);
+                    return found ? found.label : undefined;
+                  })
+                  .filter((l) => typeof l !== undefined);
+                list.push(addLeadingSpaces(`- ${t('CAST')}: ${castNames.join(', ')}`, spaces));
+              }
+              if (type && type.includes(ActivityType.HAS_ATTRIBUTES)) {
+                const attrNames = activity.attributes
+                  .map((c) => {
+                    const found = attributes.find((attr) => attr.id === c);
+                    return found ? found.label : undefined;
+                  })
+                  .filter((l) => typeof l !== undefined);
+                list.push(addLeadingSpaces(`- ${t('ATTRIBUTES')}: ${attrNames.join(', ')}`, spaces));
+              }
+              return list;
+            }, [] as string[]);
+            activitiesTxt.push('');
+            md.push(...activitiesTxt);
+          }
+
+          if (a.conditions && a.conditions.length > 0) {
+            newHeading(t('CONDITIONS'), 4);
+            const conditionsTxt = a.conditions.reduce(createListItem, [] as string[]);
+            conditionsTxt.push('');
+            md.push(...conditionsTxt);
+          }
+        }
+      });
+    });
+  });
+  if (literature) {
+    newHeading(t('REFERENCES'), 1);
+    literature.forEach((l, i) => {
+      const title = l.url ? `[${l.label}](l.url)` : l.label;
+      md.push(`${i + 1}. ${title} (${l.authors || ''})`);
+      l.description && md.push(addLeadingSpaces(l.description, i < 9 ? 3 : 4));
+    });
+  }
+  return md.join('\n');
+};
+
+/** Converts a markdown string to a docx document */
+export const markdownToDocx = (title = t('TITLE'), description = t('DESCRIPTION'), markdown = '') => {
+  return new Document({
     creator: 'TNO',
     title,
     description,
@@ -258,16 +281,43 @@ export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: 
             {
               level: 0,
               format: LevelFormat.DECIMAL,
-              text: '%1',
-              alignment: AlignmentType.START,
+              text: '%1.',
+              alignment: AlignmentType.END,
               style: {
                 paragraph: {
-                  indent: { left: convertInchesToTwip(0.5), hanging: convertInchesToTwip(0.18) },
+                  indent: { left: convertInchesToTwip(0.5), hanging: convertInchesToTwip(0.1) },
                 },
               },
             },
           ],
           reference: 'my-numbering-reference',
+        },
+        {
+          reference: 'my-bullet-points',
+          levels: [
+            {
+              level: 0,
+              format: LevelFormat.BULLET,
+              text: '\u25CF',
+              alignment: AlignmentType.LEFT,
+              style: {
+                paragraph: {
+                  indent: { left: convertInchesToTwip(0.5), hanging: convertInchesToTwip(0.25) },
+                },
+              },
+            },
+            {
+              level: 1,
+              format: LevelFormat.BULLET,
+              text: '\u25E6',
+              alignment: AlignmentType.LEFT,
+              style: {
+                paragraph: {
+                  indent: { left: convertInchesToTwip(0.65), hanging: convertInchesToTwip(0.15) },
+                },
+              },
+            },
+          ],
         },
       ],
     },
@@ -283,11 +333,94 @@ export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: 
       },
     ],
   });
+};
+
+/** Converts a crime script to a Word docx document and saves it */
+export const toWord = async (filename: string, cs: Partial<CrimeScript>, model: DataModel) => {
+  const { label: title, description } = cs;
+
+  const markdown = crimeScriptToMarkdown(cs, model);
+  console.log(markdown);
+
+  const doc = markdownToDocx(title, description, markdown);
 
   Packer.toBlob(doc).then((blob) => {
     // saveAs from FileSaver will download the blob
     saveAs(blob, filename);
   });
+};
+
+const parseFormattedText = (text: string): (TextRun | ExternalHyperlink)[] => {
+  const parts: (TextRun | ExternalHyperlink)[] = [];
+  let currentText = '';
+  let isBold = false;
+  let isItalic = false;
+  let isUnderline = false;
+  let isStrikethrough = false;
+
+  const pushCurrentText = () => {
+    if (currentText) {
+      parts.push(
+        new TextRun({
+          text: currentText,
+          bold: isBold,
+          italics: isItalic,
+          underline: isUnderline ? { color: 'red', type: 'dash' } : undefined,
+          strike: isStrikethrough,
+        })
+      );
+      currentText = '';
+    }
+  };
+
+  for (let i = 0; i < text.length; i++) {
+    if (text[i] === '*' || text[i] === '_') {
+      if (i + 2 < text.length && text[i + 1] === text[i] && text[i + 2] === text[i]) {
+        // Bold italic
+        pushCurrentText();
+        isBold = !isBold;
+        isItalic = !isItalic;
+        i += 2;
+      } else if (text[i + 1] === text[i]) {
+        // Bold
+        pushCurrentText();
+        isBold = !isBold;
+        i++;
+      } else {
+        // Italic
+        pushCurrentText();
+        isItalic = !isItalic;
+      }
+    } else if (text[i] === '~' && text[i + 1] === '~') {
+      pushCurrentText();
+      isStrikethrough = !isStrikethrough;
+      i++;
+    } else if (text[i] === '[') {
+      const closeBracket = text.indexOf(']', i);
+      const openParen = text.indexOf('(', closeBracket);
+      const closeParen = text.indexOf(')', openParen);
+
+      if (closeBracket !== -1 && openParen !== -1 && closeParen !== -1) {
+        pushCurrentText();
+        const linkText = text.slice(i + 1, closeBracket);
+        const linkUrl = text.slice(openParen + 1, closeParen);
+        parts.push(
+          new ExternalHyperlink({
+            children: [new TextRun({ text: linkText, style: 'Hyperlink' })],
+            link: linkUrl,
+          })
+        );
+        i = closeParen;
+      } else {
+        currentText += text[i];
+      }
+    } else {
+      currentText += text[i];
+    }
+  }
+
+  pushCurrentText();
+  return parts;
 };
 
 const convertMarkdownToDocxParagraphs = (markdown?: string): Paragraph[] => {
@@ -297,164 +430,154 @@ const convertMarkdownToDocxParagraphs = (markdown?: string): Paragraph[] => {
   let listCounter = 0;
   let currentListInstance: number | null = null;
 
-  const parseFormattedText = (text: string): (TextRun | ExternalHyperlink)[] => {
-    const parts: (TextRun | ExternalHyperlink)[] = [];
-    let currentText = '';
-    let isBold = false;
-    let isItalic = false;
-    let isUnderline = false;
-    let isStrikethrough = false;
+  interface ListItem {
+    level: number;
+    ordered: boolean;
+    content: string[];
+  }
 
-    const pushCurrentText = () => {
-      if (currentText) {
-        parts.push(
-          new TextRun({
-            text: currentText,
-            bold: isBold,
-            italics: isItalic,
-            underline: isUnderline ? { color: 'red', type: 'dash' } : undefined,
-            strike: isStrikethrough,
-          })
-        );
-        currentText = '';
-      }
-    };
-
-    for (let i = 0; i < text.length; i++) {
-      if (text[i] === '*' || text[i] === '_') {
-        if (i + 2 < text.length && text[i + 1] === text[i] && text[i + 2] === text[i]) {
-          // Bold italic
-          pushCurrentText();
-          isBold = !isBold;
-          isItalic = !isItalic;
-          i += 2;
-        } else if (text[i + 1] === text[i]) {
-          // Bold
-          pushCurrentText();
-          isBold = !isBold;
-          i++;
-        } else {
-          // Italic
-          pushCurrentText();
-          isItalic = !isItalic;
-        }
-      } else if (text[i] === '~' && text[i + 1] === '~') {
-        pushCurrentText();
-        isStrikethrough = !isStrikethrough;
-        i++;
-      } else if (text[i] === '[') {
-        const closeBracket = text.indexOf(']', i);
-        const openParen = text.indexOf('(', closeBracket);
-        const closeParen = text.indexOf(')', openParen);
-
-        if (closeBracket !== -1 && openParen !== -1 && closeParen !== -1) {
-          pushCurrentText();
-          const linkText = text.slice(i + 1, closeBracket);
-          const linkUrl = text.slice(openParen + 1, closeParen);
-          parts.push(
-            new ExternalHyperlink({
-              children: [new TextRun({ text: linkText, style: 'Hyperlink' })],
-              link: linkUrl,
-            })
-          );
-          i = closeParen;
-        } else {
-          currentText += text[i];
-        }
-      } else {
-        currentText += text[i];
-      }
-    }
-
-    pushCurrentText();
-    return parts;
+  const getIndentLevel = (line: string): number => {
+    return line.search(/\S|$/);
   };
 
-  let currentParagraphLines: string[] = [];
-
-  const createParagraph = (lines: string[]) => {
-    if (lines.length === 0) return;
-
-    const processLine = (line: string): Paragraph => {
-      line = line.trim();
-      if (line.startsWith('# ')) {
-        currentListInstance = null;
-        return new Paragraph({
-          children: parseFormattedText(line.substring(2)),
-          heading: HeadingLevel.HEADING_1,
-        });
-      } else if (line.startsWith('## ')) {
-        currentListInstance = null;
-        return new Paragraph({
-          children: parseFormattedText(line.substring(3)),
-          heading: HeadingLevel.HEADING_2,
-        });
-      } else if (line.startsWith('### ')) {
-        currentListInstance = null;
-        return new Paragraph({
-          children: parseFormattedText(line.substring(4)),
-          heading: HeadingLevel.HEADING_3,
-        });
-      } else if (line.startsWith('#### ')) {
-        currentListInstance = null;
-        return new Paragraph({
-          children: parseFormattedText(line.substring(5)),
-          heading: HeadingLevel.HEADING_4,
-        });
-      } else if (line.startsWith('- ')) {
-        currentListInstance = null;
-        return new Paragraph({
-          children: parseFormattedText(line.substring(2)),
-          bullet: {
-            level: 0,
-          },
-        });
-      } else if (line.match(/^\d+\. /)) {
+  const createParagraph = (line: string, listItem?: ListItem): Paragraph => {
+    const trimmedLine = line.trim();
+    if (trimmedLine.startsWith('# ')) {
+      currentListInstance = null;
+      return new Paragraph({
+        children: parseFormattedText(trimmedLine.substring(2)),
+        heading: HeadingLevel.HEADING_1,
+      });
+    } else if (trimmedLine.startsWith('## ')) {
+      currentListInstance = null;
+      return new Paragraph({
+        children: parseFormattedText(trimmedLine.substring(3)),
+        heading: HeadingLevel.HEADING_2,
+      });
+    } else if (trimmedLine.startsWith('### ')) {
+      currentListInstance = null;
+      return new Paragraph({
+        children: parseFormattedText(trimmedLine.substring(4)),
+        heading: HeadingLevel.HEADING_3,
+      });
+    } else if (trimmedLine.startsWith('#### ')) {
+      currentListInstance = null;
+      return new Paragraph({
+        children: parseFormattedText(trimmedLine.substring(5)),
+        heading: HeadingLevel.HEADING_4,
+      });
+    } else if (listItem) {
+      if (listItem.ordered) {
         if (currentListInstance === null) {
           listCounter++;
           currentListInstance = listCounter;
         }
         return new Paragraph({
-          children: parseFormattedText(line.replace(/^\d+\.\s/, '')),
+          children: parseFormattedText(trimmedLine.replace(/^\d+\.\s/, '')),
           numbering: {
             reference: 'my-numbering-reference',
-            level: 0,
+            level: listItem.level,
             instance: currentListInstance,
           },
         });
       } else {
-        currentListInstance = null;
         return new Paragraph({
-          children: parseFormattedText(line),
+          children: parseFormattedText(trimmedLine.startsWith('- ') ? trimmedLine.substring(2) : trimmedLine),
+          numbering: {
+            reference: 'my-bullet-points',
+            level: listItem.level,
+          },
+          // bullet: {
+          //   level: listItem.level,
+          // },
         });
       }
-    };
-
-    if (lines[0].trim().startsWith('- ') || lines[0].trim().match(/^\d+\. /)) {
-      // Handle bullet points or ordered list
-      lines.forEach((line) => {
-        if (line.trim() !== '') {
-          paragraphs.push(processLine(line));
-        }
-      });
     } else {
-      // Handle regular paragraphs and headings
-      const text = lines.join(' ');
-      paragraphs.push(processLine(text));
+      currentListInstance = null;
+      return new Paragraph({
+        children: parseFormattedText(trimmedLine),
+      });
     }
   };
 
-  for (const line of lines) {
-    if (line.trim() === '') {
-      createParagraph(currentParagraphLines);
-      currentParagraphLines = [];
-    } else {
-      currentParagraphLines.push(line);
-    }
-  }
+  const processLines = (startIndex: number, parentLevel = -1): number => {
+    let i = startIndex;
+    let currentListItem: ListItem | undefined = undefined;
 
-  // Create the last paragraph if there are any remaining lines
-  createParagraph(currentParagraphLines);
+    while (i < lines.length) {
+      const line = lines[i];
+      const indentLevel = getIndentLevel(line);
+      const trimmedLine = line.trim();
+
+      if (indentLevel <= parentLevel) {
+        // We've exited the current list level
+        break;
+      }
+
+      const isOrderedListItem = trimmedLine.match(/^\d+\. /);
+      const isBulletPoint = trimmedLine.startsWith('- ');
+
+      if (isOrderedListItem || isBulletPoint) {
+        // if (currentListItem) {
+        //   currentListItem.content.forEach((content, index) => {
+        //     paragraphs.push(createParagraph(content, index === 0 ? currentListItem : undefined));
+        //   });
+        // }
+        // currentListItem = {
+        //   level: Math.round(indentLevel / 3), // Assuming 3 spaces per indent level
+        //   ordered: !!isOrderedListItem,
+        //   content: [line],
+        // };
+        if (currentListItem) {
+          currentListItem.content.push(line);
+        } else {
+          currentListItem = {
+            level: Math.round(indentLevel / 3), // Assuming 3 spaces per indent level
+            ordered: !!isOrderedListItem,
+            content: [line],
+          };
+        }
+        i++;
+      } else if (currentListItem && indentLevel > 0 && indentLevel > parentLevel) {
+        // This line belongs to the current list item
+        console.log(`Belongs to current list item: ${line}`);
+        currentListItem.content.push(line);
+        i++;
+      } else {
+        // This is a new paragraph
+        if (currentListItem) {
+          currentListItem.content.forEach((curLine) => {
+            paragraphs.push(createParagraph(curLine, currentListItem));
+          });
+          currentListItem = undefined;
+        }
+        trimmedLine && paragraphs.push(createParagraph(line));
+        i++;
+      }
+
+      // Check for nested list
+      if (i < lines.length && getIndentLevel(lines[i]) > indentLevel) {
+        if (currentListItem) {
+          currentListItem.content.forEach((curLine) => {
+            paragraphs.push(createParagraph(curLine, currentListItem));
+          });
+          currentListItem.content = [];
+        }
+        i = processLines(i, indentLevel);
+      }
+    }
+
+    // Handle any remaining list item
+    if (currentListItem) {
+      currentListItem.content.forEach((curLine) => {
+        paragraphs.push(createParagraph(curLine, currentListItem));
+      });
+    }
+
+    return i;
+  };
+
+  processLines(0);
 
   return paragraphs;
 };
