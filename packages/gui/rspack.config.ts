@@ -5,8 +5,8 @@ import {
   DefinePlugin,
   HtmlRspackPlugin,
   HotModuleReplacementPlugin,
-  SwcCssMinimizerRspackPlugin,
   SwcJsMinimizerRspackPlugin,
+  LightningCssMinimizerRspackPlugin,
 } from '@rspack/core';
 
 config();
@@ -27,6 +27,9 @@ console.log(
 );
 
 const configuration: Configuration = {
+  experiments: {
+    css: true,
+  },
   mode: isProduction ? 'production' : 'development',
   entry: {
     main: './src/app.ts',
@@ -63,10 +66,15 @@ const configuration: Configuration = {
       },
     }),
     new HotModuleReplacementPlugin(),
-    new SwcCssMinimizerRspackPlugin(),
+    new LightningCssMinimizerRspackPlugin(),
     new SwcJsMinimizerRspackPlugin({
-      compress: !devMode,
-      mangle: !devMode,
+      minimizerOptions: devMode
+        ? {}
+        : {
+            compress: true,
+            minify: true,
+            // mangle: true,
+          },
     }),
   ],
   resolve: {
