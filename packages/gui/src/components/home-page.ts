@@ -16,10 +16,12 @@ import {
   attributeTypeToIconMap,
   Stage,
   Measure,
+  scriptIcon,
+  missingIcon,
 } from '../models';
 import { MeiosisComponent, State, routingSvc } from '../services';
-import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel, Select, ISelectOptions } from 'mithril-materialized';
-import { FormAttributes, LayoutForm, SlimdownView, UIForm } from 'mithril-ui-form';
+import { FlatButton, ITabItem, Tabs, uniqueId, ModalPanel, Select, ISelectOptions, Icon } from 'mithril-materialized';
+import { FormAttributes, LayoutForm, render, SlimdownView, UIForm } from 'mithril-ui-form';
 import { labelForm, literatureForm } from '../models/forms';
 import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from './ui/reference';
@@ -133,9 +135,24 @@ export const HomePage: MeiosisComponent = () => {
                 ),
               m(
                 '.crime-scenes',
-                crimeScripts.map((crimeScript) =>
-                  m(CrimeScriptCard, { crimeScript, cast, acts, changePage: actions.changePage })
-                )
+                m('ul.collection.with-header', [
+                  m('li.collection-header', m('h4', 'Crime Scripts')),
+                  ...crimeScripts.map(({ url = scriptIcon, label, description, id }) =>
+                    m('li.collection-item.avatar', [
+                      m('img.circle', { src: url, alt: 'Avatar' }),
+                      m('span.title', label),
+                      m('p', description),
+                      m(
+                        'a.secondary-content',
+                        { href: routingSvc.href(Pages.HOME, `id=${id}`) },
+                        m(Icon, { iconName: 'more_horiz' })
+                      ),
+                    ])
+                  ),
+                ])
+                // crimeScripts.map((crimeScript) =>
+                //   m(CrimeScriptCard, { crimeScript, cast, acts, changePage: actions.changePage })
+                // )
               ),
             ],
         m(ModalPanel, {
@@ -174,7 +191,7 @@ export const CrimeScriptCard: FactoryComponent<{
 }> = () => {
   return {
     view: ({ attrs: { crimeScript, cast = [], acts: allActs = [], changePage } }) => {
-      const { id, url, label: name = t('NEW_ACT'), stages: actVariants = [], description } = crimeScript;
+      const { id, url = scriptIcon, label: name = t('NEW_ACT'), stages: actVariants = [], description } = crimeScript;
 
       const acts = actVariants.map((variant) => allActs.find((a) => a.id === variant.id) || ({} as Act));
       const allCast = Array.from(
@@ -188,6 +205,7 @@ export const CrimeScriptCard: FactoryComponent<{
         .map((id) => cast.find((cast) => cast.id === id))
         .filter((c) => c) as Cast[];
 
+      console.log(url);
       return m(
         '.col.s12.m6.l4',
         m(
@@ -198,16 +216,15 @@ export const CrimeScriptCard: FactoryComponent<{
             },
           },
           [
-            url &&
-              m('.card-image', [
-                m(
-                  'a',
-                  {
-                    href: routingSvc.href(Pages.HOME, `?id=${id}`),
-                  },
-                  [m('img', { src: url, alt: name }), m('span.card-title.bold.sharpen', name)]
-                ),
-              ]),
+            m('.card-image', [
+              m(
+                'a',
+                {
+                  href: routingSvc.href(Pages.HOME, `?id=${id}`),
+                },
+                [m('img', { src: url, alt: name }), m('span.card-title.bold.sharpen', name)]
+              ),
+            ]),
             m('.card-content', [
               !url && m('span.card-title.bold.sharpen', { style: { 'white-space': 'wrap' } }, name),
               description && m('p', description),
@@ -259,6 +276,18 @@ export const CrimeScriptView: FactoryComponent<{
         },
         [new Set<ID>(), new Set<ID>()] as [cast: Set<ID>, attr: Set<ID>]
       );
+      const allStages = actVariants.reduce((acc, cur, index) => {
+        cur.ids.forEach((id, idx) => {
+          const act = acts.find((a) => a.id === id);
+          if (act) {
+            const counter = `${index + 1}${cur.ids.length === 1 ? '' : String.fromCharCode(97 + idx)}`;
+            const title = `${counter}. ${act.label}`;
+            const selectedVariant = cur.ids.length > 1 && id === cur.id;
+            acc.push({ stage: cur, stageIdx: index, title, act, selectedVariant });
+          }
+        });
+        return acc;
+      }, [] as Array<{ stage: Stage; stageIdx: number; title: string; act: Act; selectedVariant: boolean }>);
 
       const selectedActContent = actVariants
         .filter((_, index) => curActIdx === index)
@@ -360,79 +389,32 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
         literature &&
           literature.length > 0 && [m('h5', t('REFERENCES')), m(ReferenceListComponent, { references: literature })],
         m(
-          '.card-container',
-          actVariants
-            .map(({ id }) => acts.find((a) => a.id === id) || ({} as Act))
-            .map(({ id, label = '...', icon, url, description }, index) => {
-              const imgSrc = icon === ICONS.OTHER ? url : IconOpts.find((i) => i.id === icon)?.img;
-              const ids = actVariants[index].ids;
-              const hasVariants = ids.length > 1;
-              const curVariantIdx = ids.indexOf(id);
-              const prevVariantIdx = curVariantIdx > 0 && ids[curVariantIdx - 1];
-              const nextVariantIdx = curVariantIdx < ids.length - 1 && ids[curVariantIdx + 1];
-
-              const className =
-                (curActIdx === index ? 'selected-card' : '') + (ids.length > 1 ? ' multiple-variants' : '');
-
-              return m(
-                '.card.large',
-                {
-                  class: className,
-                },
-                [
-                  m('.card-image', [
-                    imgSrc &&
-                      m('img', {
-                        alt: label,
-                        src: imgSrc,
-                        style: {
-                          width: 'auto',
-                          margin: 'auto',
-                          'padding-top': '10px',
-                          'padding-bottom': '2.8rem',
-                          'max-height': '200px',
-                        },
-                      }),
-                    m(
-                      'span.card-title.white.black-text',
-                      { style: { padding: '5px 10px', 'border-radius': '10px' } },
-                      `${index + 1}. ${label}`
-                    ),
-                  ]),
-                  m(
-                    '.card-content',
-                    { style: { padding: '12px', 'overflow-y': 'auto', 'max-height': '55%' } },
-                    m(SlimdownView, { md: description })
-                  ),
-                  m('.card-action', [
-                    m(FlatButton, {
-                      label: t('DETAILS'),
-                      className: 'right',
-                      onclick: () => update({ curActIdx: index }),
-                    }),
-                    hasVariants && [
-                      m(FlatButton, {
-                        label: '<',
-                        disabled: !prevVariantIdx,
-                        style: { 'margin-right': 0 },
-                        onclick: () => {
-                          if (typeof prevVariantIdx === 'string') actVariants[index].id = prevVariantIdx;
-                        },
-                      }),
-                      m('span', { style: { 'line-height': '36px' } }, `${curVariantIdx + 1}/${ids.length}`),
-                      m(FlatButton, {
-                        label: '>',
-                        disabled: !nextVariantIdx,
-                        style: { 'margin-right': 0 },
-                        onclick: () => {
-                          if (typeof nextVariantIdx === 'string') actVariants[index].id = nextVariantIdx;
-                        },
-                      }),
-                    ],
-                  ]),
-                ]
-              );
-            })
+          'ul.collection.with-header',
+          m('li.collection-header', m('h4', t('STAGES'))),
+          allStages.map(({ stage, stageIdx, selectedVariant, title, act }) => {
+            const { id, label = '...', icon, url, description = '' } = act;
+            const imgSrc = (icon === ICONS.OTHER ? url : IconOpts.find((i) => i.id === icon)?.img) || missingIcon;
+            return m(
+              'li.collection-item.avatar',
+              { class: curActIdx === stageIdx && id === actVariants[curActIdx].id ? 'active' : undefined },
+              [
+                m('img.circle', { src: imgSrc, alt: label }),
+                m('span.title', title, selectedVariant ? m('sup', '*') : undefined),
+                m('p.markdown', m.trust(render(description, true))),
+                m(
+                  'a.secondary-content',
+                  { href: window.location.href },
+                  m(Icon, {
+                    iconName: 'more_horiz',
+                    onclick: () => {
+                      stage.id = id;
+                      update({ curActIdx: stageIdx });
+                    },
+                  })
+                ),
+              ]
+            );
+          })
         ),
         selectedActContent && [m('h4', selectedActContent.title), selectedActContent.vnode],
       ]);
