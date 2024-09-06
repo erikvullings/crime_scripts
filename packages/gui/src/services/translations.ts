@@ -7,6 +7,7 @@ export type Languages = 'nl' | 'en';
 export const messages = {
   HOME: { TITLE: 'Home', ROUTE: '/home' },
   ABOUT: { TITLE: 'About the app', ROUTE: '/about', TEXT: situationCrimePreventionClassificationTable },
+  CRIME_SCRIPT: { TITLE: 'Crime script', ROUTE: '/crime_script' },
   SETTINGS: { TITLE: 'Settings', ROUTE: '/settings' },
   LANDING: { TITLE: 'Introduction', ROUTE: '/' },
   USER: 'User',
@@ -180,11 +181,14 @@ export const messages = {
   },
   EXPORT_TO_WORD: 'Export to Word',
   INTRODUCTION: 'Introduction',
+  LOCATION: 'Location',
+  LOCATIONS: 'Locations ',
 };
 
 export const messagesNL: typeof messages = {
   HOME: { TITLE: 'Home', ROUTE: '/home' },
   ABOUT: { TITLE: 'Over de app', ROUTE: '/over', TEXT: situationCrimePreventionClassificationTableNL },
+  CRIME_SCRIPT: { TITLE: 'Crime script', ROUTE: '/crime_script' },
   SETTINGS: { TITLE: 'Instellingen', ROUTE: '/instellingen' },
   LANDING: { TITLE: 'Introductie', ROUTE: '/' },
   USER: 'Gebruiker',
@@ -359,6 +363,8 @@ export const messagesNL: typeof messages = {
   },
   EXPORT_TO_WORD: 'Exporteer naar Word',
   INTRODUCTION: 'Introductie',
+  LOCATION: 'Locatie',
+  LOCATIONS: 'Locaties',
 };
 
 const setGuiLanguage = (language: Languages) => {

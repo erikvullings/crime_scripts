@@ -7,7 +7,7 @@ export enum Pages {
   LANDING = 'LANDING',
   LOGIN = 'LOGIN',
   HOME = 'HOME',
-  CRIME_SCENE = 'CRIME_SCENE',
+  CRIME_SCRIPT = 'CRIME_SCRIPT',
   SETTINGS = 'SETTINGS',
   ABOUT = 'ABOUT',
 }

@@ -6,6 +6,7 @@ import {
   CrimeScriptAttributes,
   AttributeTypeOptions,
   Literature,
+  CrimeLocation,
 } from './data-model';
 import { t } from '../services';
 
@@ -58,6 +59,22 @@ export const attributesForm = () =>
       ] as UIForm<CrimeScriptAttributes>,
     },
   ] as UIForm<{ attributes: CrimeScriptAttributes[] }>;
+
+export const locationForm = () =>
+  [
+    {
+      id: 'locations',
+      label: t('LOCATIONS'),
+      className: 'col s12',
+      repeat: true,
+      // pageSize: 100,
+      type: [
+        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+        { id: 'label', type: 'text', className: 'col s6', label: t('NAME') },
+        { id: 'url', type: 'base64', className: 'col s6', label: t('IMAGE') },
+      ] as UIForm<CrimeLocation>,
+    },
+  ] as UIForm<{ locations: CrimeLocation[] }>;
 
 export const labelForm = () =>
   [

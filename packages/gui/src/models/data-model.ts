@@ -6,6 +6,7 @@ export type DataModel = {
   crimeScripts: CrimeScript[];
   cast: Cast[];
   attributes: CrimeScriptAttributes[];
+  locations: CrimeLocation[];
   acts: Act[];
 };
 
@@ -15,6 +16,7 @@ export const defaultModel = {
   crimeScripts: [],
   cast: [],
   attributes: [],
+  locations: [],
   acts: [],
 } as DataModel;
 
@@ -72,7 +74,7 @@ export type SearchResult = {
   activityIdx: number;
   conditionIdx: number;
   resultMd: string;
-  type: 'crimeScript' | 'act' | 'activity' | 'condition' | 'cast' | 'attribute';
+  type: 'crimeScript' | 'act' | 'activity' | 'condition' | 'cast' | 'attribute' | 'location';
 };
 
 export type ID = string;
@@ -189,6 +191,8 @@ export const AttributeTypeOptions = [
   { id: ATTRIBUTE_TYPE.OTHER, label: 'Other' },
 ];
 
+export type CrimeLocation = Labeled;
+
 export type CrimeScriptAttributes = Labeled & {
   type: ATTRIBUTE_TYPE;
 };
@@ -217,8 +221,9 @@ export type Act = Labeled & {
 
 export type ActivityPhase = {
   label: string;
+  locationId?: ID;
   activities: Activity[];
-  description: string[];
+  // description: string[];
   conditions: Condition[];
 };
 

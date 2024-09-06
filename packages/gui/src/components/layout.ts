@@ -132,7 +132,10 @@ export const Layout: MeiosisComponent = () => {
                               'a.truncate',
                               {
                                 style: { cursor: 'pointer' },
-                                href: routingSvc.href(Pages.HOME, `id=${model.crimeScripts[crimeScriptIdx].id}`),
+                                href: routingSvc.href(
+                                  Pages.CRIME_SCRIPT,
+                                  `id=${model.crimeScripts[crimeScriptIdx].id}`
+                                ),
                                 onclick: () => {
                                   searchDialog.close();
                                   actions.setLocation(model.crimeScripts[crimeScriptIdx].id, actIdx, phaseIdx);

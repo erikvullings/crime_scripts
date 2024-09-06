@@ -2,7 +2,7 @@ import { meiosisSetup } from 'meiosis-setup';
 import { MeiosisCell, MeiosisConfig, Patch, Service } from 'meiosis-setup/types';
 import m, { FactoryComponent } from 'mithril';
 import { routingSvc, t } from '.';
-import { Cast, CrimeScriptAttributes, DataModel, ID, Pages, SearchResult, Settings } from '../models';
+import { Cast, CrimeLocation, CrimeScriptAttributes, DataModel, ID, Pages, SearchResult, Settings } from '../models';
 import { User, UserRole } from './login-service';
 import { scrollToTop } from '../utils';
 
@@ -103,7 +103,7 @@ export const setSearchResults: Service<State> = {
   run: (cell) => {
     const state = cell.getState();
     const { model = {} as DataModel } = state;
-    const { crimeScripts = [], cast = [], attributes = [], acts = [] } = model;
+    const { crimeScripts = [], cast = [], attributes = [], acts = [], locations = [] } = model;
     const searchResults: SearchResult[] = [];
     if (state.searchFilter) {
       const searchFilter = state.searchFilter.toLowerCase();
@@ -116,6 +116,9 @@ export const setSearchResults: Service<State> = {
       const matchingAttr = attributes
         .filter((attr) => attr.label?.toLowerCase().includes(searchFilter))
         .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, CrimeScriptAttributes>());
+      const matchingLoc = locations
+        .filter((loc) => loc.label?.toLowerCase().includes(searchFilter))
+        .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, CrimeLocation>());
       crimeScripts.forEach((crimeScript, crimeScriptIdx) => {
         const { label, description, stages: actVariants = [] } = crimeScript;
         if (label.toLowerCase().includes(searchFilter) || description?.toLowerCase().includes(searchFilter)) {
@@ -135,8 +138,22 @@ export const setSearchResults: Service<State> = {
             if (actIdx < 0) return;
             const act = acts[actIdx];
             [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
+              if (phase.locationId) {
+                const include = matchingLoc.get(phase.locationId);
+                if (include) {
+                  searchResults.push({
+                    crimeScriptIdx: crimeScriptIdx,
+                    actIdx,
+                    phaseIdx,
+                    activityIdx: -1,
+                    conditionIdx: -1,
+                    type: 'cast',
+                    resultMd: highlighter(include.label),
+                  });
+                }
+              }
               phase.activities?.forEach((activity, activityIdx) => {
-                const { label, description, conditions = [], cast = [], attributes = [] } = activity;
+                const { label = '', description, conditions = [], cast = [], attributes = [] } = activity;
                 cast.forEach((id) => {
                   const include = matchingCast.get(id);
                   if (include) {

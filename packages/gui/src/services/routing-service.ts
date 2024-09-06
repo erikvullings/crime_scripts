@@ -1,7 +1,7 @@
 import m, { RouteDefs } from 'mithril';
 import { Pages, Page } from '../models';
 import { Layout } from '../components/layout';
-import { AboutPage, HomePage, LandingPage, SettingsPage } from '../components';
+import { AboutPage, CrimeScriptPage, HomePage, LandingPage, SettingsPage } from '../components';
 import { t } from './translations';
 import { appActions, cells } from './meiosis';
 
@@ -31,22 +31,31 @@ class RoutingService {
         component: HomePage,
       },
       {
+        id: Pages.CRIME_SCRIPT,
+        icon: 'menu_book',
+        title: t('CRIME_SCRIPT', 'TITLE'),
+        route: t('CRIME_SCRIPT', 'ROUTE'),
+        visible: true,
+        hasSidebar: true,
+        component: CrimeScriptPage,
+      },
+      {
+        id: Pages.SETTINGS,
+        icon: 'edit_attributes',
+        // iconClass: 'blue-text',
+        title: t('SETTINGS', 'TITLE'),
+        route: t('SETTINGS', 'ROUTE'),
+        hasSidebar: true,
+        visible: ({ role }) => role === 'admin',
+        component: SettingsPage,
+      },
+      {
         id: Pages.ABOUT,
         icon: 'info',
         title: t('ABOUT', 'TITLE'),
         route: t('ABOUT', 'ROUTE'),
         visible: true,
         component: AboutPage,
-      },
-      {
-        id: Pages.SETTINGS,
-        icon: 'settings',
-        iconClass: 'blue-text',
-        title: t('SETTINGS', 'TITLE'),
-        route: t('SETTINGS', 'ROUTE'),
-        hasSidebar: true,
-        visible: ({ role }) => role === 'admin',
-        component: SettingsPage,
       },
     ];
     // console.log(JSON.stringify(routes, null, 2));

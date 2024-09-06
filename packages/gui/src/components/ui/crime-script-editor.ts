@@ -14,6 +14,7 @@ import {
   attributeTypeToIconMap,
   Stage,
   Measure,
+  CrimeLocation,
 } from '../../models';
 import { FlatButton, Tabs, uniqueId, Select, ISelectOptions } from 'mithril-materialized';
 import { FormAttributes, LayoutForm, UIForm } from 'mithril-ui-form';
@@ -27,6 +28,7 @@ export const CrimeScriptEditor: FactoryComponent<{
   cast: Cast[];
   acts: Act[];
   attributes: CrimeScriptAttributes[];
+  locations: CrimeLocation[];
 }> = () => {
   type InputOptions = {
     id: string;
@@ -45,18 +47,20 @@ export const CrimeScriptEditor: FactoryComponent<{
     },
   ];
 
+  let locationOptions: Array<InputOptions> = [];
   let castOptions: Array<InputOptions> = [];
   let attrOptions: Array<InputOptions> = [];
   let measuresForm: UIForm<any> = [];
 
   return {
-    oninit: ({ attrs: { cast, attributes } }) => {
+    oninit: ({ attrs: { cast, attributes, locations } }) => {
       castOptions = cast.map(({ id, label, type }) => ({
         id,
         label,
         group: type === CastType.Individual ? 'person' : 'group',
       }));
       attrOptions = attributes.map(({ id, label, type }) => ({ id, label, group: attributeTypeToIconMap.get(type) }));
+      locationOptions = locations.map(({ id, label }) => ({ id, label }));
       const measOptions = crimeMeasureOptions();
 
       const measureForm: UIForm<Measure> = [
@@ -70,6 +74,12 @@ export const CrimeScriptEditor: FactoryComponent<{
     },
     view: ({ attrs: { acts, crimeScript } }) => {
       const activityForm: UIForm<any> = [
+        {
+          id: 'locationId',
+          type: 'select',
+          label: t('LOCATION'),
+          options: locationOptions,
+        },
         {
           id: 'activities',
           repeat: true,
