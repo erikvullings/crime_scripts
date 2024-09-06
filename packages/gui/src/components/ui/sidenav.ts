@@ -1,9 +1,9 @@
-import m, { FactoryComponent } from 'mithril';
+import m from 'mithril';
 import { Languages, MeiosisComponent, UserRole, i18n, routingSvc, t } from '../../services';
 import { FlatButton, ISelectOptions, ModalPanel, Select, padLeft } from 'mithril-materialized';
 import { DataModel, Pages, defaultModel } from '../../models';
 import { formatDate } from '../../utils';
-import { compressToEncodedURIComponent, compressToUint8Array, decompressFromUint8Array } from 'lz-string';
+import { compressToEncodedURIComponent, decompressFromUint8Array } from 'lz-string';
 import { LanguageSwitcher } from './language-switcher';
 
 export const SideNav: MeiosisComponent = () => {
@@ -55,18 +55,18 @@ export const SideNav: MeiosisComponent = () => {
         dlAnchorElem.click();
         break;
       }
-      case 'download_bin': {
-        const version = typeof model.version === 'undefined' ? 1 : model.version++;
-        const binaryData = compressToUint8Array(JSON.stringify({ ...model, version }));
-        const blob = new Blob([binaryData], { type: 'application/octet-stream' });
-        const url = URL.createObjectURL(blob);
-        const dlAnchorElem = document.createElement('a');
-        dlAnchorElem.setAttribute('href', url);
-        dlAnchorElem.setAttribute('download', `${formatDate()}_v${padLeft(version, 3)}_crime_scripts.bin`);
-        dlAnchorElem.click();
-        URL.revokeObjectURL(url);
-        break;
-      }
+      // case 'download_bin': {
+      //   const version = typeof model.version === 'undefined' ? 1 : model.version++;
+      //   const binaryData = compressToUint8Array(JSON.stringify({ ...model, version }));
+      //   const blob = new Blob([binaryData], { type: 'application/octet-stream' });
+      //   const url = URL.createObjectURL(blob);
+      //   const dlAnchorElem = document.createElement('a');
+      //   dlAnchorElem.setAttribute('href', url);
+      //   dlAnchorElem.setAttribute('download', `${formatDate()}_v${padLeft(version, 3)}_crime_scripts.bin`);
+      //   dlAnchorElem.click();
+      //   URL.revokeObjectURL(url);
+      //   break;
+      // }
       case 'upload_json': {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
@@ -75,14 +75,14 @@ export const SideNav: MeiosisComponent = () => {
         fileInput.click();
         break;
       }
-      case 'upload_bin': {
-        const fileInput = document.createElement('input');
-        fileInput.type = 'file';
-        fileInput.accept = '.bin';
-        fileInput.onchange = handleFileUpload(true, saveModel);
-        fileInput.click();
-        break;
-      }
+      // case 'upload_bin': {
+      //   const fileInput = document.createElement('input');
+      //   fileInput.type = 'file';
+      //   fileInput.accept = '.bin';
+      //   fileInput.onchange = handleFileUpload(true, saveModel);
+      //   fileInput.click();
+      //   break;
+      // }
       case 'link': {
         const compressed = compressToEncodedURIComponent(JSON.stringify(model));
         const url = `${window.location.href}${/\?/.test(window.location.href) ? '&' : '?'}model=${compressed}`;
@@ -124,7 +124,7 @@ export const SideNav: MeiosisComponent = () => {
           m(
             'li',
             m(FlatButton, {
-              label: 'Clear',
+              label: t('CLEAR'),
               iconName: 'clear',
               modalId: 'clear_model',
             })
@@ -132,39 +132,39 @@ export const SideNav: MeiosisComponent = () => {
           m(
             'li',
             m(FlatButton, {
-              label: 'Download JSON',
+              label: t('DOWNLOAD'),
               onclick: () => handleSelection('download_json', model, saveModel),
               iconName: 'download',
             })
           ),
+          // m(
+          //   'li',
+          //   m(FlatButton, {
+          //     label: 'Download Binary',
+          //     onclick: () => handleSelection('download_bin', model, saveModel),
+          //     iconName: 'download',
+          //   })
+          // ),
           m(
             'li',
             m(FlatButton, {
-              label: 'Download Binary',
-              onclick: () => handleSelection('download_bin', model, saveModel),
-              iconName: 'download',
-            })
-          ),
-          m(
-            'li',
-            m(FlatButton, {
-              label: 'Upload JSON',
+              label: t('UPLOAD'),
               onclick: () => handleSelection('upload_json', model, saveModel),
               iconName: 'upload',
             })
           ),
+          // m(
+          //   'li',
+          //   m(FlatButton, {
+          //     label: 'Upload Binary',
+          //     onclick: () => handleSelection('upload_bin', model, saveModel),
+          //     iconName: 'upload',
+          //   })
+          // ),
           m(
             'li',
             m(FlatButton, {
-              label: 'Upload Binary',
-              onclick: () => handleSelection('upload_bin', model, saveModel),
-              iconName: 'upload',
-            })
-          ),
-          m(
-            'li',
-            m(FlatButton, {
-              label: 'Permalink',
+              label: t('PERMALINK'),
               onclick: () => handleSelection('link', model, saveModel),
               iconName: 'link',
             })
