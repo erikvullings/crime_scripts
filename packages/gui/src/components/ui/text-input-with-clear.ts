@@ -13,7 +13,7 @@ export const TextInputWithClear: FactoryComponent<{
   onchange?: (v?: string) => void;
   oninput?: (v?: string) => void;
 }> = () => {
-  let id: string;
+  let inputId: string;
   let input: HTMLInputElement;
   let clearButton: HTMLButtonElement;
   let labelElement: HTMLLabelElement;
@@ -21,16 +21,17 @@ export const TextInputWithClear: FactoryComponent<{
 
   return {
     oninit: ({ attrs: { oninput, id } }) => {
-      id = id || uniqueId();
+      inputId = id || uniqueId();
       debouncedOnInput = oninput && debounce(oninput, 500);
     },
     view: ({
       attrs: { label, initialValue, placeholder, iconName, className = 'col s12', style, onchange, oninput },
     }) => {
-      return m('.input-field', { className, style }, [
+      console.log({ inputId, label });
+      return m('.text-input-with-clear.input-field', { className, style }, [
         iconName && m('.material-icons prefix', iconName),
         m('input', {
-          id,
+          id: inputId,
           type: 'text',
           placeholder,
           oncreate: ({ dom }) => {
@@ -51,7 +52,7 @@ export const TextInputWithClear: FactoryComponent<{
         m(
           'label',
           {
-            for: id,
+            for: inputId,
             className: initialValue || placeholder ? 'active' : undefined,
             oncreate: ({ dom }) => (labelElement = dom as HTMLLabelElement),
           },

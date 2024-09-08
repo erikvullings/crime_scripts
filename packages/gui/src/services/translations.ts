@@ -187,6 +187,12 @@ export const messages = {
   INTRODUCTION: 'Introduction',
   LOCATION: 'Location',
   LOCATIONS: 'Locations ',
+  SEARCH: 'Search...',
+  HITS: {
+    0: 'No results found',
+    1: '1 result found',
+    n: '{n} results found',
+  },
 };
 
 export const messagesNL: typeof messages = {
@@ -373,6 +379,12 @@ export const messagesNL: typeof messages = {
   INTRODUCTION: 'Introductie',
   LOCATION: 'Locatie',
   LOCATIONS: 'Locaties',
+  SEARCH: 'Zoek...',
+  HITS: {
+    0: 'Geen resultaten gevonden',
+    1: '1 resultaat gevonden',
+    n: '{n} resultaten gevonden',
+  },
 };
 
 const setGuiLanguage = (language: Languages) => {

@@ -3,7 +3,7 @@ import { Icon } from 'mithril-materialized';
 import logo from '../assets/logo.svg';
 import { Pages, Page } from '../models';
 import { routingSvc } from '../services/routing-service';
-import { APP_TITLE, MeiosisComponent } from '../services';
+import { APP_TITLE, MeiosisComponent, t } from '../services';
 import { SideNav, SideNavTrigger } from './ui/sidenav';
 import { TextInputWithClear } from './ui/text-input-with-clear';
 import { SlimdownView } from 'mithril-ui-form';
@@ -50,24 +50,24 @@ export const Layout: MeiosisComponent = () => {
                       style: 'margin-bottom: 6px; margin-left: -6px;',
                     }),
                     m('span', { style: 'margin-left: 20px; vertical-align: top;' }, APP_TITLE),
-                    m('.tooltip', [
-                      m(Icon, {
-                        iconName: 'search',
-                        style: {
-                          'margin-left': '10px',
-                          'font-size': '2rem',
-                        },
-                        onclick: (e: MouseEvent) => {
-                          e.preventDefault();
-                          searchDialog && !searchDialog.isOpen && searchDialog.open();
-                        },
-                      }),
-                      m('span.tooltiptext', { style: { 'font-size': '1rem' } }, 'Type / to search'),
-                    ]),
                   ]
                 ),
 
                 m('ul.right.hide-on-med-and-down', [
+                  m('li.tooltip.cursor-pointer', [
+                    m(Icon, {
+                      iconName: 'search',
+                      style: {
+                        'margin-right': '15px',
+                        'font-size': '2rem',
+                      },
+                      onclick: (e: MouseEvent) => {
+                        e.preventDefault();
+                        searchDialog && !searchDialog.isOpen && searchDialog.open();
+                      },
+                    }),
+                    m('span.tooltiptext', { style: { 'font-size': '1rem' } }, 'Type / to search'),
+                  ]),
                   ...routingSvc
                     .getList()
                     .filter(
@@ -101,13 +101,20 @@ export const Layout: MeiosisComponent = () => {
             '#searchDialog.modal',
             {
               oncreate: ({ dom }) => {
-                searchDialog = M.Modal.init(dom);
+                searchDialog = M.Modal.init(dom, {
+                  onOpenEnd: () => {
+                    if (textInput) {
+                      textInput.focus();
+                    }
+                  },
+                });
               },
             },
             [
               m('.modal-content', [
                 m(TextInputWithClear, {
-                  label: 'Search...',
+                  id: 'search',
+                  label: t('SEARCH'),
                   onchange: () => {},
                   iconName: 'search',
                   initialValue: searchFilter,
@@ -120,9 +127,7 @@ export const Layout: MeiosisComponent = () => {
                   searchDialog.isOpen &&
                   searchFilter &&
                   searchResults && [
-                    searchResults.length === 0 && [m('p', 'No results found')],
-                    searchResults.length === 1 && [m('p', '1 result found')],
-                    searchResults.length > 1 && [m('p', `${searchResults.length} results found`)],
+                    [m('p', t('HITS', searchResults.length))],
                     searchResults.length > 0 && [
                       m(
                         'ol',
