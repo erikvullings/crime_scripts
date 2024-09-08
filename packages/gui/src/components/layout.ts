@@ -66,7 +66,7 @@ export const Layout: MeiosisComponent = () => {
                         searchDialog && !searchDialog.isOpen && searchDialog.open();
                       },
                     }),
-                    m('span.tooltiptext', { style: { 'font-size': '1rem' } }, 'Type / to search'),
+                    m('span.tooltiptext', { style: { 'font-size': '1rem' } }, t('SEARCH_TOOLTIP')),
                   ]),
                   ...routingSvc
                     .getList()

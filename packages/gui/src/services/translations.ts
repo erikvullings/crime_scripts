@@ -188,6 +188,7 @@ export const messages = {
   LOCATION: 'Location',
   LOCATIONS: 'Locations ',
   SEARCH: 'Search...',
+  SEARCH_TOOLTIP: 'Type / to search',
   HITS: {
     0: 'No results found',
     1: '1 result found',
@@ -380,6 +381,7 @@ export const messagesNL: typeof messages = {
   LOCATION: 'Locatie',
   LOCATIONS: 'Locaties',
   SEARCH: 'Zoek...',
+  SEARCH_TOOLTIP: 'Type / om te zoeken',
   HITS: {
     0: 'Geen resultaten gevonden',
     1: '1 resultaat gevonden',
