@@ -53,7 +53,7 @@ export const crimeScriptToMarkdown = (crimeScript: Partial<CrimeScript>, model: 
   }
   stages.forEach((stage, i) => {
     const stageActs = stage.ids.map((id) => acts.find((a) => a.id === id)).filter((a) => typeof a !== 'undefined');
-    newHeading(`${t('STAGE')} ${i + 1}: ${stageActs.map((a) => a.label).join(' | ')}`, 1);
+    newHeading(`${t('SCENE')} ${i + 1}: ${stageActs.map((a) => a.label).join(' | ')}`, 1);
     stageActs.forEach((act) => {
       newHeading(act.label, 2);
       act.description && md.push(act.description);

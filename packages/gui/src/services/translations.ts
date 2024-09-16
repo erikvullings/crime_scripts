@@ -10,6 +10,7 @@ export const messages = {
   CRIME_SCRIPT: { TITLE: 'Crime script', ROUTE: '/crime_script' },
   SETTINGS: { TITLE: 'Settings', ROUTE: '/settings' },
   LANDING: { TITLE: 'Introduction', ROUTE: '/' },
+  CASE: { TITLE: 'Case file', ROUTE: '/case' },
   USER: 'User',
   EDITOR: 'Editor',
   ADMIN: 'Administrator',
@@ -64,6 +65,10 @@ export const messages = {
   CREATE: 'Create',
   STAGES: 'Stages',
   STAGE: 'Stage',
+  SCENES: 'Scenes',
+  SCENE: 'Scene',
+  ACTS: 'Acts',
+  ACT: 'Act',
   SELECT_ACT_TO_EDIT: 'Select act to edit',
   CREATE_NEW_ACT: 'Create new act',
   REFERENCES: 'References',
@@ -194,6 +199,7 @@ export const messages = {
     1: '1 result found',
     n: '{n} results found',
   },
+  SYNONYMS: 'Synonyms',
 };
 
 export const messagesNL: typeof messages = {
@@ -202,6 +208,7 @@ export const messagesNL: typeof messages = {
   CRIME_SCRIPT: { TITLE: 'Crime script', ROUTE: '/crime_script' },
   SETTINGS: { TITLE: 'Instellingen', ROUTE: '/instellingen' },
   LANDING: { TITLE: 'Introductie', ROUTE: '/' },
+  CASE: { TITLE: 'Casus', ROUTE: '/casus' },
   USER: 'Gebruiker',
   EDITOR: 'Redacteur',
   ADMIN: 'Beheerder',
@@ -237,7 +244,7 @@ export const messagesNL: typeof messages = {
   NEW_SCRIPT: 'Nieuw script',
   DELETE_SCRIPT_CONFIRM: 'Weet je zeker dat je het script "{name}" wilt verwijderen?',
   ACTIVITIES: 'Activiteiten',
-  CAST: 'Rolverdeling',
+  CAST: 'Rollen',
   CONDITIONS: 'Voorwaarden',
   ATTRIBUTES: 'Attributen',
   MEASURES: 'Maatregelen',
@@ -256,6 +263,10 @@ export const messagesNL: typeof messages = {
   CREATE: 'Maken',
   STAGES: 'Fasen',
   STAGE: 'Fase',
+  SCENES: 'Scenes',
+  SCENE: 'Scene',
+  ACTS: 'Actes',
+  ACT: 'Acte',
   SELECT_ACT_TO_EDIT: 'Selecteer handeling om te bewerken',
   CREATE_NEW_ACT: 'Nieuwe handeling maken',
   REFERENCES: 'Referenties',
@@ -387,6 +398,7 @@ export const messagesNL: typeof messages = {
     1: '1 resultaat gevonden',
     n: '{n} resultaten gevonden',
   },
+  SYNONYMS: 'Synoniemen',
 };
 
 const setGuiLanguage = (language: Languages) => {
