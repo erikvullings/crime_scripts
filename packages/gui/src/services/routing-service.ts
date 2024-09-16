@@ -1,7 +1,7 @@
 import m, { RouteDefs } from 'mithril';
 import { Pages, Page } from '../models';
 import { Layout } from '../components/layout';
-import { AboutPage, CrimeScriptPage, HomePage, LandingPage, SettingsPage } from '../components';
+import { AboutPage, CasePage, CrimeScriptPage, HomePage, LandingPage, SettingsPage } from '../components';
 import { t } from './translations';
 import { appActions, cells } from './meiosis';
 
@@ -36,8 +36,18 @@ class RoutingService {
         title: t('CRIME_SCRIPT', 'TITLE'),
         route: t('CRIME_SCRIPT', 'ROUTE'),
         visible: true,
-        hasSidebar: true,
+        hasSidebar: false,
         component: CrimeScriptPage,
+      },
+      {
+        id: Pages.CASE,
+        icon: 'cases',
+        // iconClass: 'blue-text',
+        title: t('CASE', 'TITLE'),
+        route: t('CASE', 'ROUTE'),
+        hasSidebar: false,
+        visible: true, // ({ role }) => role === 'admin',
+        component: CasePage,
       },
       {
         id: Pages.SETTINGS,
@@ -45,8 +55,8 @@ class RoutingService {
         // iconClass: 'blue-text',
         title: t('SETTINGS', 'TITLE'),
         route: t('SETTINGS', 'ROUTE'),
-        hasSidebar: true,
-        visible: ({ role }) => role === 'admin',
+        hasSidebar: false,
+        visible: true, // ({ role }) => role === 'admin',
         component: SettingsPage,
       },
       {
