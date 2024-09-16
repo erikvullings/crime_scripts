@@ -134,6 +134,7 @@ export const SettingsPage: MeiosisComponent = () => {
         m(Tabs, {
           tabs: tabs.map(([id, label, type, iconName, attr]) => {
             return {
+              id: label,
               title: `${label} (${attr.length})`,
               vnode: edit
                 ? m(LayoutForm, {
