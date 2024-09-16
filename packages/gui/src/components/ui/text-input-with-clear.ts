@@ -27,7 +27,6 @@ export const TextInputWithClear: FactoryComponent<{
     view: ({
       attrs: { label, initialValue, placeholder, iconName, className = 'col s12', style, onchange, oninput },
     }) => {
-      console.log({ inputId, label });
       return m('.text-input-with-clear.input-field', { className, style }, [
         iconName && m('.material-icons prefix', iconName),
         m('input', {
