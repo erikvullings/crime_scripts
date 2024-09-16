@@ -46,7 +46,7 @@ export const SideNav: MeiosisComponent = () => {
         saveModel(defaultModel);
         break;
       case 'download_json': {
-        const version = typeof model.version === 'undefined' ? 1 : model.version++;
+        const version = typeof model.version === 'undefined' ? 1 : ++model.version;
         const dataStr =
           'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify({ ...model, version }, null, 2));
         const dlAnchorElem = document.createElement('a');

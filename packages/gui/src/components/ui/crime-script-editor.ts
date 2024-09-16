@@ -278,7 +278,7 @@ export const CrimeScriptEditor: FactoryComponent<{
               form: measuresForm,
               obj: curAct,
               onchange: () => {
-                console.log(curAct);
+                // console.log(curAct);
               },
             } as FormAttributes<Partial<ActivityPhase>>),
           ]),
