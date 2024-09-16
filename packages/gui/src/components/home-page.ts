@@ -90,7 +90,7 @@ export const CrimeScriptCard: FactoryComponent<{
         .map((id) => cast.find((cast) => cast.id === id))
         .filter((c) => c) as Cast[];
 
-      console.log(url);
+      // console.log(url);
       return m(
         '.col.s12.m6.l4',
         m(

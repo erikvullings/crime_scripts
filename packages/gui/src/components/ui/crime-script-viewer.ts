@@ -109,7 +109,6 @@ ${
 ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).join('\n')}`
     : ''
 }`;
-          console.log(md);
           return {
             title: label,
             md,

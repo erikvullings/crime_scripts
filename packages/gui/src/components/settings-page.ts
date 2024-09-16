@@ -112,10 +112,8 @@ export const SettingsPage: MeiosisComponent = () => {
             onclick: () => {
               edit = !edit;
               if (edit) {
-                console.log('STORE');
                 storedModel = deepCopy(model);
               } else {
-                console.log('SAVE');
                 actions.saveModel(model);
               }
             },

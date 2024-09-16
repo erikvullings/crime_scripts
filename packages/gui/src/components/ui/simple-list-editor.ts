@@ -87,11 +87,9 @@ export const SimpleListEditor: FactoryComponent<SimpleListEditorAttrs> = () => {
                       onchange(items);
                     },
                     onblur: () => {
-                      console.log('On blur');
                       stopEditing();
                     },
                     onkeypress: (e: KeyboardEvent) => {
-                      console.log(e.key);
                       if (e.key === 'Enter' || e.key === 'Escape' || e.key === 'Tab') {
                         stopEditing();
                       }

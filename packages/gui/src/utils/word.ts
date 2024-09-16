@@ -540,7 +540,7 @@ const convertMarkdownToDocxParagraphs = (markdown?: string): Paragraph[] => {
         i++;
       } else if (currentListItem && indentLevel > 0 && indentLevel > parentLevel) {
         // This line belongs to the current list item
-        console.log(`Belongs to current list item: ${line}`);
+        // console.log(`Belongs to current list item: ${line}`);
         currentListItem.content.push(line);
         i++;
       } else {

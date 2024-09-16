@@ -37,10 +37,7 @@ const dbFact = () => {
       throw new Error('indexedDB cannot get window');
     }
     const indexedDB =
-      win.indexedDB ||
-      (win as any).mozIndexedDB ||
-      (win as any).webkitIndexedDB ||
-      (win as any).msIndexedDB;
+      win.indexedDB || (win as any).mozIndexedDB || (win as any).webkitIndexedDB || (win as any).msIndexedDB;
     if (typeof window !== 'undefined' && !indexedDB) {
       throw new Error('indexDB not supported');
     }
@@ -76,8 +73,7 @@ const dbFact = () => {
             return;
           }
           db.transaction('s').objectStore('s').get(key).onsuccess = function (event) {
-            const result =
-              ((event.target as any).result && (event.target as any).result['v']) || null;
+            const result = ((event.target as any).result && (event.target as any).result['v']) || null;
             resolve(result);
           };
         }),

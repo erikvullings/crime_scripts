@@ -240,7 +240,6 @@ export const setSearchResults: Service<State> = {
       // If all compared fields are equal, return 0
       return 0;
     });
-    console.log('CALLED');
     cell.update({ searchResults });
   },
 };
