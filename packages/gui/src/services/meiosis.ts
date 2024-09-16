@@ -9,7 +9,7 @@ import { scrollToTop } from '../utils';
 // const settingsSvc = restServiceFactory<Settings>('settings');
 const MODEL_KEY = 'CSS_MODEL';
 const USER_ROLE = 'USER_ROLE';
-export const APP_TITLE = 'Crime Scripting';
+export const APP_TITLE = 'PAX - Crime Scripting';
 
 export interface State {
   page: Pages;
@@ -22,6 +22,8 @@ export interface State {
   curPhaseIdx?: number;
   searchFilter: string;
   searchResults: SearchResult[];
+  caseTags: string[];
+  caseResults: SearchResult[];
 }
 
 export interface Actions {
