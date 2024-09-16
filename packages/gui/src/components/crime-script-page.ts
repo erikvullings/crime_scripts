@@ -32,7 +32,7 @@ export const CrimeScriptPage: MeiosisComponent = () => {
       const filename = `${formatDate(Date.now(), '')}_${crimeScript?.label}_v${model.version}.docx`;
 
       return m(
-        '#row.crime-script.page',
+        '#crime-script.page',
         [
           isEditor &&
             m(
@@ -77,7 +77,7 @@ export const CrimeScriptPage: MeiosisComponent = () => {
             ),
           crimeScript &&
             m(
-              '.crime-scene',
+              '.row.crime-scene',
               edit
                 ? m(CrimeScriptEditor, { crimeScript: crimeScript, cast, acts, attributes, locations })
                 : m(CrimeScriptViewer, {

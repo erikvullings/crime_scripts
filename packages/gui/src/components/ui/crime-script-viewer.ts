@@ -43,8 +43,9 @@ export const CrimeScriptViewer: FactoryComponent<{
       preactivity.label = t('PRE_ACTIVITY_PHASE');
       activity.label = t('ACTIVITY_PHASE');
       postactivity.label = t('POST_ACTIVITY_PHASE');
-      const contentTabs = [preparation, preactivity, activity, postactivity].map(
-        ({ label, activities = [], conditions, locationId }) => {
+      const contentTabs = [preparation, preactivity, activity, postactivity]
+        .filter((p) => p.activities.length > 0 || p.conditions.length > 0)
+        .map(({ label, activities = [], conditions, locationId }) => {
           const castIds = Array.from(
             activities.reduce((acc, { cast: curCast }) => {
               if (curCast) curCast.forEach((id) => acc.add(id));
@@ -100,17 +101,7 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
             title: label,
             md,
           };
-        }
-      );
-      if (measures.length > 0) {
-        contentTabs.push({
-          title: t('MEASURES'),
-          md: `##### ${t('MEASURES')}
-            
-${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measure.label}`).join('\n')}
-            `,
         });
-      }
       const tabItem: ITabItem = {
         title: label,
         vnode: contentTabs.length
@@ -167,6 +158,12 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
       const selectedActContent = selectedAct
         ? visualizeAct(selectedAct, cast, attributes, locations, curPhaseIdx)
         : undefined;
+      const measuresMd =
+        selectedAct &&
+        selectedAct.measures.length > 0 &&
+        `##### ${t('MEASURES')}
+            
+${selectedAct.measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measure.label}`).join('\n')}`;
 
       return m('.col.s12', [
         m('h4', label),
@@ -202,7 +199,7 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
         ]),
         literature &&
           literature.length > 0 && [m('h5', t('REFERENCES')), m(ReferenceListComponent, { references: literature })],
-        m('h5', t('STAGES')),
+        m('h5', t('ACTS')),
         m(
           'ul.collection',
           allStages.map(({ stage, selectedVariant, title, act }) => {
@@ -233,6 +230,7 @@ ${measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measur
           })
         ),
         selectedActContent && [m('h4', selectedActContent.title), selectedActContent.vnode],
+        measuresMd && m('div.markdown', m.trust(render(measuresMd))),
       ]);
     },
   };

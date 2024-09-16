@@ -42,7 +42,7 @@ export const CrimeScriptEditor: FactoryComponent<{
       id: 'stages',
       repeat: true,
       pageSize: 1,
-      label: t('STAGES'),
+      label: t('ACTS'),
       type: [] as UIForm<Partial<Stage>>,
     },
   ];
@@ -268,20 +268,28 @@ export const CrimeScriptEditor: FactoryComponent<{
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
                 },
-                {
-                  title: t('MEASURES'),
-                  vnode: m('.acts', [
-                    m(LayoutForm, {
-                      form: measuresForm,
-                      obj: curAct,
-                      onchange: () => {
-                        console.log(curAct);
-                      },
-                    } as FormAttributes<Partial<ActivityPhase>>),
-                  ]),
-                },
+                // {
+                //   title: t('MEASURES'),
+                //   vnode: m('.acts', [
+                //     m(LayoutForm, {
+                //       form: measuresForm,
+                //       obj: curAct,
+                //       onchange: () => {
+                //         console.log(curAct);
+                //       },
+                //     } as FormAttributes<Partial<ActivityPhase>>),
+                //   ]),
+                // },
               ],
             }),
+            m('h5', t('MEASURES')),
+            m(LayoutForm, {
+              form: measuresForm,
+              obj: curAct,
+              onchange: () => {
+                console.log(curAct);
+              },
+            } as FormAttributes<Partial<ActivityPhase>>),
           ]),
         ],
       ]);

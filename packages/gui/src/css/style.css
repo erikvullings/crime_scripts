@@ -852,7 +852,3 @@ li input[type='text'] {
   border: 2px solid #2668a6; /* Teal border to indicate selection */
   box-shadow: 0 4px 8px rgba(38, 115, 166, 0.5);
 }
-
-.input-field.col label {
-  left: 0;
-}
