@@ -21,6 +21,7 @@ export interface State {
   curActIdx?: number;
   curPhaseIdx?: number;
   searchFilter: string;
+  attributeFilter: string;
   searchResults: SearchResult[];
   caseTags: string[];
   caseResults: SearchResult[];
@@ -39,6 +40,7 @@ export interface Actions {
   login: () => void;
   update: (patch: Patch<State>) => void;
   setSearchFilter: (searchFilter?: string) => Promise<void>;
+  setAttributeFilter: (searchFilter?: string) => Promise<void>;
   setLocation: (currentCrimeScriptId: ID, actIdx: number, phaseIdx: number) => void;
 }
 
@@ -93,6 +95,13 @@ export const appActions: (cell: MeiosisCell<State>) => Actions = ({ update /* st
       update({ searchFilter });
     } else {
       update({ searchFilter: undefined });
+    }
+  },
+  setAttributeFilter: async (attributeFilter?: string) => {
+    if (attributeFilter) {
+      update({ attributeFilter });
+    } else {
+      update({ attributeFilter: undefined });
     }
   },
   setLocation: (currentCrimeScriptId, curActIdx, curPhaseIdx) => {

@@ -7,6 +7,9 @@ export type DataModel = {
   cast: Cast[];
   attributes: CrimeScriptAttributes[];
   locations: CrimeLocation[];
+  geoLocations: GeographicLocation[];
+  products: Product[];
+  transports: Transport[];
   acts: Act[];
 };
 
@@ -17,6 +20,9 @@ export const defaultModel = {
   cast: [],
   attributes: [],
   locations: [],
+  geoLocations: [],
+  products: [],
+  transports: [],
   acts: [],
 } as DataModel;
 
@@ -67,6 +73,18 @@ export enum LITERATURE_TYPE {
   META_ANALYSIS_PR,
 }
 
+export type SearchType =
+  | 'crimeScript'
+  | 'act'
+  | 'activity'
+  | 'condition'
+  | 'cast'
+  | 'attribute'
+  | 'location'
+  | 'geolocation'
+  | 'transport'
+  | 'product';
+
 export type SearchResult = {
   crimeScriptIdx: number;
   actIdx: number;
@@ -74,7 +92,7 @@ export type SearchResult = {
   activityIdx: number;
   conditionIdx: number;
   resultMd: string;
-  type: 'crimeScript' | 'act' | 'activity' | 'condition' | 'cast' | 'attribute' | 'location';
+  type: SearchType;
 };
 
 export type ID = string;
@@ -142,60 +160,64 @@ export enum ATTRIBUTE_TYPE {
   OTHER,
 }
 
-export const attributeTypeToIconMap = new Map<ATTRIBUTE_TYPE, string>([
-  [ATTRIBUTE_TYPE.EQUIPMENT, 'build'],
-  [ATTRIBUTE_TYPE.TOOLS, 'construction'],
-  [ATTRIBUTE_TYPE.GEAR, 'settings'],
-  [ATTRIBUTE_TYPE.DEVICES, 'devices'],
-  [ATTRIBUTE_TYPE.ACCESSORIES, 'style'],
-  [ATTRIBUTE_TYPE.DOCUMENTATION, 'description'],
-  [ATTRIBUTE_TYPE.CYBER, 'security'],
-  [ATTRIBUTE_TYPE.OTHER, 'more_horiz'],
-]);
+// export const attributeTypeToIconMap = new Map<ATTRIBUTE_TYPE, string>([
+//   [ATTRIBUTE_TYPE.EQUIPMENT, 'build'],
+//   [ATTRIBUTE_TYPE.TOOLS, 'construction'],
+//   [ATTRIBUTE_TYPE.GEAR, 'settings'],
+//   [ATTRIBUTE_TYPE.DEVICES, 'devices'],
+//   [ATTRIBUTE_TYPE.ACCESSORIES, 'style'],
+//   [ATTRIBUTE_TYPE.DOCUMENTATION, 'description'],
+//   [ATTRIBUTE_TYPE.CYBER, 'security'],
+//   [ATTRIBUTE_TYPE.OTHER, 'more_horiz'],
+// ]);
 
-export const AttributeTypeOptions = [
-  {
-    id: ATTRIBUTE_TYPE.EQUIPMENT,
-    label: 'Equipment',
-    description: 'A set of tools, machinery, or apparatus used for a specific purpose.',
-  },
-  {
-    id: ATTRIBUTE_TYPE.TOOLS,
-    label: 'Tools',
-    description: 'Handheld devices or instruments used to perform specific tasks.',
-  },
-  {
-    id: ATTRIBUTE_TYPE.GEAR,
-    label: 'Gear',
-    description:
-      'Wearable items or personal apparatus designed for specific functions, protection, or performance enhancement.',
-  },
-  {
-    id: ATTRIBUTE_TYPE.DEVICES,
-    label: 'Devices/electronics',
-    description: 'Electronic items designed for communication, computing, and multimedia purposes.',
-  },
-  {
-    id: ATTRIBUTE_TYPE.ACCESSORIES,
-    label: 'Accessories',
-    description:
-      'Supplementary items that add functionality or compliance to a primary item or system (e.g., license plates, phone cases).',
-  },
-  {
-    id: ATTRIBUTE_TYPE.DOCUMENTATION,
-    label: 'Documentation',
-    description:
-      'Official documents and records used for legal, financial, and administrative purposes (e.g., accounting books, contracts, manuals)',
-  },
-  { id: ATTRIBUTE_TYPE.CYBER, label: 'Cyber/digital', description: 'URLs, websites, digital information' },
-  { id: ATTRIBUTE_TYPE.OTHER, label: 'Other' },
-];
+// export const AttributeTypeOptions = [
+//   {
+//     id: ATTRIBUTE_TYPE.EQUIPMENT,
+//     label: 'Equipment',
+//     description: 'A set of tools, machinery, or apparatus used for a specific purpose.',
+//   },
+//   {
+//     id: ATTRIBUTE_TYPE.TOOLS,
+//     label: 'Tools',
+//     description: 'Handheld devices or instruments used to perform specific tasks.',
+//   },
+//   {
+//     id: ATTRIBUTE_TYPE.GEAR,
+//     label: 'Gear',
+//     description:
+//       'Wearable items or personal apparatus designed for specific functions, protection, or performance enhancement.',
+//   },
+//   {
+//     id: ATTRIBUTE_TYPE.DEVICES,
+//     label: 'Devices/electronics',
+//     description: 'Electronic items designed for communication, computing, and multimedia purposes.',
+//   },
+//   {
+//     id: ATTRIBUTE_TYPE.ACCESSORIES,
+//     label: 'Accessories',
+//     description:
+//       'Supplementary items that add functionality or compliance to a primary item or system (e.g., license plates, phone cases).',
+//   },
+//   {
+//     id: ATTRIBUTE_TYPE.DOCUMENTATION,
+//     label: 'Documentation',
+//     description:
+//       'Official documents and records used for legal, financial, and administrative purposes (e.g., accounting books, contracts, manuals)',
+//   },
+//   { id: ATTRIBUTE_TYPE.CYBER, label: 'Cyber/digital', description: 'URLs, websites, digital information' },
+//   { id: ATTRIBUTE_TYPE.OTHER, label: 'Other' },
+// ];
 
-export type CrimeLocation = Labeled;
+export type Transport = Labeled & Hierarchical;
 
-export type CrimeScriptAttributes = Labeled & {
-  type: ATTRIBUTE_TYPE;
-};
+export type Product = Labeled & Hierarchical;
+
+export type GeographicLocation = Labeled & Hierarchical;
+
+export type CrimeLocation = Labeled & Hierarchical;
+
+export type CrimeScriptAttributes = Labeled & Hierarchical;
 
 /**
  * A crime script consists of different stages, where a stage is a distinct segment
@@ -248,22 +270,21 @@ export type Activity = Labeled & {
   conditions: Condition[];
 };
 
-export type Cast = Labeled & {
-  type: CastType;
-  skills?: Skill[];
-};
+export type Hierarchical = { synonyms?: string[]; parents?: ID[] };
 
-export enum CastType {
-  Individual = 'Individual',
-  Organisation = 'Organisation',
-  Role = 'Role',
-}
+export type Cast = Labeled & Hierarchical;
 
-export const CastTypeOptions = [
-  { id: CastType.Individual, label: 'Individual' },
-  { id: CastType.Organisation, label: 'More than one or group' },
-  // { id: CastType.Role, label: 'Role' },
-];
+// export enum CastType {
+//   Individual = 'Individual',
+//   Organisation = 'Organisation',
+//   Role = 'Role',
+// }
+
+// export const CastTypeOptions = [
+//   { id: CastType.Individual, label: 'Individual' },
+//   { id: CastType.Organisation, label: 'More than one or group' },
+//   // { id: CastType.Role, label: 'Role' },
+// ];
 
 export type Condition = Labeled & {
   type: ConditionType;

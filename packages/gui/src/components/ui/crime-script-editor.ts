@@ -5,13 +5,11 @@ import {
   ActivityPhase,
   ActivityTypeOptions,
   Cast,
-  CastType,
   Condition,
   CrimeScript,
   CrimeScriptAttributes,
   ID,
   IconOpts,
-  attributeTypeToIconMap,
   Stage,
   Measure,
   CrimeLocation,
@@ -54,12 +52,12 @@ export const CrimeScriptEditor: FactoryComponent<{
 
   return {
     oninit: ({ attrs: { cast, attributes, locations } }) => {
-      castOptions = cast.map(({ id, label, type }) => ({
+      castOptions = cast.map(({ id, label }) => ({
         id,
         label,
-        group: type === CastType.Individual ? 'person' : 'group',
+        group: 'person',
       }));
-      attrOptions = attributes.map(({ id, label, type }) => ({ id, label, group: attributeTypeToIconMap.get(type) }));
+      attrOptions = attributes.map(({ id, label }) => ({ id, label }));
       locationOptions = locations.map(({ id, label }) => ({ id, label }));
       const measOptions = crimeMeasureOptions();
 
@@ -268,18 +266,6 @@ export const CrimeScriptEditor: FactoryComponent<{
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
                 },
-                // {
-                //   title: t('MEASURES'),
-                //   vnode: m('.acts', [
-                //     m(LayoutForm, {
-                //       form: measuresForm,
-                //       obj: curAct,
-                //       onchange: () => {
-                //         console.log(curAct);
-                //       },
-                //     } as FormAttributes<Partial<ActivityPhase>>),
-                //   ]),
-                // },
               ],
             }),
             m('h5', t('MEASURES')),

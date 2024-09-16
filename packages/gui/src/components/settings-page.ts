@@ -1,23 +1,14 @@
 import m, { FactoryComponent } from 'mithril';
-import {
-  Cast,
-  CastType,
-  CrimeScript,
-  CrimeScriptAttributes,
-  ID,
-  Pages,
-  SearchResult,
-  attributeTypeToIconMap,
-  Act,
-  CrimeLocation,
-} from '../models';
+import { CrimeScript, ID, Pages, SearchResult, Act, Hierarchical, Labeled, SearchType, DataModel } from '../models';
 import { MeiosisComponent, routingSvc, t } from '../services';
-import { FormAttributes, LayoutForm, SlimdownView } from 'mithril-ui-form';
+import { deepCopy, FormAttributes, LayoutForm, SlimdownView } from 'mithril-ui-form';
 import { Collapsible, FlatButton, Tabs } from 'mithril-materialized';
-import { attributesForm, castForm, locationForm } from '../models/forms';
+import { attrForm, AttributeType } from '../models/forms';
+import { TextInputWithClear } from './ui/text-input-with-clear';
 
 export const SettingsPage: MeiosisComponent = () => {
   let edit = false;
+  let storedModel: DataModel;
 
   return {
     oninit: ({
@@ -36,13 +27,83 @@ export const SettingsPage: MeiosisComponent = () => {
       setPage(Pages.SETTINGS);
     },
     view: ({ attrs: { state, actions } }) => {
-      const { model, role } = state;
-      const { cast = [], acts = [], crimeScripts = [], attributes = [], locations = [] } = model;
+      const { model, role, attributeFilter } = state;
+      const {
+        cast = [],
+        acts = [],
+        crimeScripts = [],
+        attributes = [],
+        products = [],
+        transports = [],
+        locations = [],
+        geoLocations = [],
+      } = model;
+
+      const labelFilter = attributeFilter ? attributeFilter.toLowerCase() : undefined;
 
       const isAdmin = role === 'admin';
 
+      const tabs = [
+        [
+          'cast',
+          t('CAST'),
+          'cast',
+          'person',
+          cast.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
+        ],
+        [
+          'attributes',
+          t('ATTRIBUTES'),
+          'attribute',
+          'build',
+          attributes.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
+        ],
+        [
+          'products',
+          t('PRODUCTS'),
+          'product',
+          'shopping_bag',
+          products.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
+        ],
+        [
+          'transports',
+          t('TRANSPORTS'),
+          'transport',
+          'directions_car',
+          transports.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
+        ],
+        [
+          'locations',
+          t('LOCATIONS'),
+          'location',
+          'warehouse',
+          locations.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
+        ],
+        [
+          'geoLocations',
+          t('GEOLOCATIONS'),
+          'geolocation',
+          'location_on',
+          geoLocations.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
+        ],
+      ] as Array<
+        [id: AttributeType, label: string, type: SearchType, iconName: string, attrs: Array<Hierarchical & Labeled>]
+      >;
+
       return m(
-        '#settings-page.settings.page',
+        '#settings-page.settings.page.row',
+        m(TextInputWithClear, {
+          id: 'search',
+          className: 'col s6',
+          style: 'height: 50px',
+          label: t('SEARCH'),
+          onchange: () => {},
+          iconName: 'filter_alt',
+          initialValue: attributeFilter,
+          oninput: (v) => {
+            actions.setAttributeFilter(v);
+          },
+        }),
         isAdmin && [
           m(FlatButton, {
             label: edit ? t('SAVE_BUTTON', 'LABEL') : t('EDIT_BUTTON', 'LABEL'),
@@ -50,267 +111,163 @@ export const SettingsPage: MeiosisComponent = () => {
             className: 'right small',
             onclick: () => {
               edit = !edit;
+              if (edit) {
+                console.log('STORE');
+                storedModel = deepCopy(model);
+              } else {
+                console.log('SAVE');
+                actions.saveModel(model);
+              }
             },
           }),
+          edit &&
+            m(FlatButton, {
+              label: t('CANCEL'),
+              iconName: 'cancel',
+              className: 'right small',
+              onclick: () => {
+                edit = false;
+                actions.saveModel(storedModel);
+              },
+            }),
         ],
         m(Tabs, {
-          tabs: [
-            {
-              title: t('CAST'),
+          tabs: tabs.map(([id, label, type, iconName, attr]) => {
+            return {
+              title: `${label} (${attr.length})`,
               vnode: edit
                 ? m(LayoutForm, {
-                    form: castForm(),
+                    form: attrForm(id, label, attr),
                     obj: model,
-                    onchange: () => actions.saveModel(model),
-                  } as FormAttributes<{ cast: Cast[] }>)
-                : m(CastView, { cast, acts, crimeScripts: crimeScripts, setLocation: actions.setLocation }),
-            },
-            {
-              title: t('ATTRIBUTES'),
-              vnode: edit
-                ? m(LayoutForm, {
-                    form: attributesForm(),
-                    obj: model,
-                    onchange: () => actions.saveModel(model),
-                  } as FormAttributes<{ attributes: CrimeScriptAttributes[] }>)
-                : m(AttributesView, { attributes, acts, crimeScripts, setLocation: actions.setLocation }),
-            },
-            {
-              title: t('LOCATIONS'),
-              vnode: edit
-                ? m(LayoutForm, {
-                    form: locationForm(),
-                    obj: model,
-                    onchange: () => actions.saveModel(model),
-                  } as FormAttributes<{ locations: CrimeLocation[] }>)
-                : m(LocationsView, { locations, acts, crimeScripts, setLocation: actions.setLocation }),
-            },
-          ],
+                  } as FormAttributes<any>)
+                : m(AttrView, {
+                    attr,
+                    type,
+                    iconName,
+                    acts,
+                    crimeScripts,
+                    setLocation: actions.setLocation,
+                  }),
+            };
+          }),
         })
       );
     },
   };
 };
 
-const CastView: FactoryComponent<{
-  cast: Cast[];
+const AttrView: FactoryComponent<{
+  attr: Array<Hierarchical & Labeled>;
+  type: SearchType;
+  iconName?: string;
   acts: Act[];
   crimeScripts: CrimeScript[];
   setLocation: (currentCrimeScriptId: ID, actIdx: number, phaseIdx: number) => void;
 }> = () => {
   return {
-    view: ({ attrs: { cast, acts, crimeScripts, setLocation } }) => {
+    view: ({ attrs: { attr, type, iconName, acts, crimeScripts, setLocation } }) => {
       return m(
-        '.cast',
+        '.attr',
         m(Collapsible, {
-          items: cast.map((c) => {
-            const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
-              cs.stages?.forEach(({ ids }) => {
-                ids.forEach((actId) => {
-                  const actIdx = acts.findIndex((a) => a.id === actId);
-                  if (actIdx < 0) return;
-                  const act = acts[actIdx];
-                  [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
-                    phase.activities?.forEach((activity, activityIdx) => {
-                      const { label, cast = [] } = activity;
-                      if (cast.includes(c.id)) {
-                        acc.push({
-                          crimeScriptIdx,
-                          actIdx,
-                          phaseIdx,
-                          activityIdx,
-                          conditionIdx: -1,
-                          type: 'cast',
-                          resultMd: label,
+          items: attr
+            .sort((a, b) => a.label?.localeCompare(b.label))
+            .map((c) => {
+              const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
+                cs.stages?.forEach(({ ids }) => {
+                  ids.forEach((actId) => {
+                    const actIdx = acts.findIndex((a) => a.id === actId);
+                    if (actIdx < 0) return;
+                    const act = acts[actIdx];
+                    [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
+                      if (type === 'location') {
+                        if (phase.locationId) {
+                          acc.push({
+                            crimeScriptIdx,
+                            actIdx,
+                            phaseIdx,
+                            activityIdx: -1,
+                            conditionIdx: -1,
+                            type,
+                            resultMd: phase.label,
+                          });
+                        }
+                      } else {
+                        phase.activities?.forEach((activity, activityIdx) => {
+                          if (type === 'cast') {
+                            const { label, cast = [] } = activity;
+                            if (cast.includes(c.id)) {
+                              acc.push({
+                                crimeScriptIdx,
+                                actIdx,
+                                phaseIdx,
+                                activityIdx,
+                                conditionIdx: -1,
+                                type,
+                                resultMd: label,
+                              });
+                            }
+                          } else if (type === 'attribute') {
+                            const { label, attributes = [] } = activity;
+                            if (attributes.includes(c.id)) {
+                              acc.push({
+                                crimeScriptIdx,
+                                actIdx,
+                                phaseIdx,
+                                activityIdx,
+                                conditionIdx: -1,
+                                type,
+                                resultMd: label,
+                              });
+                            }
+                          }
                         });
                       }
                     });
                   });
                 });
-              });
-              return acc;
-            }, [] as SearchResult[]);
+                return acc;
+              }, [] as SearchResult[]);
 
-            return {
-              header: `${c.label} (${searchResults.length})`,
-              iconName: c.type === CastType.Individual ? 'person' : 'group',
-              body: m(
-                '.cast-content',
-                m(
-                  'ol',
-                  searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd }) => {
-                    const crimeScript = crimeScripts[crimeScriptIdx];
-                    const act = actIdx >= 0 ? acts[actIdx] : undefined;
-                    const actLabel = act ? act.label : '...';
+              return {
+                header: m.trust(
+                  `${c.label}${c.synonyms ? ` (${c.synonyms.join(', ')})` : ''}, hits: ${searchResults.length}${
+                    c.parents
+                      ? `<br>${attr
+                          .filter((a) => c.parents!.includes(a.id))
+                          .map((a) => a.label)
+                          .join(', ')}`
+                      : ''
+                  }`
+                ),
+                iconName,
+                body: m(
+                  '.cast-content',
+                  m(
+                    'ol',
+                    searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd }) => {
+                      const crimeScript = crimeScripts[crimeScriptIdx];
+                      const act = actIdx >= 0 ? acts[actIdx] : undefined;
+                      const actLabel = act ? act.label : '...';
 
-                    return m('li', [
-                      m(
-                        'a.truncate',
-                        {
-                          style: { cursor: 'pointer' },
-                          href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${crimeScript.id}`),
-                          onclick: () => {
-                            setLocation(crimeScript.id, actIdx, phaseIdx);
+                      return m('li', [
+                        m(
+                          'a.truncate',
+                          {
+                            style: { cursor: 'pointer' },
+                            href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${crimeScript.id}`),
+                            onclick: () => {
+                              setLocation(crimeScript.id, actIdx, phaseIdx);
+                            },
                           },
-                        },
-                        `${crimeScript.label} > ${actLabel}`
-                      ),
-                      m(SlimdownView, { md: resultMd, removeParagraphs: true }),
-                    ]);
-                  })
-                )
-              ),
-            };
-          }),
-        })
-      );
-    },
-  };
-};
-
-const AttributesView: FactoryComponent<{
-  acts: Act[];
-  attributes: CrimeScriptAttributes[];
-  crimeScripts: CrimeScript[];
-  setLocation: (currentCrimeScriptId: ID, actIdx: number, phaseIdx: number) => void;
-}> = () => {
-  return {
-    view: ({ attrs: { attributes, acts, crimeScripts, setLocation } }) => {
-      return m(
-        '.cast',
-        m(Collapsible, {
-          items: attributes.map((attr) => {
-            const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
-              cs.stages?.forEach(({ ids }) => {
-                ids.forEach((actId) => {
-                  const actIdx = acts.findIndex((a) => a.id === actId);
-                  if (actIdx < 0) return;
-                  const act = acts[actIdx];
-                  [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
-                    phase.activities?.forEach((activity, activityIdx) => {
-                      const { label, attributes = [] } = activity;
-                      if (attributes.includes(attr.id)) {
-                        acc.push({
-                          crimeScriptIdx,
-                          actIdx,
-                          phaseIdx,
-                          activityIdx,
-                          conditionIdx: -1,
-                          type: 'attribute',
-                          resultMd: label,
-                        });
-                      }
-                    });
-                  });
-                });
-              });
-              return acc;
-            }, [] as SearchResult[]);
-
-            return {
-              header: `${attr.label} (${searchResults.length})`,
-              iconName: (attr.type && attributeTypeToIconMap.get(attr.type)) || 'help_outline',
-              body: m(
-                '.cast-content',
-                m(
-                  'ol',
-                  searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd }) => {
-                    const crimeScript = crimeScripts[crimeScriptIdx];
-                    const act = actIdx >= 0 ? acts[actIdx] : undefined;
-                    const actLabel = act ? act.label : '...';
-
-                    return m('li', [
-                      m(
-                        'a.truncate',
-                        {
-                          style: { cursor: 'pointer' },
-                          href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${crimeScript.id}`),
-                          onclick: () => {
-                            setLocation(crimeScript.id, actIdx, phaseIdx);
-                          },
-                        },
-                        `${crimeScript.label} > ${actLabel}`
-                      ),
-                      m(SlimdownView, { md: resultMd, removeParagraphs: true }),
-                    ]);
-                  })
-                )
-              ),
-            };
-          }),
-        })
-      );
-    },
-  };
-};
-
-const LocationsView: FactoryComponent<{
-  acts: Act[];
-  locations: CrimeLocation[];
-  crimeScripts: CrimeScript[];
-  setLocation: (currentCrimeScriptId: ID, actIdx: number, phaseIdx: number) => void;
-}> = () => {
-  return {
-    view: ({ attrs: { locations, acts, crimeScripts, setLocation } }) => {
-      return m(
-        '.cast',
-        m(Collapsible, {
-          items: locations.map((loc) => {
-            const searchResults = crimeScripts.reduce((acc, cs, crimeScriptIdx) => {
-              cs.stages?.forEach(({ ids }) => {
-                ids.forEach((actId) => {
-                  const actIdx = acts.findIndex((a) => a.id === actId);
-                  if (actIdx < 0) return;
-                  const act = acts[actIdx];
-                  [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
-                    if (phase.locationId) {
-                      acc.push({
-                        crimeScriptIdx,
-                        actIdx,
-                        phaseIdx,
-                        activityIdx: -1,
-                        conditionIdx: -1,
-                        type: 'location',
-                        resultMd: phase.label,
-                      });
-                    }
-                  });
-                });
-              });
-              return acc;
-            }, [] as SearchResult[]);
-
-            return {
-              header: `${loc.label} (${searchResults.length})`,
-              // iconName: (loc.type && attributeTypeToIconMap.get(loc.type)) || 'help_outline',
-              body: m(
-                '.cast-content',
-                m(
-                  'ol',
-                  searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd }) => {
-                    const crimeScript = crimeScripts[crimeScriptIdx];
-                    const act = actIdx >= 0 ? acts[actIdx] : undefined;
-                    const actLabel = act ? act.label : '...';
-
-                    return m('li', [
-                      m(
-                        'a.truncate',
-                        {
-                          style: { cursor: 'pointer' },
-                          href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${crimeScript.id}`),
-                          onclick: () => {
-                            setLocation(crimeScript.id, actIdx, phaseIdx);
-                          },
-                        },
-                        `${crimeScript.label} > ${actLabel}`
-                      ),
-                      m(SlimdownView, { md: resultMd, removeParagraphs: true }),
-                    ]);
-                  })
-                )
-              ),
-            };
-          }),
+                          `${crimeScript.label} > ${actLabel}`
+                        ),
+                        m(SlimdownView, { md: resultMd, removeParagraphs: true }),
+                      ]);
+                    })
+                  )
+                ),
+              };
+            }),
         })
       );
     },
