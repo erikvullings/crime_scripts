@@ -110,6 +110,11 @@ export const CrimeScriptEditor: FactoryComponent<{
               options: attrOptions,
               label: t('ATTRIBUTES'),
             },
+            {
+              id: 'description',
+              label: t('DESCRIPTION'),
+              type: 'textarea',
+            },
           ] as UIForm<Activity>,
           className: 'col s12',
           label: t('ACTIVITIES'),

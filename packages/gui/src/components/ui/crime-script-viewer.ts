@@ -32,7 +32,7 @@ export const CrimeScriptViewer: FactoryComponent<{
   const findCrimeMeasure = lookupCrimeMeasure();
 
   const visualizeAct = (
-    { label = '...', preparation, preactivity, activity, postactivity, measures = [] } = {} as Act,
+    { label = '...', preparation, preactivity, activity, postactivity } = {} as Act,
     cast: Cast[],
     attributes: CrimeScriptAttributes[],
     locations: CrimeLocation[],
@@ -70,9 +70,21 @@ ${
   activities.length > 0
     ? `##### ${t('ACTIVITIES')}
     
-${activities.map((act) => '- ' + act.label).join('\n')}`
+<ol>${activities
+        .map(
+          (act) =>
+            `<li>${act.label}${
+              act.description
+                ? `\n<ul>${act.description
+                    .split('\n')
+                    .map((line) => `  <li>${line.replace(/^- |^\d+. /, '')}</li>`)
+                    .join('\n')}</ul>\n`
+                : ''
+            }`
+        )
+        .join('</li>\n')}`
     : ''
-}
+}</ol>
 
 ${
   castIds.length > 0
@@ -97,25 +109,30 @@ ${
 ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).join('\n')}`
     : ''
 }`;
+          console.log(md);
           return {
             title: label,
             md,
           };
         });
+
       const tabItem: ITabItem = {
         title: label,
-        vnode: contentTabs.length
-          ? m(Tabs, {
-              tabs: contentTabs.map(
-                ({ title, md }, index) =>
-                  ({
-                    title,
-                    active: index === curPhaseIdx,
-                    vnode: m(SlimdownView, { md }),
-                  } as ITabItem)
-              ),
-            })
-          : m('div'),
+        vnode:
+          contentTabs.length === 1
+            ? m(SlimdownView, { md: contentTabs[0].md })
+            : contentTabs.length > 1
+            ? m(Tabs, {
+                tabs: contentTabs.map(
+                  ({ title, md }, index) =>
+                    ({
+                      title,
+                      active: index === curPhaseIdx,
+                      vnode: m(SlimdownView, { md }),
+                    } as ITabItem)
+                ),
+              })
+            : m('div'),
       };
       return tabItem;
     }
