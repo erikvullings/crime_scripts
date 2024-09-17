@@ -3,6 +3,7 @@ import { Act, Cast, CrimeScript, ID, Pages, scriptIcon } from '../models';
 import { MeiosisComponent, routingSvc } from '../services';
 import { FlatButton, uniqueId, Icon } from 'mithril-materialized';
 import { t } from '../services/translations';
+import { toCommaSeparatedList } from '../utils';
 
 export const HomePage: MeiosisComponent = () => {
   return {
@@ -15,7 +16,7 @@ export const HomePage: MeiosisComponent = () => {
     },
     view: ({ attrs: { state, actions } }) => {
       const { model, role } = state;
-      const { crimeScripts = [] } = model;
+      const { crimeScripts = [], products = [], geoLocations = [] } = model;
       const isAdmin = role === 'admin';
 
       return m('#home-page.row.home.page', [
@@ -38,22 +39,45 @@ export const HomePage: MeiosisComponent = () => {
           '.crime-scenes',
           m('ul.collection.with-header', [
             m('li.collection-header', m('h4', 'Crime Scripts')),
-            ...crimeScripts.map(({ url = scriptIcon, label, description, id }) => {
-              const onclick = () => {
-                actions.changePage(Pages.CRIME_SCRIPT, { id });
-                actions.update({ currentCrimeScriptId: id });
-              };
-              return m('li.collection-item.avatar.cursor-pointer', { onclick }, [
-                m('img.circle', { src: url, alt: 'Avatar' }),
-                m('span.title', label),
-                m('p', description),
-                m(
-                  'a.secondary-content',
-                  { href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${id}`) },
-                  m(Icon, { iconName: 'more_horiz' })
-                ),
-              ]);
-            }),
+            ...crimeScripts.map(
+              ({ url = scriptIcon, label, description, id, productIds = [], geoLocationIds = [] }) => {
+                const onclick = () => {
+                  actions.changePage(Pages.CRIME_SCRIPT, { id });
+                  actions.update({ currentCrimeScriptId: id });
+                };
+                return m('li.collection-item.avatar.cursor-pointer', { onclick }, [
+                  m('img.circle', { src: url, alt: 'Avatar' }),
+                  m(
+                    'span.title',
+                    `${label}${
+                      productIds.length > 0
+                        ? ` (${t('PRODUCTS', productIds.length).toLowerCase()}: ${toCommaSeparatedList(
+                            products,
+                            productIds
+                          ).toLowerCase()})`
+                        : ''
+                    }`
+                  ),
+                  geoLocationIds.length > 0 &&
+                    m(
+                      'p',
+                      m(
+                        'i',
+                        `${t('GEOLOCATIONS', geoLocationIds.length)}: ${toCommaSeparatedList(
+                          geoLocations,
+                          geoLocationIds
+                        )}`
+                      )
+                    ),
+                  m('p', description),
+                  m(
+                    'a.secondary-content',
+                    { href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${id}`) },
+                    m(Icon, { iconName: 'more_horiz' })
+                  ),
+                ]);
+              }
+            ),
           ])
         ),
       ]);

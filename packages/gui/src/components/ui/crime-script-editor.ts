@@ -78,7 +78,7 @@ export const CrimeScriptEditor: FactoryComponent<{
           id: 'locationIds',
           type: 'select',
           multiple: true,
-          label: t('LOCATION'),
+          label: t('LOCATIONS', 2),
           className: 'col s12',
           options: locationOptions,
         },
@@ -175,7 +175,7 @@ export const CrimeScriptEditor: FactoryComponent<{
             {
               id: 'productIds',
               type: 'select',
-              label: t('PRODUCTS'),
+              label: t('PRODUCTS', 2),
               multiple: true,
               className: 'col s6',
               options: productOptions,

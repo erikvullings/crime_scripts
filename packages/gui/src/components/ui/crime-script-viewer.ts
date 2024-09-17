@@ -20,7 +20,7 @@ import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from '../ui/reference';
 import { lookupCrimeMeasure } from '../../models/situational-crime-prevention';
 import { t } from '../../services/translations';
-import { resolveOptions, toCommaSeparatedList, toMarkdownOl, toMarkdownUl } from '../../utils';
+import { toCommaSeparatedList, toMarkdownOl, toMarkdownUl } from '../../utils';
 
 export const CrimeScriptViewer: FactoryComponent<{
   crimeScript: CrimeScript;
@@ -65,7 +65,7 @@ export const CrimeScriptViewer: FactoryComponent<{
           );
           const md = `${
             locationIds
-              ? `##### ${t(locationIds.length > 1 ? 'LOCATIONS' : 'LOCATION')}
+              ? `##### ${t('LOCATIONS', locationIds.length)}
     
 ${toMarkdownUl(locations, locationIds)}`
               : ''
@@ -233,7 +233,7 @@ ${selectedAct.measures
           ]),
           m('.col.s4', [
             allLocIds.size > 0 && [
-              m('h5', t('LOCATIONS')),
+              m('h5', t('LOCATIONS', allLocIds.size)),
               m(
                 'ol',
                 Array.from(allLocIds).map((id) => m('li', locations.find((c) => c.id === id)?.label))

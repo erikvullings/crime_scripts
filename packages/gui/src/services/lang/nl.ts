@@ -187,8 +187,6 @@ export const messagesNL: typeof messages = {
   },
   EXPORT_TO_WORD: 'Exporteer naar Word',
   INTRODUCTION: 'Introductie',
-  LOCATION: 'Locatie',
-  LOCATIONS: 'Locaties',
   SEARCH: 'Zoek...',
   SEARCH_TOOLTIP: 'Type / om te zoeken',
   HITS: {
@@ -200,7 +198,8 @@ export const messagesNL: typeof messages = {
   PARENTS: 'Ouders',
   CATEGORIES: 'Categorieën',
   BELONGS_TO: 'Behoort tot',
-  PRODUCTS: 'Producten',
+  LOCATIONS: { 0: 'Locaties', 1: 'Locatie', n: 'Locaties' },
+  PRODUCTS: { 0: 'Producten', 1: 'Product', n: 'Producten' },
   GEOLOCATIONS: { 0: 'Kaartlocatie', 1: 'Kaartlocatie', n: 'Kaartlocaties' },
   TRANSPORTS: 'Transportmiddelen',
   I18n: {

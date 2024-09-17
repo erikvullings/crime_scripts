@@ -185,8 +185,6 @@ export const messages = {
   },
   EXPORT_TO_WORD: 'Export to Word',
   INTRODUCTION: 'Introduction',
-  LOCATION: 'Location',
-  LOCATIONS: 'Locations ',
   SEARCH: 'Search...',
   SEARCH_TOOLTIP: 'Type / to search',
   HITS: {
@@ -198,8 +196,9 @@ export const messages = {
   PARENTS: 'Parents',
   CATEGORIES: 'Categories',
   BELONGS_TO: 'Belongs to',
-  PRODUCTS: 'Products',
-  GEOLOCATIONS: { 0: 'Geographic Location', 1: 'Geographic Location', n: 'Geographic Locations' },
+  PRODUCTS: { 0: 'Products', 1: 'Product', n: 'Products' },
+  LOCATIONS: { 0: 'Locations', 1: 'Location', n: 'Locations' },
+  GEOLOCATIONS: { 0: 'Geographic Locations', 1: 'Geographic Location', n: 'Geographic Locations' },
   TRANSPORTS: 'Transports',
   I18n: {
     editRepeat: '',
