@@ -149,19 +149,21 @@ export const setSearchResults: Service<State> = {
             if (actIdx < 0) return;
             const act = acts[actIdx];
             [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
-              if (phase.locationIds) {
-                const include = matchingLoc.get(phase.locationIds);
-                if (include) {
-                  searchResults.push({
-                    crimeScriptIdx: crimeScriptIdx,
-                    actIdx,
-                    phaseIdx,
-                    activityIdx: -1,
-                    conditionIdx: -1,
-                    type: 'cast',
-                    resultMd: highlighter(include.label),
-                  });
-                }
+              if (phase.locationIds && Array.isArray(phase.locationIds)) {
+                phase.locationIds.forEach((id) => {
+                  const include = matchingLoc.get(id);
+                  if (include) {
+                    searchResults.push({
+                      crimeScriptIdx: crimeScriptIdx,
+                      actIdx,
+                      phaseIdx,
+                      activityIdx: -1,
+                      conditionIdx: -1,
+                      type: 'cast',
+                      resultMd: highlighter(include.label),
+                    });
+                  }
+                });
               }
               phase.activities?.forEach((activity, activityIdx) => {
                 const { label = '', description, conditions = [], cast = [], attributes = [] } = activity;
