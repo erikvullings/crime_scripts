@@ -60,7 +60,7 @@ export const SettingsPage: MeiosisComponent = () => {
         ],
         [
           'products',
-          t('PRODUCTS'),
+          t('PRODUCTS', 2),
           'product',
           'shopping_bag',
           products.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
@@ -74,14 +74,14 @@ export const SettingsPage: MeiosisComponent = () => {
         ],
         [
           'locations',
-          t('LOCATIONS'),
+          t('LOCATIONS', 2),
           'location',
           'warehouse',
           locations.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
         ],
         [
           'geoLocations',
-          t('GEOLOCATIONS'),
+          t('GEOLOCATIONS', 2),
           'geolocation',
           'location_on',
           geoLocations.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),

@@ -11,6 +11,14 @@ const MODEL_KEY = 'CSS_MODEL';
 const USER_ROLE = 'USER_ROLE';
 export const APP_TITLE = 'PAX - Crime Scripting';
 
+export type CrimeScriptFilter = {
+  productIds: ID[];
+  geoLocationIds: ID[];
+  locationIds: ID[];
+  attributeIds: ID[];
+  roleIds: ID[];
+};
+
 export interface State {
   page: Pages;
   model: DataModel;
@@ -25,13 +33,7 @@ export interface State {
   searchResults: SearchResult[];
   caseTags: string[];
   caseResults: SearchResult[];
-  crimeScriptFilter: {
-    productIds: ID[];
-    geoLocationIds: ID[];
-    locationIds: ID[];
-    attributeIds: ID[];
-    roleIds: ID[];
-  };
+  crimeScriptFilter: CrimeScriptFilter;
 }
 
 export interface Actions {
