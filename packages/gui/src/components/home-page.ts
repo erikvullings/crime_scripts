@@ -55,79 +55,8 @@ export const HomePage: MeiosisComponent = () => {
               ]);
             }),
           ])
-          // crimeScripts.map((crimeScript) =>
-          //   m(CrimeScriptCard, { crimeScript, cast, acts, changePage: actions.changePage })
-          // )
         ),
       ]);
-    },
-  };
-};
-
-export const CrimeScriptCard: FactoryComponent<{
-  crimeScript: CrimeScript;
-  cast: Cast[];
-  acts: Act[];
-  changePage: (
-    page: Pages,
-    params?: Record<string, string | number | undefined>,
-    query?: Record<string, string | number | undefined>
-  ) => void;
-}> = () => {
-  return {
-    view: ({ attrs: { crimeScript, cast = [], acts: allActs = [], changePage } }) => {
-      const { id, url = scriptIcon, label: name = t('NEW_ACT'), stages: actVariants = [], description } = crimeScript;
-
-      const acts = actVariants.map((variant) => allActs.find((a) => a.id === variant.id) || ({} as Act));
-      const allCast = Array.from(
-        acts.reduce((acc, { preparation, preactivity, activity, postactivity }) => {
-          [preparation, preactivity, activity, postactivity].forEach((ap) => {
-            if (ap.activities) ap.activities.filter((a) => a.cast).forEach((a) => a.cast.forEach((id) => acc.add(id)));
-          });
-          return acc;
-        }, new Set<ID>())
-      )
-        .map((id) => cast.find((cast) => cast.id === id))
-        .filter((c) => c) as Cast[];
-
-      // console.log(url);
-      return m(
-        '.col.s12.m6.l4',
-        m(
-          '.card.large.cursor-pointer',
-          {
-            onclick: () => {
-              changePage(Pages.HOME, { id });
-            },
-          },
-          [
-            m('.card-image', [
-              m(
-                'a',
-                {
-                  href: routingSvc.href(Pages.HOME, `?id=${id}`),
-                },
-                [m('img', { src: url, alt: name }), m('span.card-title.bold.sharpen', name)]
-              ),
-            ]),
-            m('.card-content', [
-              !url && m('span.card-title.bold.sharpen', { style: { 'white-space': 'wrap' } }, name),
-              description && m('p', description),
-              acts &&
-                m(
-                  'p',
-                  m(
-                    'ol',
-                    acts.map((act) => m('li', act.label))
-                  )
-                ),
-              allCast &&
-                allCast.length > 0 &&
-                m('p', m('span.bold', `${t('CAST')}: `), allCast.map(({ label }) => label).join(', ')),
-            ]),
-          ]
-        )
-      );
     },
   };
 };
