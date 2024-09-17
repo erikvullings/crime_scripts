@@ -3,7 +3,6 @@ import {
   Act,
   Activity,
   ActivityPhase,
-  ActivityTypeOptions,
   Cast,
   Condition,
   CrimeScript,
@@ -13,28 +12,29 @@ import {
   Stage,
   Measure,
   CrimeLocation,
+  Transport,
+  GeographicLocation,
+  ActivityType,
+  Product,
 } from '../../models';
 import { FlatButton, Tabs, uniqueId, Select, ISelectOptions } from 'mithril-materialized';
 import { FormAttributes, LayoutForm, UIForm } from 'mithril-ui-form';
 import { labelForm, literatureForm } from '../../models/forms';
 import { MultiSelectDropdown } from '../ui/multi-select';
 import { crimeMeasureOptions } from '../../models/situational-crime-prevention';
-import { t } from '../../services/translations';
+import { I18N, t } from '../../services/translations';
+import { InputOptions, toOptions } from '../../utils';
 
 export const CrimeScriptEditor: FactoryComponent<{
   crimeScript: CrimeScript;
   cast: Cast[];
   acts: Act[];
+  transports: Transport[];
   attributes: CrimeScriptAttributes[];
   locations: CrimeLocation[];
+  geoLocations: GeographicLocation[];
+  products: Product[];
 }> = () => {
-  type InputOptions = {
-    id: string;
-    label?: string;
-    group?: string;
-    icon?: string;
-  };
-
   const actsForm: UIForm<any> = [
     {
       id: 'stages',
@@ -45,20 +45,32 @@ export const CrimeScriptEditor: FactoryComponent<{
     },
   ];
 
-  let locationOptions: Array<InputOptions> = [];
-  let castOptions: Array<InputOptions> = [];
-  let attrOptions: Array<InputOptions> = [];
+  let locationOptions: InputOptions[] = [];
+  let geoLocationOptions: InputOptions[] = [];
+  let transportOptions: InputOptions[] = [];
+  let castOptions: InputOptions[] = [];
+  let attrOptions: InputOptions[] = [];
+  let productOptions: InputOptions[] = [];
   let measuresForm: UIForm<any> = [];
 
+  const ActivityTypeOptions = [
+    // { id: ActivityType.NONE, label: 'None' },
+    { id: ActivityType.HAS_CAST, label: t('CAST') },
+    { id: ActivityType.HAS_ATTRIBUTES, label: t('ATTRIBUTES') },
+    { id: ActivityType.HAS_TRANSPORT, label: t('TRANSPORTS') },
+    // { id: ActivityType.HAS_CAST_ATTRIBUTES, label: 'Both' },
+  ];
+
   return {
-    oninit: ({ attrs: { cast, attributes, locations } }) => {
-      castOptions = cast.map(({ id, label }) => ({
-        id,
-        label,
-        group: 'person',
-      }));
-      attrOptions = attributes.map(({ id, label }) => ({ id, label }));
+    oninit: ({
+      attrs: { cast = [], attributes = [], locations = [], geoLocations = [], transports = [], products = [] },
+    }) => {
+      castOptions = toOptions(cast, true);
+      attrOptions = toOptions(attributes);
       locationOptions = locations.map(({ id, label }) => ({ id, label }));
+      geoLocationOptions = toOptions(geoLocations);
+      transportOptions = toOptions(transports);
+      productOptions = toOptions(products);
       const measOptions = crimeMeasureOptions();
 
       const measureForm: UIForm<Measure> = [
@@ -73,10 +85,20 @@ export const CrimeScriptEditor: FactoryComponent<{
     view: ({ attrs: { acts, crimeScript } }) => {
       const activityForm: UIForm<any> = [
         {
-          id: 'locationId',
+          id: 'locationIds',
           type: 'select',
+          multiple: true,
           label: t('LOCATION'),
+          className: 'col s6 m4',
           options: locationOptions,
+        },
+        {
+          id: 'geoLocations',
+          type: 'select',
+          multiple: true,
+          label: t('GEOLOCATIONS'),
+          className: 'col s6 m4',
+          options: geoLocationOptions,
         },
         {
           id: 'activities',
@@ -94,21 +116,30 @@ export const CrimeScriptEditor: FactoryComponent<{
             },
             {
               id: 'cast',
-              show: ['type=1', 'type=4'],
+              show: ['type=1'],
               type: 'select',
-              className: 'col s12 m6',
+              className: 'col s12 m4',
               multiple: true,
               options: castOptions,
               label: t('CAST'),
             },
             {
               id: 'attributes',
-              show: ['type=2', 'type=4'],
+              show: ['type=2'],
               type: 'select',
-              className: 'col s12 m6',
+              className: 'col s12 m4',
               multiple: true,
               options: attrOptions,
               label: t('ATTRIBUTES'),
+            },
+            {
+              id: 'transports',
+              show: ['type=4'],
+              type: 'select',
+              className: 'col s12 m4',
+              multiple: true,
+              options: transportOptions,
+              label: t('TRANSPORTS'),
             },
             {
               id: 'description',
@@ -147,11 +178,13 @@ export const CrimeScriptEditor: FactoryComponent<{
         m(LayoutForm, {
           form: [
             ...labelForm(),
+            { id: 'productIds', type: 'select', label: t('PRODUCTS'), multiple: true, options: productOptions },
             { id: 'literature', type: literatureForm(), repeat: true, label: t('REFERENCES') },
             ...actsForm,
           ],
           obj: crimeScript,
           onchange: () => {},
+          i18n: I18N,
         } as FormAttributes<Partial<CrimeScript>>),
 
         curActIds &&
@@ -228,6 +261,7 @@ export const CrimeScriptEditor: FactoryComponent<{
               ],
               obj: curAct,
               onchange: () => {},
+              i18n: I18N,
             } as FormAttributes<Partial<Act>>),
             m(Tabs, {
               tabs: [
@@ -238,6 +272,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                       form: activityForm,
                       obj: curAct.preparation,
                       onchange: () => {},
+                      i18n: I18N,
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
                 },
@@ -248,6 +283,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                       form: activityForm,
                       obj: curAct.preactivity,
                       onchange: () => {},
+                      i18n: I18N,
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
                 },
@@ -258,6 +294,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                       form: activityForm,
                       obj: curAct.activity,
                       onchange: () => {},
+                      i18n: I18N,
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
                 },
@@ -268,6 +305,7 @@ export const CrimeScriptEditor: FactoryComponent<{
                       form: activityForm,
                       obj: curAct.postactivity,
                       onchange: () => {},
+                      i18n: I18N,
                     } as FormAttributes<Partial<ActivityPhase>>),
                   ]),
                 },
@@ -280,6 +318,7 @@ export const CrimeScriptEditor: FactoryComponent<{
               onchange: () => {
                 // console.log(curAct);
               },
+              i18n: I18N,
             } as FormAttributes<Partial<ActivityPhase>>),
           ]),
         ],

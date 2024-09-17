@@ -1,7 +1,7 @@
 import m from 'mithril';
-import { CrimeScript, Pages, scriptIcon } from '../models';
-import { MeiosisComponent, routingSvc } from '../services';
-import { FlatButton, uniqueId, ModalPanel, Icon } from 'mithril-materialized';
+import { CrimeScript, Pages } from '../models';
+import { MeiosisComponent } from '../services';
+import { FlatButton, ModalPanel } from 'mithril-materialized';
 import { t } from '../services/translations';
 import { toWord } from '../utils/word';
 import { formatDate } from '../utils';
@@ -22,7 +22,16 @@ export const CrimeScriptPage: MeiosisComponent = () => {
     },
     view: ({ attrs: { state, actions } }) => {
       const { model, role, curActIdx, curPhaseIdx, currentCrimeScriptId = '' } = state;
-      const { crimeScripts = [], cast = [], acts = [], attributes = [], locations = [] } = model;
+      const {
+        crimeScripts = [],
+        cast = [],
+        acts = [],
+        attributes = [],
+        locations = [],
+        geoLocations = [],
+        transports = [],
+        products = [],
+      } = model;
       id = m.route.param('id') || currentCrimeScriptId || (crimeScripts.length > 0 ? crimeScripts[0].id : '');
       const crimeScript =
         crimeScripts.find((c) => c.id === id) || (crimeScripts.length > 0 ? crimeScripts[0] : ({} as CrimeScript));
@@ -79,13 +88,24 @@ export const CrimeScriptPage: MeiosisComponent = () => {
             m(
               '.row.crime-scene',
               edit
-                ? m(CrimeScriptEditor, { crimeScript: crimeScript, cast, acts, attributes, locations })
-                : m(CrimeScriptViewer, {
-                    crimeScript: crimeScript,
+                ? m(CrimeScriptEditor, {
+                    crimeScript,
                     cast,
                     acts,
                     attributes,
                     locations,
+                    geoLocations,
+                    transports,
+                    products,
+                  })
+                : m(CrimeScriptViewer, {
+                    crimeScript,
+                    cast,
+                    acts,
+                    attributes,
+                    locations,
+                    geoLocations,
+                    products,
                     curActIdx,
                     curPhaseIdx,
                     update: actions.update,

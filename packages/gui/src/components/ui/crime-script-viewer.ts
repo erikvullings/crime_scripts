@@ -5,9 +5,11 @@ import {
   CrimeLocation,
   CrimeScript,
   CrimeScriptAttributes,
+  GeographicLocation,
   ICONS,
   ID,
   IconOpts,
+  Product,
   Stage,
   missingIcon,
 } from '../../models';
@@ -18,6 +20,7 @@ import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from '../ui/reference';
 import { lookupCrimeMeasure } from '../../models/situational-crime-prevention';
 import { t } from '../../services/translations';
+import { resolveOptions, toMarkdownOl, toMarkdownUl } from '../../utils';
 
 export const CrimeScriptViewer: FactoryComponent<{
   crimeScript: CrimeScript;
@@ -25,6 +28,8 @@ export const CrimeScriptViewer: FactoryComponent<{
   acts: Act[];
   attributes: CrimeScriptAttributes[];
   locations: CrimeLocation[];
+  geoLocations: GeographicLocation[];
+  products: Product[];
   curActIdx?: number;
   curPhaseIdx?: number;
   update: (patch: Patch<State>) => void;
@@ -36,6 +41,7 @@ export const CrimeScriptViewer: FactoryComponent<{
     cast: Cast[],
     attributes: CrimeScriptAttributes[],
     locations: CrimeLocation[],
+    geoLocations: GeographicLocation[],
     curPhaseIdx = -1
   ) => {
     {
@@ -45,7 +51,7 @@ export const CrimeScriptViewer: FactoryComponent<{
       postactivity.label = t('POST_ACTIVITY_PHASE');
       const contentTabs = [preparation, preactivity, activity, postactivity]
         .filter((p) => p.activities.length > 0 || p.conditions.length > 0)
-        .map(({ label, activities = [], conditions, locationId }) => {
+        .map(({ label, activities = [], conditions, locationIds, geoLocationIds }) => {
           const castIds = Array.from(
             activities.reduce((acc, { cast: curCast }) => {
               if (curCast) curCast.forEach((id) => acc.add(id));
@@ -59,12 +65,19 @@ export const CrimeScriptViewer: FactoryComponent<{
             }, new Set<ID>())
           );
           const md = `${
-            locationId
-              ? `##### ${t('LOCATION')}
+            locationIds
+              ? `##### ${t(locationIds.length > 1 ? 'LOCATIONS' : 'LOCATION')}
     
-- ${locations.find((loc) => loc.id === locationId)?.label}`
+${toMarkdownUl(locations, locationIds)}`
               : ''
           }
+${
+  geoLocationIds
+    ? `##### ${t(geoLocationIds.length > 1 ? 'GEOLOCATIONS' : 'GEOLOCATION')}
+    
+${toMarkdownUl(geoLocations, geoLocationIds)}`
+    : ''
+}
 
 ${
   activities.length > 0
@@ -90,7 +103,7 @@ ${
   castIds.length > 0
     ? `##### ${t('CAST')}
     
-${castIds.map((id) => '- ' + cast.find((cast) => cast.id === id)?.label).join('\n')}`
+${toMarkdownOl(cast, castIds)}`
     : ''
 }
 
@@ -98,7 +111,7 @@ ${
   conditions.length > 0
     ? `##### ${t('CONDITIONS')}
   
-${conditions.map((cond) => '- ' + cond.label).join('\n')}`
+${conditions.map((cond, i) => `${i + 1}. ` + cond.label).join('\n')}`
     : ''
 }
 
@@ -106,7 +119,7 @@ ${
   attrIds.length > 0
     ? `##### ${t('ATTRIBUTES')}
   
-${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).join('\n')}`
+${toMarkdownOl(attributes, attrIds)}`
     : ''
 }`;
           return {
@@ -138,15 +151,28 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
   };
 
   return {
-    view: ({ attrs: { crimeScript, cast, acts, attributes, locations, curActIdx = -1, curPhaseIdx = 0, update } }) => {
-      const { label = '...', description, literature, stages = [] } = crimeScript;
+    view: ({
+      attrs: {
+        crimeScript,
+        cast = [],
+        acts = [],
+        attributes = [],
+        locations = [],
+        geoLocations = [],
+        products = [],
+        curActIdx = -1,
+        curPhaseIdx = 0,
+        update,
+      },
+    }) => {
+      const { label = '...', description, literature, stages = [], productIds = [] } = crimeScript;
       const [allCastIds, allAttrIds, allLocIds] = stages.reduce(
         (acc, stage) => {
           const act = acts.find((a) => a.id === stage.id);
           if (act) {
             [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase) => {
-              if (phase.locationId) {
-                acc[2].add(phase.locationId);
+              if (phase.locationIds) {
+                phase.locationIds.forEach((id) => acc[2].add(id));
               }
               phase.activities.forEach((activity) => {
                 activity.cast?.forEach((id) => acc[0].add(id));
@@ -172,17 +198,29 @@ ${attrIds.map((id) => '- ' + attributes.find((attr) => attr.id === id)?.label).j
       }, [] as Array<{ stage: Stage; stageIdx: number; title: string; act: Act; selectedVariant: boolean }>);
       const selectedAct = curActIdx >= 0 ? acts[curActIdx] : allStages.length > 0 ? allStages[0].act : undefined;
       const selectedActContent = selectedAct
-        ? visualizeAct(selectedAct, cast, attributes, locations, curPhaseIdx)
+        ? visualizeAct(selectedAct, cast, attributes, locations, geoLocations, curPhaseIdx)
         : undefined;
       const measuresMd =
         selectedAct &&
         selectedAct.measures.length > 0 &&
         `##### ${t('MEASURES')}
-            
-${selectedAct.measures.map((measure) => `- ${findCrimeMeasure(measure.cat)?.label}: ${measure.label}`).join('\n')}`;
+
+${selectedAct.measures
+  .map((measure, i) => `${i + 1}. ${findCrimeMeasure(measure.cat)?.label}: ${measure.label}`)
+  .join('\n')}`;
 
       return m('.col.s12', [
-        m('h4', label),
+        m(
+          'h4',
+          `${label}${
+            productIds.length > 0
+              ? ` (${resolveOptions(products, productIds)
+                  .map((p) => p.label)
+                  .join(', ')
+                  .toLowerCase()})`
+              : ''
+          }`
+        ),
         description && m('p', description),
         m('.row', [
           m('.col.s4', [

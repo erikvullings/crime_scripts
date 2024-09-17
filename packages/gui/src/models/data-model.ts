@@ -1,3 +1,4 @@
+import { t } from '../services';
 import { ICONS } from './icons';
 
 export type DataModel = {
@@ -124,6 +125,7 @@ export type CrimeScript = Labeled & {
   literature: Literature[];
   /** Stages in the crime script */
   stages: Stage[];
+  productIds: ID[];
 };
 
 export type Measure = Labeled & {
@@ -243,7 +245,11 @@ export type Act = Labeled & {
 
 export type ActivityPhase = {
   label: string;
-  locationId?: ID;
+  /** Locations to perform the activity */
+  locationIds?: ID[];
+  /** Geographic locations on the map */
+  geoLocationIds?: ID[];
+  /** A list of activities that takes place in this phase */
   activities: Activity[];
   // description: string[];
   conditions: Condition[];
@@ -253,21 +259,16 @@ export enum ActivityType {
   NONE = 0,
   HAS_CAST = 1,
   HAS_ATTRIBUTES = 2,
-  HAS_CAST_ATTRIBUTES = 4,
+  HAS_TRANSPORT = 4,
+  // HAS_CAST_ATTRIBUTES = 4,
 }
-
-export const ActivityTypeOptions = [
-  // { id: ActivityType.NONE, label: 'None' },
-  { id: ActivityType.HAS_CAST, label: 'Cast' },
-  { id: ActivityType.HAS_ATTRIBUTES, label: 'Attributes' },
-  // { id: ActivityType.HAS_CAST_ATTRIBUTES, label: 'Both' },
-];
 
 export type Activity = Labeled & {
   type?: ActivityType | ActivityType[];
   cast: ID[];
   attributes: ID[];
   conditions: Condition[];
+  transports: ID[];
 };
 
 export type Hierarchical = { synonyms?: string[]; parents?: ID[] };

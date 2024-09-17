@@ -149,8 +149,8 @@ export const setSearchResults: Service<State> = {
             if (actIdx < 0) return;
             const act = acts[actIdx];
             [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
-              if (phase.locationId) {
-                const include = matchingLoc.get(phase.locationId);
+              if (phase.locationIds) {
+                const include = matchingLoc.get(phase.locationIds);
                 if (include) {
                   searchResults.push({
                     crimeScriptIdx: crimeScriptIdx,

@@ -1,4 +1,6 @@
 import { padLeft } from 'mithril-materialized';
+import { Hierarchical, ID, Labeled } from '../models';
+import { t } from '../services';
 
 export const LANGUAGE = 'CSS_LANGUAGE';
 export const SAVED = 'CSS_MODEL_SAVED';
@@ -193,3 +195,38 @@ export const addLeadingSpaces = (str: string, numSpaces: number): string => {
   // Concatenate the spaces with the original string
   return spaces + str;
 };
+
+export type InputOptions = {
+  id: string;
+  label?: string;
+  group?: string;
+  icon?: string;
+};
+
+export const toOptions = (arr: Array<Hierarchical & Labeled>, noGroup = false): InputOptions[] =>
+  arr.map(({ id, label, parents }) => ({
+    id,
+    label,
+    group: noGroup
+      ? undefined
+      : parents && parents.length > 0
+      ? arr.find((l) => l.id === parents[0])?.label
+      : t('OTHER'),
+  }));
+
+export const resolveOptions = (arr: Array<Labeled> = [], ids: ID | ID[] = []) => {
+  ids = Array.isArray(ids) ? ids : [ids];
+  return arr.filter((a) => ids.includes(a.id));
+};
+
+/** Convert to markdown unsorted list */
+export const toMarkdownUl = (arr: Array<Labeled> = [], ids: ID | ID[] = []) =>
+  resolveOptions(arr, ids)
+    .map((a) => `- ${a.label}`)
+    .join('\n');
+
+/** Convert to markdown sorted list */
+export const toMarkdownOl = (arr: Array<Labeled> = [], ids: ID | ID[] = []) =>
+  resolveOptions(arr, ids)
+    .map((a, i) => `${i + 1}. ${a.label}`)
+    .join('\n');

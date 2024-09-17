@@ -179,7 +179,7 @@ const AttrView: FactoryComponent<{
                     const act = acts[actIdx];
                     [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
                       if (type === 'location') {
-                        if (phase.locationId) {
+                        if (phase.locationIds) {
                           acc.push({
                             crimeScriptIdx,
                             actIdx,

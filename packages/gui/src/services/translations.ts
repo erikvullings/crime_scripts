@@ -1,6 +1,7 @@
 import translate, { Options, Translate } from 'translate.js';
 import { plural_EN } from 'translate.js/pluralize';
 import { messages, messagesNL } from './lang';
+import { I18n } from 'mithril-ui-form';
 
 export type Languages = 'nl' | 'en';
 
@@ -42,13 +43,9 @@ export const i18n = {
   init,
   addOnChangeListener,
   loadAndSetLocale,
-  // i18n: {} as I18n,
-  // } as {
-  //   defaultLocale: Languages;
-  //   currentLocale: Languages;
-  //   locales: Locales;
-  //   t: Translate<typeof messages, Options>;
 };
+
+export const I18N: I18n = {};
 
 export let t: Translate<typeof messages, Options> = setGuiLanguage(i18n.currentLocale);
 
@@ -74,17 +71,15 @@ async function loadAndSetLocale(newLocale: Languages) {
   const resolvedLocale = supported(newLocale) ? newLocale : i18n.defaultLocale;
   i18n.currentLocale = resolvedLocale;
   t = setGuiLanguage(newLocale);
-  // i18n.i18n = {
-  //   editRepeat: t('i18n', 'editRepeat'),
-  //   createRepeat: t('i18n', 'createRepeat'),
-  //   deleteItem: t('i18n', 'deleteItem'),
-  //   agree: t('i18n', 'agree'),
-  //   disagree: t('i18n', 'disagree'),
-  //   pickOne: t('i18n', 'pickOne'),
-  //   pickOneOrMore: t('i18n', 'pickOneOrMore'),
-  //   cancel: t('i18n', 'cancel'),
-  //   save: t('i18n', 'save'),
-  // } as I18n;
+  I18N.agree = t('I18n', 'agree');
+  I18N.disagree = t('I18n', 'disagree');
+  I18N.cancel = t('I18n', 'cancel');
+  I18N.save = t('I18n', 'save');
+  I18N.editRepeat = t('I18n', 'editRepeat');
+  I18N.createRepeat = t('I18n', 'createRepeat');
+  I18N.deleteItem = t('I18n', 'deleteItem');
+  I18N.pickOne = t('I18n', 'pickOne');
+  I18N.pickOneOrMore = t('I18n', 'pickOneOrMore');
   onChangeLocale.forEach((listener) => listener(i18n.currentLocale, dir()));
 }
 
