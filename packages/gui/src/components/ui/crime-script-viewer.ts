@@ -20,7 +20,7 @@ import { Patch } from 'meiosis-setup/types';
 import { ReferenceListComponent } from '../ui/reference';
 import { lookupCrimeMeasure } from '../../models/situational-crime-prevention';
 import { t } from '../../services/translations';
-import { resolveOptions, toMarkdownOl, toMarkdownUl } from '../../utils';
+import { resolveOptions, toCommaSeparatedList, toMarkdownOl, toMarkdownUl } from '../../utils';
 
 export const CrimeScriptViewer: FactoryComponent<{
   crimeScript: CrimeScript;
@@ -41,7 +41,6 @@ export const CrimeScriptViewer: FactoryComponent<{
     cast: Cast[],
     attributes: CrimeScriptAttributes[],
     locations: CrimeLocation[],
-    geoLocations: GeographicLocation[],
     curPhaseIdx = -1
   ) => {
     {
@@ -51,7 +50,7 @@ export const CrimeScriptViewer: FactoryComponent<{
       postactivity.label = t('POST_ACTIVITY_PHASE');
       const contentTabs = [preparation, preactivity, activity, postactivity]
         .filter((p) => p.activities.length > 0 || p.conditions.length > 0)
-        .map(({ label, activities = [], conditions, locationIds, geoLocationIds }) => {
+        .map(({ label, activities = [], conditions, locationIds }) => {
           const castIds = Array.from(
             activities.reduce((acc, { cast: curCast }) => {
               if (curCast) curCast.forEach((id) => acc.add(id));
@@ -71,13 +70,6 @@ export const CrimeScriptViewer: FactoryComponent<{
 ${toMarkdownUl(locations, locationIds)}`
               : ''
           }
-${
-  geoLocationIds
-    ? `##### ${t(geoLocationIds.length > 1 ? 'GEOLOCATIONS' : 'GEOLOCATION')}
-    
-${toMarkdownUl(geoLocations, geoLocationIds)}`
-    : ''
-}
 
 ${
   activities.length > 0
@@ -165,7 +157,7 @@ ${toMarkdownOl(attributes, attrIds)}`
         update,
       },
     }) => {
-      const { label = '...', description, literature, stages = [], productIds = [] } = crimeScript;
+      const { label = '...', description, literature, stages = [], productIds = [], geoLocationIds = [] } = crimeScript;
       const [allCastIds, allAttrIds, allLocIds] = stages.reduce(
         (acc, stage) => {
           const act = acts.find((a) => a.id === stage.id);
@@ -198,7 +190,7 @@ ${toMarkdownOl(attributes, attrIds)}`
       }, [] as Array<{ stage: Stage; stageIdx: number; title: string; act: Act; selectedVariant: boolean }>);
       const selectedAct = curActIdx >= 0 ? acts[curActIdx] : allStages.length > 0 ? allStages[0].act : undefined;
       const selectedActContent = selectedAct
-        ? visualizeAct(selectedAct, cast, attributes, locations, geoLocations, curPhaseIdx)
+        ? visualizeAct(selectedAct, cast, attributes, locations, curPhaseIdx)
         : undefined;
       const measuresMd =
         selectedAct &&
@@ -212,15 +204,13 @@ ${selectedAct.measures
       return m('.col.s12', [
         m(
           'h4',
-          `${label}${
-            productIds.length > 0
-              ? ` (${resolveOptions(products, productIds)
-                  .map((p) => p.label)
-                  .join(', ')
-                  .toLowerCase()})`
-              : ''
-          }`
+          `${label}${productIds.length > 0 ? ` (${toCommaSeparatedList(products, productIds).toLowerCase()})` : ''}`
         ),
+        geoLocationIds.length > 0 &&
+          m(
+            'i.geo-location',
+            `${t('GEOLOCATIONS', geoLocationIds.length)}: ${toCommaSeparatedList(geoLocations, geoLocationIds)}`
+          ),
         description && m('p', description),
         m('.row', [
           m('.col.s4', [

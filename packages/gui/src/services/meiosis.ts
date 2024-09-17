@@ -25,6 +25,13 @@ export interface State {
   searchResults: SearchResult[];
   caseTags: string[];
   caseResults: SearchResult[];
+  crimeScriptFilter: {
+    productIds: ID[];
+    geoLocationIds: ID[];
+    locationIds: ID[];
+    attributeIds: ID[];
+    roleIds: ID[];
+  };
 }
 
 export interface Actions {

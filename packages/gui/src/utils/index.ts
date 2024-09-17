@@ -230,3 +230,9 @@ export const toMarkdownOl = (arr: Array<Labeled> = [], ids: ID | ID[] = []) =>
   resolveOptions(arr, ids)
     .map((a, i) => `${i + 1}. ${a.label}`)
     .join('\n');
+
+/** Convert to comma-separated sorted list */
+export const toCommaSeparatedList = (arr: Array<Labeled> = [], ids: ID | ID[] = []) =>
+  resolveOptions(arr, ids)
+    .map((a, i) => a.label)
+    .join(', ');

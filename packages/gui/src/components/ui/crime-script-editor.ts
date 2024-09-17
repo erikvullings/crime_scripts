@@ -52,6 +52,7 @@ export const CrimeScriptEditor: FactoryComponent<{
   let attrOptions: InputOptions[] = [];
   let productOptions: InputOptions[] = [];
   let measuresForm: UIForm<any> = [];
+  let activityForm: UIForm<any>;
 
   const ActivityTypeOptions = [
     // { id: ActivityType.NONE, label: 'None' },
@@ -71,34 +72,15 @@ export const CrimeScriptEditor: FactoryComponent<{
       geoLocationOptions = toOptions(geoLocations);
       transportOptions = toOptions(transports);
       productOptions = toOptions(products);
-      const measOptions = crimeMeasureOptions();
 
-      const measureForm: UIForm<Measure> = [
-        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
-        { id: 'cat', type: 'select', options: measOptions, className: 'col s12 m5 l4', label: t('CATEGORY') },
-        { id: 'label', type: 'text', className: 'col s12 m7 l8', label: t('NAME') },
-        // { id: 'description', type: 'textarea', className: 'col s12', label: t('DESCRIPTION') },
-      ];
-
-      measuresForm = [{ id: 'measures', type: measureForm, repeat: true, label: t('MEASURES') }];
-    },
-    view: ({ attrs: { acts, crimeScript } }) => {
-      const activityForm: UIForm<any> = [
+      activityForm = [
         {
           id: 'locationIds',
           type: 'select',
           multiple: true,
           label: t('LOCATION'),
-          className: 'col s6 m4',
+          className: 'col s12',
           options: locationOptions,
-        },
-        {
-          id: 'geoLocations',
-          type: 'select',
-          multiple: true,
-          label: t('GEOLOCATIONS'),
-          className: 'col s6 m4',
-          options: geoLocationOptions,
         },
         {
           id: 'activities',
@@ -162,6 +144,18 @@ export const CrimeScriptEditor: FactoryComponent<{
         },
       ];
 
+      const measOptions = crimeMeasureOptions();
+
+      const measureForm: UIForm<Measure> = [
+        { id: 'id', type: 'autogenerate', autogenerate: 'id' },
+        { id: 'cat', type: 'select', options: measOptions, className: 'col s12 m5 l4', label: t('CATEGORY') },
+        { id: 'label', type: 'text', className: 'col s12 m7 l8', label: t('NAME') },
+        // { id: 'description', type: 'textarea', className: 'col s12', label: t('DESCRIPTION') },
+      ];
+
+      measuresForm = [{ id: 'measures', type: measureForm, repeat: true, label: t('MEASURES') }];
+    },
+    view: ({ attrs: { acts, crimeScript } }) => {
       const curActIdx = +(m.route.param('stages') || 1) - 1;
       const curActIds = crimeScript.stages && curActIdx < crimeScript.stages.length && crimeScript.stages[curActIdx];
       const curActId = curActIds && curActIds.id;
@@ -178,7 +172,22 @@ export const CrimeScriptEditor: FactoryComponent<{
         m(LayoutForm, {
           form: [
             ...labelForm(),
-            { id: 'productIds', type: 'select', label: t('PRODUCTS'), multiple: true, options: productOptions },
+            {
+              id: 'productIds',
+              type: 'select',
+              label: t('PRODUCTS'),
+              multiple: true,
+              className: 'col s6',
+              options: productOptions,
+            },
+            {
+              id: 'geoLocationIds',
+              type: 'select',
+              multiple: true,
+              label: t('GEOLOCATIONS', 2),
+              className: 'col s6',
+              options: geoLocationOptions,
+            },
             { id: 'literature', type: literatureForm(), repeat: true, label: t('REFERENCES') },
             ...actsForm,
           ],

@@ -201,8 +201,7 @@ export const messagesNL: typeof messages = {
   CATEGORIES: 'Categorieën',
   BELONGS_TO: 'Behoort tot',
   PRODUCTS: 'Producten',
-  GEOLOCATION: 'Kaartlocatie',
-  GEOLOCATIONS: 'Kaartlocaties',
+  GEOLOCATIONS: { 0: 'Kaartlocatie', 1: 'Kaartlocatie', n: 'Kaartlocaties' },
   TRANSPORTS: 'Transportmiddelen',
   I18n: {
     editRepeat: 'Bewerk item',

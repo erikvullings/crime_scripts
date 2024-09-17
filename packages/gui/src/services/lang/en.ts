@@ -199,8 +199,7 @@ export const messages = {
   CATEGORIES: 'Categories',
   BELONGS_TO: 'Belongs to',
   PRODUCTS: 'Products',
-  GEOLOCATION: 'Geographic Location',
-  GEOLOCATIONS: 'Geographic Locations',
+  GEOLOCATIONS: { 0: 'Geographic Location', 1: 'Geographic Location', n: 'Geographic Locations' },
   TRANSPORTS: 'Transports',
   I18n: {
     editRepeat: '',

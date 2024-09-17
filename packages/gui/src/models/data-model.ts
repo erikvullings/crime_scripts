@@ -101,6 +101,8 @@ export type CrimeScript = Labeled & {
   /** Stages in the crime script */
   stages: Stage[];
   productIds: ID[];
+  /** Geographic locations on the map */
+  geoLocationIds?: ID[];
 };
 
 export type Measure = Labeled & {
@@ -222,8 +224,6 @@ export type ActivityPhase = {
   label: string;
   /** Locations to perform the activity */
   locationIds?: ID[];
-  /** Geographic locations on the map */
-  geoLocationIds?: ID[];
   /** A list of activities that takes place in this phase */
   activities: Activity[];
   // description: string[];
