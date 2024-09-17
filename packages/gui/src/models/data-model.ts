@@ -1,4 +1,3 @@
-import { t } from '../services';
 import { ICONS } from './icons';
 
 export type DataModel = {
@@ -27,34 +26,12 @@ export const defaultModel = {
   acts: [],
 } as DataModel;
 
-export enum CATEGORY {
-  HARDWARE = 1,
-  BIO_ENHANCEMENT,
-  PHARMACOLOGICAL_SUBSTANCES_SUPPLEMENTS_AND_NUTRITION,
-  TRAINING,
-  SELF_REGULATION,
-  NUTRITION,
-  OTHER,
-}
-
 export enum STATUS {
   FIRST_DRAFT = 1,
   READY_FOR_REVIEW,
   UNDER_REVIEW,
   REVIEWED,
   FINISHED,
-}
-
-export enum CHOICE {
-  NONE = 1,
-  UNKNOWN,
-  YES,
-}
-
-export enum YES_NO {
-  //CAN BE USED AS A BOOSTER
-  YES = 1,
-  NO,
 }
 
 export enum LITERATURE_TYPE {
@@ -119,8 +96,6 @@ export type CrimeScript = Labeled & {
   updated: number;
   reviewer: ID[];
   status: STATUS;
-  /** Specific application */
-  category: CATEGORY;
   /** Literature referred to in this article */
   literature: Literature[];
   /** Stages in the crime script */
