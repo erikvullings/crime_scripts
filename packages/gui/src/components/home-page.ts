@@ -1,5 +1,5 @@
-import m, { FactoryComponent } from 'mithril';
-import { Act, Cast, CrimeScript, Hierarchical, ID, Labeled, Pages, scriptIcon } from '../models';
+import m from 'mithril';
+import { Act, CrimeScript, Hierarchical, ID, Labeled, Pages, scriptIcon } from '../models';
 import { CrimeScriptFilter, MeiosisComponent, routingSvc } from '../services';
 import { FlatButton, uniqueId, Icon } from 'mithril-materialized';
 import { I18N, t } from '../services/translations';
@@ -78,7 +78,6 @@ export const HomePage: MeiosisComponent = () => {
         {
           id: 'locationIds',
           label: t('LOCATIONS', 2),
-          icon: 'filter_alt',
           type: 'select',
           multiple: true,
           options: toOptions(locations),
@@ -87,7 +86,6 @@ export const HomePage: MeiosisComponent = () => {
         {
           id: 'geoLocationIds',
           label: t('GEOLOCATIONS', 2),
-          icon: 'filter_alt',
           type: 'select',
           multiple: true,
           options: toOptions(geoLocations),

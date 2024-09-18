@@ -47,7 +47,7 @@ export const Layout: MeiosisComponent = () => {
                   },
                   [
                     m(`img[width=50][height=50][src=${logo}][alt=logo]`, {
-                      style: 'margin-bottom: 6px; margin-left: -6px;',
+                      style: 'margin: 6px -6px;',
                     }),
                     m('span', { style: 'margin-left: 20px; vertical-align: top;' }, APP_TITLE),
                   ]
