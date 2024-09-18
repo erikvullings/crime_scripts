@@ -14,7 +14,13 @@ export const Layout: MeiosisComponent = () => {
   let textInput: HTMLInputElement;
 
   document.addEventListener('keydown', (ev: KeyboardEvent) => {
-    if (ev.key !== '/' || searchDialog?.isOpen) return;
+    if (
+      ev.key !== '/' ||
+      searchDialog?.isOpen ||
+      (ev.target && (ev.target as HTMLTextAreaElement).type === 'textarea') ||
+      (ev.target as HTMLInputElement).type === 'text'
+    )
+      return;
     ev.preventDefault(); // Prevent the slash key from being inputted into input fields
     searchDialog.open();
     textInput.focus();
@@ -111,7 +117,7 @@ export const Layout: MeiosisComponent = () => {
               },
             },
             [
-              m('.modal-content', [
+              m('.modal-content.row', [
                 m(TextInputWithClear, {
                   id: 'search',
                   label: t('SEARCH'),
