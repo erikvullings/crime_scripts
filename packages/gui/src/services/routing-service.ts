@@ -10,7 +10,7 @@ class RoutingService {
 
   constructor() {}
 
-  public init() {
+  public init(locale: string) {
     const routes: Page[] = [
       {
         id: Pages.LANDING,
@@ -70,6 +70,7 @@ class RoutingService {
     ];
     // console.log(JSON.stringify(routes, null, 2));
     this.setList(routes);
+    appActions(cells()).update({ locale });
     // console.log(JSON.stringify(this.dashboards, null, 2));
   }
 
