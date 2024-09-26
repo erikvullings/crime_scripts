@@ -2,9 +2,10 @@ import { meiosisSetup } from 'meiosis-setup';
 import { MeiosisCell, MeiosisConfig, Patch, Service } from 'meiosis-setup/types';
 import m, { FactoryComponent } from 'mithril';
 import { routingSvc, t } from '.';
-import { Cast, CrimeLocation, CrimeScriptAttributes, DataModel, ID, Pages, SearchResult, Settings } from '../models';
+import { DataModel, ID, Pages, SearchResult, Settings } from '../models';
 import { User, UserRole } from './login-service';
 import { scrollToTop } from '../utils';
+import { flexSearchLookupUpdater, FlexSearchResult } from './flex-search';
 
 // const settingsSvc = restServiceFactory<Settings>('settings');
 const MODEL_KEY = 'CSS_MODEL';
@@ -22,6 +23,7 @@ export type CrimeScriptFilter = {
 export interface State {
   page: Pages;
   model: DataModel;
+  locale: string;
   loggedInUser?: User;
   role: UserRole;
   settings: Settings;
@@ -34,6 +36,8 @@ export interface State {
   caseTags: string[];
   caseResults: SearchResult[];
   crimeScriptFilter: CrimeScriptFilter;
+  /** For finding search results */
+  lookup: Map<string, FlexSearchResult[]>;
 }
 
 export interface Actions {
@@ -118,139 +122,67 @@ export const appActions: (cell: MeiosisCell<State>) => Actions = ({ update /* st
   },
 });
 
+const aggregateFlexSearchResults = (results: FlexSearchResult[]): SearchResult[] => {
+  // Step 1: Aggregate by crimeScriptIdx
+  const crimeScriptMap = new Map<number, SearchResult>();
+
+  for (const [crimeScriptIdx, actIdx, phaseIdx, score] of results) {
+    if (!crimeScriptMap.has(crimeScriptIdx)) {
+      crimeScriptMap.set(crimeScriptIdx, {
+        crimeScriptIdx,
+        totalScore: 0,
+        acts: [],
+      });
+    }
+
+    const crimeScript = crimeScriptMap.get(crimeScriptIdx)!;
+    crimeScript.totalScore += score;
+
+    const existingAct = crimeScript.acts.find((act) => act.actIdx === actIdx);
+    if (existingAct) {
+      existingAct.score += score;
+    } else {
+      crimeScript.acts.push({ actIdx, phaseIdx, score });
+    }
+  }
+
+  // Step 2: Sort the results
+  const sortedResults = Array.from(crimeScriptMap.values()).sort((a, b) => {
+    // Sort by total score of crimeScript
+    if (b.totalScore !== a.totalScore) {
+      return b.totalScore - a.totalScore;
+    }
+
+    // If total scores are equal, sort by the highest scoring act
+    const maxScoreA = Math.max(...a.acts.map((act) => act.score));
+    const maxScoreB = Math.max(...b.acts.map((act) => act.score));
+    return maxScoreB - maxScoreA;
+  });
+
+  // Sort acts within each crimeScript
+  sortedResults.forEach((crimeScript) => {
+    crimeScript.acts.sort((a, b) => b.score - a.score);
+  });
+
+  return sortedResults;
+};
 export const setSearchResults: Service<State> = {
   onchange: (state) => state.searchFilter,
   run: (cell) => {
     const state = cell.getState();
-    const { model = {} as DataModel } = state;
-    const { crimeScripts = [], cast = [], attributes = [], acts = [], locations = [] } = model;
-    const searchResults: SearchResult[] = [];
+    const { lookup, searchFilter } = state;
+    const allFlexResults: FlexSearchResult[] = [];
     if (state.searchFilter) {
-      const searchFilter = state.searchFilter.toLowerCase();
-      const highlighter = (text: string) => {
-        return text.replace(new RegExp(searchFilter, 'gi'), (match) => `**${match}**`);
-      };
-      const matchingCast = cast
-        .filter((role) => role.label?.toLowerCase().includes(searchFilter))
-        .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, Cast>());
-      const matchingAttr = attributes
-        .filter((attr) => attr.label?.toLowerCase().includes(searchFilter))
-        .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, CrimeScriptAttributes>());
-      const matchingLoc = locations
-        .filter((loc) => loc.label?.toLowerCase().includes(searchFilter))
-        .reduce((acc, cur) => acc.set(cur.id, cur), new Map<ID, CrimeLocation>());
-      crimeScripts.forEach((crimeScript, crimeScriptIdx) => {
-        const { label, description, stages: actVariants = [] } = crimeScript;
-        if (label.toLowerCase().includes(searchFilter) || description?.toLowerCase().includes(searchFilter)) {
-          searchResults.push({
-            crimeScriptIdx,
-            actIdx: -1,
-            phaseIdx: -1,
-            activityIdx: -1,
-            conditionIdx: -1,
-            type: 'crimeScript',
-            resultMd: highlighter(label.toLowerCase().includes(searchFilter) ? label : description!),
-          });
-        }
-        actVariants.forEach(({ ids }) => {
-          ids.forEach((actId) => {
-            const actIdx = acts.findIndex((a) => a.id === actId);
-            if (actIdx < 0) return;
-            const act = acts[actIdx];
-            [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
-              if (phase.locationIds && Array.isArray(phase.locationIds)) {
-                phase.locationIds.forEach((id) => {
-                  const include = matchingLoc.get(id);
-                  if (include) {
-                    searchResults.push({
-                      crimeScriptIdx: crimeScriptIdx,
-                      actIdx,
-                      phaseIdx,
-                      activityIdx: -1,
-                      conditionIdx: -1,
-                      type: 'cast',
-                      resultMd: highlighter(include.label),
-                    });
-                  }
-                });
-              }
-              phase.activities?.forEach((activity, activityIdx) => {
-                const { label = '', description, conditions = [], cast = [], attributes = [] } = activity;
-                cast.forEach((id) => {
-                  const include = matchingCast.get(id);
-                  if (include) {
-                    searchResults.push({
-                      crimeScriptIdx: crimeScriptIdx,
-                      actIdx,
-                      phaseIdx,
-                      activityIdx,
-                      conditionIdx: -1,
-                      type: 'cast',
-                      resultMd: highlighter(include.label),
-                    });
-                  }
-                });
-                attributes.forEach((id) => {
-                  const include = matchingAttr.get(id);
-                  if (include) {
-                    searchResults.push({
-                      crimeScriptIdx: crimeScriptIdx,
-                      actIdx,
-                      phaseIdx,
-                      activityIdx,
-                      conditionIdx: -1,
-                      type: 'attribute',
-                      resultMd: highlighter(include.label),
-                    });
-                  }
-                });
-                if (label.toLowerCase().includes(searchFilter) || description?.toLowerCase().includes(searchFilter)) {
-                  searchResults.push({
-                    crimeScriptIdx: crimeScriptIdx,
-                    actIdx,
-                    phaseIdx,
-                    activityIdx,
-                    conditionIdx: -1,
-                    type: 'activity',
-                    resultMd: highlighter(label.toLowerCase().includes(searchFilter) ? label : description!),
-                  });
-                }
-                conditions?.forEach((condition, conditionIdx) => {
-                  const { label } = condition;
-                  if (label?.toLowerCase().includes(searchFilter)) {
-                    searchResults.push({
-                      crimeScriptIdx: crimeScriptIdx,
-                      actIdx,
-                      phaseIdx,
-                      activityIdx,
-                      conditionIdx,
-                      type: 'condition',
-                      resultMd: highlighter(label),
-                    });
-                  }
-                });
-              });
-            });
-          });
+      const searchWords = searchFilter.trim().toLowerCase().split(/\s+/);
+      searchWords
+        .map((word) => lookup.get(word))
+        .filter((results) => typeof results !== 'undefined')
+        .forEach((results) => {
+          results.forEach((res) => allFlexResults.push(res));
         });
-      });
     }
-    searchResults.sort((a, b) => {
-      // Compare by crimeScriptIdx
-      if (a.crimeScriptIdx !== b.crimeScriptIdx) {
-        return a.crimeScriptIdx - b.crimeScriptIdx;
-      }
-      // Compare by actIdx
-      if (a.actIdx !== b.actIdx) {
-        return a.actIdx - b.actIdx;
-      }
-      // Compare by type (lexicographically)
-      if (a.type !== b.type) {
-        return a.type.localeCompare(b.type);
-      }
-      // If all compared fields are equal, return 0
-      return 0;
-    });
+    const searchResults = aggregateFlexSearchResults(allFlexResults);
+
     cell.update({ searchResults });
   },
 };
@@ -264,7 +196,7 @@ const config: MeiosisConfig<State> = {
       settings: {} as Settings,
       model: {} as DataModel,
     } as State,
-    services: [setSearchResults],
+    services: [setSearchResults, flexSearchLookupUpdater],
   },
 };
 export const cells = meiosisSetup<State>(config);

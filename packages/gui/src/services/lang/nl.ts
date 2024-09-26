@@ -214,4 +214,5 @@ export const messagesNL: typeof messages = {
     save: 'Bewaren',
   },
   OTHER: 'Overig',
+  TEXT: 'Tekst',
 };

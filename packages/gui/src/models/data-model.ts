@@ -51,26 +51,14 @@ export enum LITERATURE_TYPE {
   META_ANALYSIS_PR,
 }
 
-export type SearchType =
-  | 'crimeScript'
-  | 'act'
-  | 'activity'
-  | 'condition'
-  | 'cast'
-  | 'attribute'
-  | 'location'
-  | 'geolocation'
-  | 'transport'
-  | 'product';
-
 export type SearchResult = {
   crimeScriptIdx: number;
-  actIdx: number;
-  phaseIdx: number;
-  activityIdx: number;
-  conditionIdx: number;
-  resultMd: string;
-  type: SearchType;
+  totalScore: number;
+  acts: {
+    actIdx: number;
+    phaseIdx: number;
+    score: number;
+  }[];
 };
 
 export type ID = string;
@@ -242,7 +230,7 @@ export type Activity = Labeled & {
   type?: ActivityType | ActivityType[];
   cast: ID[];
   attributes: ID[];
-  conditions: Condition[];
+  // conditions: Condition[];
   transports: ID[];
 };
 

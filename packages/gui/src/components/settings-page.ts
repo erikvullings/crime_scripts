@@ -1,10 +1,13 @@
 import m, { FactoryComponent } from 'mithril';
-import { CrimeScript, ID, Pages, SearchResult, Act, Hierarchical, Labeled, SearchType, DataModel } from '../models';
+import { CrimeScript, ID, Pages, Act, Hierarchical, Labeled, DataModel } from '../models';
 import { MeiosisComponent, routingSvc, t } from '../services';
-import { deepCopy, FormAttributes, LayoutForm, SlimdownView } from 'mithril-ui-form';
+import { deepCopy, FormAttributes, LayoutForm } from 'mithril-ui-form';
 import { Collapsible, FlatButton, Tabs } from 'mithril-materialized';
 import { attrForm, AttributeType } from '../models/forms';
 import { TextInputWithClear } from './ui/text-input-with-clear';
+import { FlexSearchResult, SearchScore } from '../services/flex-search';
+
+type ItemType = 'cast' | 'attribute' | 'location' | 'geolocation' | 'transport' | 'product';
 
 export const SettingsPage: MeiosisComponent = () => {
   let edit = false;
@@ -69,7 +72,7 @@ export const SettingsPage: MeiosisComponent = () => {
           'transports',
           t('TRANSPORTS'),
           'transport',
-          'directions_car',
+          'directions',
           transports.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
         ],
         [
@@ -87,7 +90,7 @@ export const SettingsPage: MeiosisComponent = () => {
           geoLocations.filter((a) => !labelFilter || (a.label && a.label.toLowerCase().includes(labelFilter))),
         ],
       ] as Array<
-        [id: AttributeType, label: string, type: SearchType, iconName: string, attrs: Array<Hierarchical & Labeled>]
+        [id: AttributeType, label: string, type: ItemType, iconName: string, attrs: Array<Hierarchical & Labeled>]
       >;
 
       return m(
@@ -157,7 +160,7 @@ export const SettingsPage: MeiosisComponent = () => {
 
 const AttrView: FactoryComponent<{
   attr: Array<Hierarchical & Labeled>;
-  type: SearchType;
+  type: ItemType;
   iconName?: string;
   acts: Act[];
   crimeScripts: CrimeScript[];
@@ -180,43 +183,19 @@ const AttrView: FactoryComponent<{
                     [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((phase, phaseIdx) => {
                       if (type === 'location') {
                         if (phase.locationIds) {
-                          acc.push({
-                            crimeScriptIdx,
-                            actIdx,
-                            phaseIdx,
-                            activityIdx: -1,
-                            conditionIdx: -1,
-                            type,
-                            resultMd: phase.label,
-                          });
+                          acc.push([crimeScriptIdx, actIdx, phaseIdx, SearchScore.EXACT_MATCH]);
                         }
                       } else {
-                        phase.activities?.forEach((activity, activityIdx) => {
+                        phase.activities?.forEach((activity) => {
                           if (type === 'cast') {
-                            const { label, cast = [] } = activity;
+                            const { cast = [] } = activity;
                             if (cast.includes(c.id)) {
-                              acc.push({
-                                crimeScriptIdx,
-                                actIdx,
-                                phaseIdx,
-                                activityIdx,
-                                conditionIdx: -1,
-                                type,
-                                resultMd: label,
-                              });
+                              acc.push([crimeScriptIdx, actIdx, phaseIdx, SearchScore.EXACT_MATCH]);
                             }
                           } else if (type === 'attribute') {
-                            const { label, attributes = [] } = activity;
+                            const { attributes = [] } = activity;
                             if (attributes.includes(c.id)) {
-                              acc.push({
-                                crimeScriptIdx,
-                                actIdx,
-                                phaseIdx,
-                                activityIdx,
-                                conditionIdx: -1,
-                                type,
-                                resultMd: label,
-                              });
+                              acc.push([crimeScriptIdx, actIdx, phaseIdx, SearchScore.EXACT_MATCH]);
                             }
                           }
                         });
@@ -225,7 +204,7 @@ const AttrView: FactoryComponent<{
                   });
                 });
                 return acc;
-              }, [] as SearchResult[]);
+              }, [] as FlexSearchResult[]);
 
               return {
                 header: m.trust(
@@ -243,7 +222,7 @@ const AttrView: FactoryComponent<{
                   '.cast-content',
                   m(
                     'ol',
-                    searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd }) => {
+                    searchResults.map(([crimeScriptIdx, actIdx, phaseIdx]) => {
                       const crimeScript = crimeScripts[crimeScriptIdx];
                       const act = actIdx >= 0 ? acts[actIdx] : undefined;
                       const actLabel = act ? act.label : '...';
@@ -260,7 +239,6 @@ const AttrView: FactoryComponent<{
                           },
                           `${crimeScript.label} > ${actLabel}`
                         ),
-                        m(SlimdownView, { md: resultMd, removeParagraphs: true }),
                       ]);
                     })
                   )

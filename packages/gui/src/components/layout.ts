@@ -1,12 +1,12 @@
 import m from 'mithril';
 import { Icon } from 'mithril-materialized';
 import logo from '../assets/logo.svg';
+import tno from '../assets/tno.svg';
 import { Pages, Page } from '../models';
 import { routingSvc } from '../services/routing-service';
 import { APP_TITLE, MeiosisComponent, t } from '../services';
 import { SideNav, SideNavTrigger } from './ui/sidenav';
 import { TextInputWithClear } from './ui/text-input-with-clear';
-import { SlimdownView } from 'mithril-ui-form';
 
 export const Layout: MeiosisComponent = () => {
   const style = 'font-size: 2.2rem; width: 4rem;';
@@ -52,7 +52,8 @@ export const Layout: MeiosisComponent = () => {
                     href: routingSvc.href(Pages.LANDING),
                   },
                   [
-                    m(`img[width=50][height=50][src=${logo}][alt=logo]`, {
+                    m('img[width=50][height=50][alt=logo]', {
+                      src: logo,
                       style: 'margin: 6px -6px;',
                     }),
                     m('span', { style: 'margin-left: 20px; vertical-align: top;' }, APP_TITLE),
@@ -137,25 +138,34 @@ export const Layout: MeiosisComponent = () => {
                     searchResults.length > 0 && [
                       m(
                         'ol',
-                        searchResults.map(({ crimeScriptIdx, actIdx, phaseIdx, resultMd, type }) =>
-                          m('li', [
+                        searchResults.map(({ crimeScriptIdx, totalScore, acts }) =>
+                          m(
+                            'li',
+                            `${model.crimeScripts[crimeScriptIdx].label} (score ${totalScore})`,
                             m(
-                              'a.truncate',
-                              {
-                                style: { cursor: 'pointer' },
-                                href: routingSvc.href(
-                                  Pages.CRIME_SCRIPT,
-                                  `id=${model.crimeScripts[crimeScriptIdx].id}`
-                                ),
-                                onclick: () => {
-                                  searchDialog.close();
-                                  actions.setLocation(model.crimeScripts[crimeScriptIdx].id, actIdx, phaseIdx);
-                                },
-                              },
-                              `${model.crimeScripts[crimeScriptIdx].label} > ${type}`
-                            ),
-                            m(SlimdownView, { md: resultMd, removeParagraphs: true }),
-                          ])
+                              'ul.browser-default',
+                              acts.map(({ actIdx, phaseIdx, score }) =>
+                                m(
+                                  'li',
+                                  m(
+                                    'a.truncate',
+                                    {
+                                      style: { cursor: 'pointer' },
+                                      href: routingSvc.href(
+                                        Pages.CRIME_SCRIPT,
+                                        `id=${model.crimeScripts[crimeScriptIdx].id}`
+                                      ),
+                                      onclick: () => {
+                                        searchDialog.close();
+                                        actions.setLocation(model.crimeScripts[crimeScriptIdx].id, actIdx, phaseIdx);
+                                      },
+                                    },
+                                    `${actIdx >= 0 ? model.acts[actIdx].label : t('TEXT')} (score: ${score})`
+                                  )
+                                )
+                              )
+                            )
+                          )
                         )
                       ),
                     ],
@@ -164,6 +174,19 @@ export const Layout: MeiosisComponent = () => {
             ]
           ),
           m('.container', { style: 'padding-top: 5px' }, children),
+          m(
+            'a',
+            {
+              href: 'https://www.tno.nl',
+              target: '_blank',
+              style: {
+                position: 'absolute',
+                bottom: '0',
+                right: '10px',
+              },
+            },
+            m('img[width=100][height=50][alt=TNO website][title=TNO website].right', { src: tno })
+          ),
         ]),
       ];
     },

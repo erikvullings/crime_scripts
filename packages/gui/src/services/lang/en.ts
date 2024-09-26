@@ -212,4 +212,5 @@ export const messages = {
     save: '',
   },
   OTHER: 'Other',
+  TEXT: 'Text',
 };
