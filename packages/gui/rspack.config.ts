@@ -14,7 +14,7 @@ config();
 const devMode = (process.env as any).NODE_ENV === 'development';
 const isProduction = !devMode;
 const outputPath = resolve(__dirname, isProduction ? '../../docs' : 'dist');
-const SERVER = process.env.SERVER;
+const SERVER = process.env.SERVER || 'localhost';
 const publicPath = isProduction ? 'https://erikvullings.github.io/crime_scripts/' : '';
 const APP_TITLE = 'Crime Scripting';
 const APP_DESC = 'GUI for creating and editing crime scripts';
@@ -23,7 +23,7 @@ const APP_PORT = 3498;
 console.log(
   `Running in ${
     isProduction ? 'production' : 'development'
-  } mode, serving from ${SERVER} and public path ${publicPath}, output directed to ${outputPath}.`
+  } mode, serving from ${SERVER}:${APP_PORT} and public path ${publicPath}, output directed to ${outputPath}.`
 );
 
 const configuration: Configuration = {
@@ -126,6 +126,10 @@ const configuration: Configuration = {
         type: 'css', // This is must, which tells rspack this is type of css resources
       },
     ],
+  },
+  optimization: {
+    minimize: true,
+    minimizer: [],
   },
   output: {
     filename: '[id].bundle.js',
