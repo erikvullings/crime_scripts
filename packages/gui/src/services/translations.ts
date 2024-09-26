@@ -2,6 +2,8 @@ import translate, { Options, Translate } from 'translate.js';
 import { plural_EN } from 'translate.js/pluralize';
 import { messages, messagesNL } from './lang';
 import { I18n } from 'mithril-ui-form';
+import stopwordsNl from 'stopwords-nl';
+import stopwordsEn from 'stopwords-en';
 
 export type Languages = 'nl' | 'en';
 
@@ -43,6 +45,7 @@ export const i18n = {
   init,
   addOnChangeListener,
   loadAndSetLocale,
+  stopwords: [] as string[],
 };
 
 export const I18N: I18n = {};
@@ -70,6 +73,7 @@ async function loadAndSetLocale(newLocale: Languages) {
 
   const resolvedLocale = supported(newLocale) ? newLocale : i18n.defaultLocale;
   i18n.currentLocale = resolvedLocale;
+  i18n.stopwords = newLocale === 'nl' ? stopwordsNl : stopwordsEn;
   t = setGuiLanguage(newLocale);
   I18N.agree = t('I18n', 'agree');
   I18N.disagree = t('I18n', 'disagree');
