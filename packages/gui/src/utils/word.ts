@@ -10,7 +10,7 @@ import {
   convertInchesToTwip,
 } from 'docx';
 import { saveAs } from 'file-saver';
-import { ActivityType, CrimeScript, DataModel } from '../models';
+import { ActivityType, CrimeScript, DataModel, Hierarchical, ID, Labeled } from '../models';
 import { t } from '../services';
 import { addLeadingSpaces } from '.';
 
@@ -18,9 +18,14 @@ const blue = '2F5496';
 
 /** Convert a crime script to a markdown string. */
 export const crimeScriptToMarkdown = (crimeScript: Partial<CrimeScript>, model: DataModel) => {
-  const { description, stages = [], literature } = crimeScript;
-  const { acts, cast, attributes } = model;
+  const { description, stages = [], literature, productIds, geoLocationIds } = crimeScript;
+  const { acts, cast = [], attributes = [], transports = [], products = [], geoLocations = [], locations = [] } = model;
   const phaseNames = [t('PREPARATION_PHASE'), t('PRE_ACTIVITY_PHASE'), t('ACTIVITY_PHASE'), t('POST_ACTIVITY_PHASE')];
+
+  const itemLookup = [...cast, ...attributes, ...transports, ...locations, ...products, ...geoLocations].reduce(
+    (acc, cur) => acc.set(cur.id, cur),
+    new Map<ID, Labeled & Hierarchical>()
+  );
 
   const md: string[] = [];
 
@@ -51,6 +56,24 @@ export const crimeScriptToMarkdown = (crimeScript: Partial<CrimeScript>, model: 
     newHeading(`${t('INTRODUCTION')}\n`, 1);
     md.push(description);
   }
+  if (productIds) {
+    md.push(
+      `${t('PRODUCTS', productIds.length)}: **${productIds
+        .map((id) => itemLookup.get(id))
+        .filter((i) => typeof i !== 'undefined')
+        .map((i) => i.label)
+        .join(', ')}**\n`
+    );
+  }
+  if (geoLocationIds) {
+    md.push(
+      `${t('GEOLOCATIONS', geoLocationIds.length)}: **${geoLocationIds
+        .map((id) => itemLookup.get(id))
+        .filter((i) => typeof i !== 'undefined')
+        .map((i) => i.label)
+        .join(', ')}**\n`
+    );
+  }
   stages.forEach((stage, i) => {
     const stageActs = stage.ids.map((id) => acts.find((a) => a.id === id)).filter((a) => typeof a !== 'undefined');
     newHeading(`${t('SCENE')} ${i + 1}: ${stageActs.map((a) => a.label).join(' | ')}`, 1);
@@ -61,6 +84,16 @@ export const crimeScriptToMarkdown = (crimeScript: Partial<CrimeScript>, model: 
       [act.preparation, act.preactivity, act.activity, act.postactivity].forEach((a, i) => {
         if (a && ((a.activities && a.activities.length > 0) || (a.conditions && a.conditions.length > 0))) {
           newHeading(phaseNames[i], 3);
+          if (a.locationIds && a.locationIds.length > 0) {
+            newHeading(t('LOCATIONS', a.locationIds.length), 3);
+            md.push(
+              a.locationIds
+                .map((id) => itemLookup.get(id))
+                .filter((l) => typeof l !== 'undefined')
+                .map((l) => l.label)
+                .join(', ') + '\n'
+            );
+          }
           if (a.activities && a.activities.length > 0) {
             newHeading(t('ACTIVITIES'), 4);
             const activitiesTxt = a.activities.reduce((list, activity, idx) => {
@@ -70,7 +103,7 @@ export const crimeScriptToMarkdown = (crimeScript: Partial<CrimeScript>, model: 
               if (type && type.includes(ActivityType.HAS_CAST)) {
                 const castNames = activity.cast
                   .map((c) => {
-                    const found = cast.find((cast) => cast.id === c);
+                    const found = itemLookup.get(c);
                     return found ? found.label : undefined;
                   })
                   .filter((l) => typeof l !== undefined);
@@ -79,11 +112,20 @@ export const crimeScriptToMarkdown = (crimeScript: Partial<CrimeScript>, model: 
               if (type && type.includes(ActivityType.HAS_ATTRIBUTES)) {
                 const attrNames = activity.attributes
                   .map((c) => {
-                    const found = attributes.find((attr) => attr.id === c);
+                    const found = itemLookup.get(c);
                     return found ? found.label : undefined;
                   })
                   .filter((l) => typeof l !== undefined);
                 list.push(addLeadingSpaces(`- ${t('ATTRIBUTES')}: ${attrNames.join(', ')}`, spaces));
+              }
+              if (type && type.includes(ActivityType.HAS_TRANSPORT)) {
+                const transNames = activity.transports
+                  .map((c) => {
+                    const found = itemLookup.get(c);
+                    return found ? found.label : undefined;
+                  })
+                  .filter((l) => typeof l !== undefined);
+                list.push(addLeadingSpaces(`- ${t('TRANSPORTS')}: ${transNames.join(', ')}`, spaces));
               }
               return list;
             }, [] as string[]);
