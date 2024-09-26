@@ -1,23 +1,8 @@
 import { Service } from 'meiosis-setup/types';
 import { State } from './meiosis';
-import { DataModel, Hierarchical, ID, Labeled } from '../models';
+import { DataModel, FlexSearchResult, Hierarchical, ID, Labeled, SearchScore } from '../models';
 import { i18n } from './translations';
-
-export type FlexSearchResult = [crimeScriptIdx: number, actIdx: number, phaseIdx: number, score: number];
-
-export const tokenize = (text: string = '', stopwords: string[]): string[] => {
-  return text
-    .replace(/[^\w\s]/g, '') // Remove punctuation
-    .split(/\s+/) // Split into words
-    .map((word) => word.toLowerCase()) // Convert to lowercase
-    .filter((word) => word.length > 2 && !stopwords.includes(word)); // Exclude stopwords and empty strings
-};
-
-export enum SearchScore {
-  EXACT_MATCH = 3,
-  PARENT_MATCH = 2,
-  OTHER_MATCH = 1,
-}
+import { tokenize } from '../utils';
 
 /**
  * A flexible search solution:

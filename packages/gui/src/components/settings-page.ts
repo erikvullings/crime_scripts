@@ -1,11 +1,20 @@
 import m, { FactoryComponent } from 'mithril';
-import { CrimeScript, ID, Pages, Act, Hierarchical, Labeled, DataModel } from '../models';
+import {
+  CrimeScript,
+  ID,
+  Pages,
+  Act,
+  Hierarchical,
+  Labeled,
+  DataModel,
+  FlexSearchResult,
+  SearchScore,
+} from '../models';
 import { MeiosisComponent, routingSvc, t } from '../services';
 import { deepCopy, FormAttributes, LayoutForm } from 'mithril-ui-form';
 import { Collapsible, FlatButton, Tabs } from 'mithril-materialized';
 import { attrForm, AttributeType } from '../models/forms';
 import { TextInputWithClear } from './ui/text-input-with-clear';
-import { FlexSearchResult, SearchScore } from '../services/flex-search';
 
 type ItemType = 'cast' | 'attribute' | 'location' | 'geolocation' | 'transport' | 'product';
 

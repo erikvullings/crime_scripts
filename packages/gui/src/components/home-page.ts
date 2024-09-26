@@ -1,10 +1,11 @@
 import m from 'mithril';
-import { Act, CrimeScript, Hierarchical, ID, Labeled, Pages, scriptIcon } from '../models';
-import { CrimeScriptFilter, MeiosisComponent, routingSvc } from '../services';
+import { Act, CrimeScript, CrimeScriptFilter, Hierarchical, ID, Labeled, Pages, scriptIcon } from '../models';
+import { MeiosisComponent, routingSvc } from '../services';
 import { FlatButton, uniqueId, Icon } from 'mithril-materialized';
 import { I18N, t } from '../services/translations';
-import { toCommaSeparatedList, toOptions } from '../utils';
+import { toCommaSeparatedList } from '../utils';
 import { FormAttributes, LayoutForm, UIForm } from 'mithril-ui-form';
+import { crimeScriptFilterFormFactory } from '../models/forms';
 
 export const HomePage: MeiosisComponent = () => {
   const actLocations = (cs: CrimeScript, acts: Act[]) => {
@@ -35,12 +36,21 @@ export const HomePage: MeiosisComponent = () => {
     return [...included, ...children, ...grandchildren];
   };
 
+  let crimeScriptFilterForm: UIForm<CrimeScriptFilter>;
+
   return {
     oninit: ({
       attrs: {
+        state: { model },
         actions: { setPage },
       },
     }) => {
+      const { products = [], geoLocations = [], locations = [] } = model;
+      crimeScriptFilterForm = crimeScriptFilterFormFactory(
+        products,
+        locations,
+        geoLocations
+      ) as UIForm<CrimeScriptFilter>;
       setPage(Pages.HOME);
     },
     view: ({ attrs: { state, actions } }) => {
@@ -64,34 +74,6 @@ export const HomePage: MeiosisComponent = () => {
               );
             }
           : (_cs: CrimeScript, _idx: number, _arr: CrimeScript[]) => true;
-
-      const crimeScriptFilterForm = [
-        {
-          id: 'productIds',
-          label: t('PRODUCTS', 2),
-          icon: 'filter_alt',
-          type: 'select',
-          multiple: true,
-          options: toOptions(products),
-          className: 'col s4',
-        },
-        {
-          id: 'locationIds',
-          label: t('LOCATIONS', 2),
-          type: 'select',
-          multiple: true,
-          options: toOptions(locations),
-          className: 'col s4',
-        },
-        {
-          id: 'geoLocationIds',
-          label: t('GEOLOCATIONS', 2),
-          type: 'select',
-          multiple: true,
-          options: toOptions(geoLocations),
-          className: 'col s4',
-        },
-      ] as UIForm<CrimeScriptFilter>;
 
       return m('#home-page.row.home.page', [
         isAdmin &&

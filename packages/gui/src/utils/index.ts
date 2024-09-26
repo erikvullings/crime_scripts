@@ -1,5 +1,5 @@
 import { padLeft } from 'mithril-materialized';
-import { Hierarchical, ID, Labeled } from '../models';
+import { CrimeScriptFilter, FlexSearchResult, Hierarchical, ID, Labeled, SearchResult } from '../models';
 import { t } from '../services';
 
 export const LANGUAGE = 'CSS_LANGUAGE';
@@ -236,3 +236,77 @@ export const toCommaSeparatedList = (arr: Array<Labeled> = [], ids: ID | ID[] = 
   resolveOptions(arr, ids)
     .map((a, i) => a.label)
     .join(', ');
+
+export const crimeScriptFilterToText = (arr: Array<Labeled> = [], filter = {} as CrimeScriptFilter) => {
+  const {
+    productIds = [],
+    geoLocationIds = [],
+    locationIds = [],
+    roleIds = [],
+    attributeIds = [],
+    transportIds = [],
+  } = filter;
+  return toCommaSeparatedList(arr, [
+    ...productIds,
+    ...geoLocationIds,
+    ...locationIds,
+    ...roleIds,
+    ...attributeIds,
+    ...transportIds,
+  ]);
+};
+
+/** Tokenize a text by removing punctuation, splitting the text into words, lowercasing and removing stopwords and (almost) empty strings */
+export const tokenize = (text: string = '', stopwords: string[]): string[] => {
+  return text
+    .replace(/[^\w\s]/g, '') // Remove punctuation
+    .split(/\s+/) // Split into words
+    .map((word) => word.toLowerCase()) // Convert to lowercase
+    .filter((word) => word.length > 2 && !stopwords.includes(word)); // Exclude stopwords and empty strings
+};
+
+/** Aggregate all search results to determine the most relevant crimescript (and act of that crimescript) */
+export const aggregateFlexSearchResults = (results: FlexSearchResult[]): SearchResult[] => {
+  // Step 1: Aggregate by crimeScriptIdx
+  const crimeScriptMap = new Map<number, SearchResult>();
+
+  for (const [crimeScriptIdx, actIdx, phaseIdx, score] of results) {
+    if (!crimeScriptMap.has(crimeScriptIdx)) {
+      crimeScriptMap.set(crimeScriptIdx, {
+        crimeScriptIdx,
+        totalScore: 0,
+        acts: [],
+      });
+    }
+
+    const crimeScript = crimeScriptMap.get(crimeScriptIdx)!;
+    crimeScript.totalScore += score;
+
+    const existingAct = crimeScript.acts.find((act) => act.actIdx === actIdx);
+    if (existingAct) {
+      existingAct.score += score;
+    } else {
+      crimeScript.acts.push({ actIdx, phaseIdx, score });
+    }
+  }
+
+  // Step 2: Sort the results
+  const sortedResults = Array.from(crimeScriptMap.values()).sort((a, b) => {
+    // Sort by total score of crimeScript
+    if (b.totalScore !== a.totalScore) {
+      return b.totalScore - a.totalScore;
+    }
+
+    // If total scores are equal, sort by the highest scoring act
+    const maxScoreA = Math.max(...a.acts.map((act) => act.score));
+    const maxScoreB = Math.max(...b.acts.map((act) => act.score));
+    return maxScoreB - maxScoreA;
+  });
+
+  // Sort acts within each crimeScript
+  sortedResults.forEach((crimeScript) => {
+    crimeScript.acts.sort((a, b) => b.score - a.score);
+  });
+
+  return sortedResults;
+};

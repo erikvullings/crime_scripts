@@ -188,9 +188,9 @@ export const messages = {
   SEARCH: 'Search...',
   SEARCH_TOOLTIP: 'Type / to search',
   HITS: {
-    0: 'No results found',
-    1: '1 result found',
-    n: '{n} results found',
+    0: 'No results found.',
+    1: '1 result found:',
+    n: '{n} results found:',
   },
   SYNONYMS: 'Synonyms',
   PARENTS: 'Parents',

@@ -1,24 +1,16 @@
 import { meiosisSetup } from 'meiosis-setup';
 import { MeiosisCell, MeiosisConfig, Patch, Service } from 'meiosis-setup/types';
 import m, { FactoryComponent } from 'mithril';
-import { routingSvc, t } from '.';
-import { DataModel, ID, Pages, SearchResult, Settings } from '../models';
+import { i18n, routingSvc, t } from '.';
+import { CrimeScriptFilter, DataModel, FlexSearchResult, ID, Pages, SearchResult, Settings } from '../models';
 import { User, UserRole } from './login-service';
-import { scrollToTop } from '../utils';
-import { flexSearchLookupUpdater, FlexSearchResult } from './flex-search';
+import { aggregateFlexSearchResults, crimeScriptFilterToText, scrollToTop, tokenize } from '../utils';
+import { flexSearchLookupUpdater } from './flex-search';
 
 // const settingsSvc = restServiceFactory<Settings>('settings');
 const MODEL_KEY = 'CSS_MODEL';
 const USER_ROLE = 'USER_ROLE';
 export const APP_TITLE = 'PAX - Crime Scripting';
-
-export type CrimeScriptFilter = {
-  productIds: ID[];
-  geoLocationIds: ID[];
-  locationIds: ID[];
-  attributeIds: ID[];
-  roleIds: ID[];
-};
 
 export interface State {
   page: Pages;
@@ -30,10 +22,10 @@ export interface State {
   currentCrimeScriptId?: ID;
   curActIdx?: number;
   curPhaseIdx?: number;
-  searchFilter: string;
   attributeFilter: string;
+  searchFilter: string;
   searchResults: SearchResult[];
-  caseTags: string[];
+  caseFilter: string;
   caseResults: SearchResult[];
   crimeScriptFilter: CrimeScriptFilter;
   /** For finding search results */
@@ -122,57 +114,13 @@ export const appActions: (cell: MeiosisCell<State>) => Actions = ({ update /* st
   },
 });
 
-const aggregateFlexSearchResults = (results: FlexSearchResult[]): SearchResult[] => {
-  // Step 1: Aggregate by crimeScriptIdx
-  const crimeScriptMap = new Map<number, SearchResult>();
-
-  for (const [crimeScriptIdx, actIdx, phaseIdx, score] of results) {
-    if (!crimeScriptMap.has(crimeScriptIdx)) {
-      crimeScriptMap.set(crimeScriptIdx, {
-        crimeScriptIdx,
-        totalScore: 0,
-        acts: [],
-      });
-    }
-
-    const crimeScript = crimeScriptMap.get(crimeScriptIdx)!;
-    crimeScript.totalScore += score;
-
-    const existingAct = crimeScript.acts.find((act) => act.actIdx === actIdx);
-    if (existingAct) {
-      existingAct.score += score;
-    } else {
-      crimeScript.acts.push({ actIdx, phaseIdx, score });
-    }
-  }
-
-  // Step 2: Sort the results
-  const sortedResults = Array.from(crimeScriptMap.values()).sort((a, b) => {
-    // Sort by total score of crimeScript
-    if (b.totalScore !== a.totalScore) {
-      return b.totalScore - a.totalScore;
-    }
-
-    // If total scores are equal, sort by the highest scoring act
-    const maxScoreA = Math.max(...a.acts.map((act) => act.score));
-    const maxScoreB = Math.max(...b.acts.map((act) => act.score));
-    return maxScoreB - maxScoreA;
-  });
-
-  // Sort acts within each crimeScript
-  sortedResults.forEach((crimeScript) => {
-    crimeScript.acts.sort((a, b) => b.score - a.score);
-  });
-
-  return sortedResults;
-};
 export const setSearchResults: Service<State> = {
   onchange: (state) => state.searchFilter,
   run: (cell) => {
     const state = cell.getState();
     const { lookup, searchFilter } = state;
     const allFlexResults: FlexSearchResult[] = [];
-    if (state.searchFilter) {
+    if (searchFilter) {
       const searchWords = searchFilter.trim().toLowerCase().split(/\s+/);
       searchWords
         .map((word) => lookup.get(word))
@@ -187,6 +135,33 @@ export const setSearchResults: Service<State> = {
   },
 };
 
+export const setCaseSearchResults: Service<State> = {
+  onchange: (state) => state.caseFilter + JSON.stringify(state.crimeScriptFilter || {}),
+  run: (cell) => {
+    const state = cell.getState();
+    const { lookup, caseFilter, crimeScriptFilter, model } = state;
+    const { products = [], transports = [], attributes = [], geoLocations = [], locations = [], cast = [] } = model;
+    const crimeScriptLabels = crimeScriptFilterToText(
+      [...products, ...transports, ...attributes, ...geoLocations, ...locations, ...cast],
+      crimeScriptFilter
+    );
+    console.log(`${crimeScriptLabels || ''} ${caseFilter || ''}`);
+    const allFlexResults: FlexSearchResult[] = [];
+    if (crimeScriptLabels || caseFilter) {
+      const searchWords = tokenize(`${crimeScriptLabels || ''} ${caseFilter || ''}`, i18n.stopwords);
+      searchWords
+        .map((word) => lookup.get(word))
+        .filter((results) => typeof results !== 'undefined')
+        .forEach((results) => {
+          results.forEach((res) => allFlexResults.push(res));
+        });
+    }
+    const caseResults = aggregateFlexSearchResults(allFlexResults);
+
+    cell.update({ caseResults });
+  },
+};
+
 const config: MeiosisConfig<State> = {
   app: {
     initial: {
@@ -195,8 +170,9 @@ const config: MeiosisConfig<State> = {
       role: 'user',
       settings: {} as Settings,
       model: {} as DataModel,
+      crimeScriptFilter: {} as CrimeScriptFilter,
     } as State,
-    services: [setSearchResults, flexSearchLookupUpdater],
+    services: [setSearchResults, setCaseSearchResults, flexSearchLookupUpdater],
   },
 };
 export const cells = meiosisSetup<State>(config);

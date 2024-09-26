@@ -61,6 +61,23 @@ export type SearchResult = {
   }[];
 };
 
+export enum SearchScore {
+  EXACT_MATCH = 3,
+  PARENT_MATCH = 2,
+  OTHER_MATCH = 1,
+}
+
+export type FlexSearchResult = [crimeScriptIdx: number, actIdx: number, phaseIdx: number, score: number];
+
+export type CrimeScriptFilter = {
+  productIds: ID[];
+  geoLocationIds: ID[];
+  locationIds: ID[];
+  roleIds: ID[];
+  attributeIds: ID[];
+  transportIds: ID[];
+};
+
 export type ID = string;
 
 export type Labeled = {

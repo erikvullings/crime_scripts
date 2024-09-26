@@ -190,9 +190,9 @@ export const messagesNL: typeof messages = {
   SEARCH: 'Zoek...',
   SEARCH_TOOLTIP: 'Type / om te zoeken',
   HITS: {
-    0: 'Geen resultaten gevonden',
-    1: '1 resultaat gevonden',
-    n: '{n} resultaten gevonden',
+    0: 'Geen resultaten gevonden.',
+    1: '1 resultaat gevonden:',
+    n: '{n} resultaten gevonden:',
   },
   SYNONYMS: 'Synoniemen',
   PARENTS: 'Ouders',
