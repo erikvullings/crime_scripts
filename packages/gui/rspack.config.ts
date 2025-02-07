@@ -1,19 +1,12 @@
 import { config } from 'dotenv';
 import { resolve } from 'path';
-import { Configuration } from '@rspack/cli';
-import {
-  DefinePlugin,
-  HtmlRspackPlugin,
-  HotModuleReplacementPlugin,
-  SwcJsMinimizerRspackPlugin,
-  LightningCssMinimizerRspackPlugin,
-} from '@rspack/core';
+import * as core from '@rspack/core';
 
 config();
 
 const devMode = (process.env as any).NODE_ENV === 'development';
 const isProduction = !devMode;
-const outputPath = resolve(__dirname, isProduction ? '../../docs' : 'dist');
+const outputPath = resolve(process.cwd(), isProduction ? '../../docs' : 'dist');
 const SERVER = process.env.SERVER || 'localhost';
 const publicPath = isProduction ? 'https://erikvullings.github.io/crime_scripts/' : '';
 const APP_TITLE = 'Crime Scripting';
@@ -23,10 +16,10 @@ const APP_PORT = 3498;
 console.log(
   `Running in ${
     isProduction ? 'production' : 'development'
-  } mode, serving from ${SERVER}:${APP_PORT} and public path ${publicPath}, output directed to ${outputPath}.`
+  } mode, serving from http://${SERVER}:${APP_PORT} and public path ${publicPath}, output directed to ${outputPath}.`
 );
 
-const configuration: Configuration = {
+const configuration: core.Configuration = {
   experiments: {
     css: true,
   },
@@ -39,10 +32,10 @@ const configuration: Configuration = {
   },
   devtool: devMode ? 'inline-source-map' : 'source-map',
   plugins: [
-    new DefinePlugin({
+    new core.DefinePlugin({
       'process.env.SERVER': isProduction ? `'${publicPath}'` : "'http://localhost:4545'",
     }),
-    new HtmlRspackPlugin({
+    new core.HtmlRspackPlugin({
       title: APP_TITLE,
       publicPath,
       scriptLoading: 'defer',
@@ -65,9 +58,9 @@ const configuration: Configuration = {
         'og:image:height': '200',
       },
     }),
-    new HotModuleReplacementPlugin(),
-    new LightningCssMinimizerRspackPlugin(),
-    new SwcJsMinimizerRspackPlugin({
+    new core.HotModuleReplacementPlugin(),
+    new core.LightningCssMinimizerRspackPlugin(),
+    new core.SwcJsMinimizerRspackPlugin({
       minimizerOptions: devMode
         ? {}
         : {
@@ -133,7 +126,6 @@ const configuration: Configuration = {
   },
   output: {
     filename: '[id].bundle.js',
-    publicPath,
     path: outputPath,
   },
 };
