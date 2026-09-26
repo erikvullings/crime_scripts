@@ -8,6 +8,17 @@ export const messages = {
     TITLE: 'Security first',
     DESC: 'All crime scripts are stored in a local file, and cached in your browser. Ho passwords required.',
   },
+  LANDING_GUIDE_TITLE: 'Learn PAX at your own pace',
+  LANDING_GUIDE_DESCRIPTION:
+    'Use the Dutch guide for viewing and editing scripts, importing and exporting data, and working with the provider-neutral LLM wizard.',
+  LANDING_GUIDE_OPEN: 'Open the Dutch user guide',
+  LANDING_GUIDE_VIDEO_LABEL: 'Short video walkthrough of the PAX interface',
+  LANDING_GUIDE_VIDEO_CAPTION: 'A short walkthrough of viewing, editing, and the LLM wizard.',
+  LANDING_GUIDE_ADVANCED_TITLE: 'Advanced: restricted CLI workflow',
+  LANDING_GUIDE_ADVANCED_DESCRIPTION:
+    'For authorised users who prepare a restricted script outside the browser and review it before merging.',
+  LANDING_GUIDE_CLI_OPEN: 'Open the restricted Witwassen CLI guide',
+  LANDING_GUIDE_CLI_VIDEO: 'Watch the CLI walkthrough',
   HOME: { TITLE: 'Home', ROUTE: '/home' },
   ABOUT: { TITLE: 'Definitions used in PAX', ROUTE: '/about', TEXT: situationCrimePreventionClassificationTable },
   CRIME_SCRIPT: { TITLE: 'Crime script', ROUTE: '/crime_script' },
