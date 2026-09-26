@@ -7,7 +7,9 @@ import homeScreenshot from '../../../../documentation/assets/user-guide/01-home.
 import scriptScreenshot from '../../../../documentation/assets/user-guide/02-script-view.png';
 import editorScreenshot from '../../../../documentation/assets/user-guide/03-script-edit.png';
 import llmBriefScreenshot from '../../../../documentation/assets/user-guide/04-llm-brief.png';
-import llmPromptScreenshot from '../../../../documentation/assets/user-guide/05-llm-prompt-dark.png';
+import llmPromptScreenshot from '../../../../documentation/assets/user-guide/05-llm-prompt-light.png';
+import llmJsonScreenshot from '../../../../documentation/assets/user-guide/06-llm-json-paste.png';
+import llmReviewScreenshot from '../../../../documentation/assets/user-guide/07-llm-review.png';
 import { Pages } from '../models';
 import { type MeiosisComponent, t } from '../services';
 import { routingSvc } from '../services/routing-service';
@@ -19,11 +21,13 @@ const guideAssets = new Map([
   ['assets/user-guide/02-script-view.png', scriptScreenshot],
   ['assets/user-guide/03-script-edit.png', editorScreenshot],
   ['assets/user-guide/04-llm-brief.png', llmBriefScreenshot],
-  ['assets/user-guide/05-llm-prompt-dark.png', llmPromptScreenshot],
+  ['assets/user-guide/05-llm-prompt-light.png', llmPromptScreenshot],
+  ['assets/user-guide/06-llm-json-paste.png', llmJsonScreenshot],
+  ['assets/user-guide/07-llm-review.png', llmReviewScreenshot],
 ]);
 
 const localizedGuide = [...guideAssets].reduce(
-  (markdown, [path, url]) => markdown.split(path).join(url),
+  (markdown, [path, url]) => markdown.split(path).join(url.split('_').join('%5F')),
   guideSource
 );
 const [guideIntroduction, guideBody] = localizedGuide.split(VIDEO_MARKER);
@@ -59,10 +63,24 @@ const videoSteps = [
   },
   {
     start: 12,
-    end: 18,
+    end: 15,
     time: '0:12',
     title: 'De prompt controleren',
     description: 'Controleer en kopieer de prompt naar een LLM naar keuze.',
+  },
+  {
+    start: 15,
+    end: 18,
+    time: '0:15',
+    title: 'De JSON plakken',
+    description: 'Plak uitsluitend het JSON-antwoord terug in PAX.',
+  },
+  {
+    start: 18,
+    end: 24,
+    time: '0:18',
+    title: 'Het resultaat controleren',
+    description: 'Bekijk scènes, taxonomie en bronnen vóór de importbevestiging.',
   },
 ];
 

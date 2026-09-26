@@ -18,7 +18,7 @@ export const messagesNL: typeof messages = {
   GUIDE_VIDEO_TITLE: 'Volg de rondleiding stap voor stap',
   GUIDE_VIDEO_DESCRIPTION:
     'De Nederlandse ondertiteling staat standaard aan. Kies een stap om direct naar het bijbehorende scherm te gaan.',
-  GUIDE_VIDEO_CAPTION: 'De vijf stappen hiernaast leggen uit wat er op het scherm verandert.',
+  GUIDE_VIDEO_CAPTION: 'De zeven stappen hiernaast leggen uit wat er op het scherm verandert.',
   HOME: { TITLE: 'Home', ROUTE: '/home' },
   GUIDE: { TITLE: 'Gebruikershandleiding', ROUTE: '/handleiding' },
   ABOUT: { TITLE: 'Gebruikte definities in PAX', ROUTE: '/over', TEXT: situationCrimePreventionClassificationTableNL },

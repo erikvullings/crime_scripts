@@ -17,7 +17,7 @@ export const messages = {
   GUIDE_VIDEO_TITLE: 'Follow the walkthrough step by step',
   GUIDE_VIDEO_DESCRIPTION:
     'Dutch captions are enabled by default. Select a step to jump directly to the matching screen.',
-  GUIDE_VIDEO_CAPTION: 'The five steps below explain what changes on screen.',
+  GUIDE_VIDEO_CAPTION: 'The seven steps below explain what changes on screen.',
   HOME: { TITLE: 'Home', ROUTE: '/home' },
   GUIDE: { TITLE: 'Dutch user guide', ROUTE: '/guide' },
   ABOUT: { TITLE: 'Definitions used in PAX', ROUTE: '/about', TEXT: situationCrimePreventionClassificationTable },

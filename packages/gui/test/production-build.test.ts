@@ -39,9 +39,10 @@ test('production guide ships ordered captions without restricted CLI media', () 
     end: Number(match[4]) * 60 + Number(match[5]) + Number(match[6]) / 1000,
   }));
 
-  assert.equal(cues.length, 5);
+  assert.equal(cues.length, 7);
   cues.forEach((cue, index) => {
     assert.ok(cue.end > cue.start, `caption ${index + 1} has a positive duration`);
     if (index > 0) assert.ok(cue.start >= cues[index - 1].end, `caption ${index + 1} does not overlap`);
   });
+  assert.equal(cues.at(-1)?.end, 24);
 });

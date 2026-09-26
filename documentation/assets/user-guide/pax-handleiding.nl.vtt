@@ -16,6 +16,14 @@ scènes en activiteiten aan te passen.
 Stap 4. Open Genereren met LLM en beschrijf
 taal, onderwerp, regio, detailniveau en bronnen.
 
-00:12.000 --> 00:18.000
+00:12.000 --> 00:14.950
 Stap 5. Controleer de gegenereerde prompt
 en kopieer deze naar een LLM naar keuze.
+
+00:15.000 --> 00:17.950
+Stap 6. Plak uitsluitend het JSON-antwoord terug.
+PAX verwerkt en controleert dit lokaal.
+
+00:18.000 --> 00:24.000
+Stap 7. Bekijk scènes, taxonomie en bronnen.
+Importeer pas na een inhoudelijke controle.

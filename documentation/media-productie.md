@@ -16,9 +16,13 @@ The checked-in media must be reproducible without real case data.
    - the `Phishing en betaalfraude` viewer;
    - the script editor without changing content;
    - the empty LLM brief;
-   - a prompt generated from synthetic values, in dark theme.
+   - a prompt generated from synthetic values, in light theme;
+   - deterministic synthetic JSON pasted into PAX;
+   - PAX's local validation preview before import.
 4. Save the PNG files as `01-home.png` through
-   `05-llm-prompt-dark.png` in `documentation/assets/user-guide/`.
+   `07-llm-review.png` in `documentation/assets/user-guide/`. The JSON example
+   must validate in the current wizard. Do not imply that a specific LLM
+   generated it unless that interaction was genuinely captured.
 5. Generate the silent WebM slideshow:
 
    ```sh
@@ -27,10 +31,12 @@ The checked-in media must be reproducible without real case data.
      "$PWD/documentation/assets/user-guide/02-script-view.png" \
      "$PWD/documentation/assets/user-guide/03-script-edit.png" \
      "$PWD/documentation/assets/user-guide/04-llm-brief.png" \
-     "$PWD/documentation/assets/user-guide/05-llm-prompt-dark.png" \
+     "$PWD/documentation/assets/user-guide/05-llm-prompt-light.png" \
+     "$PWD/documentation/assets/user-guide/06-llm-json-paste.png" \
+     "$PWD/documentation/assets/user-guide/07-llm-review.png" \
      > /tmp/pax-user-guide-concat.txt
    printf "file '%s'\n" \
-     "$PWD/documentation/assets/user-guide/05-llm-prompt-dark.png" \
+     "$PWD/documentation/assets/user-guide/07-llm-review.png" \
      >> /tmp/pax-user-guide-concat.txt
    ffmpeg -y -f concat -safe 0 -i /tmp/pax-user-guide-concat.txt \
      -vf "fps=24,scale=1440:900:force_original_aspect_ratio=decrease,pad=1440:900:(ow-iw)/2:(oh-ih)/2:color=white,format=yuv420p" \
@@ -39,9 +45,9 @@ The checked-in media must be reproducible without real case data.
    rm /tmp/pax-user-guide-concat.txt
    ```
 6. Keep `documentation/assets/user-guide/pax-handleiding.nl.vtt` aligned with
-   the five three-second slides. The final prompt slide remains visible until
-   18 seconds. The in-app guide uses these timestamps for both captions and
-   seekable steps.
+   the seven three-second slides. The final validation slide remains visible
+   until 24 seconds. The in-app guide uses these timestamps for both captions
+   and seekable steps.
 
 ## Publication checks
 
