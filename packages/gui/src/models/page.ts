@@ -12,6 +12,7 @@ export enum Pages {
   ABOUT = 'ABOUT',
   ARTICLE = 'ARTICLE',
   CASE = 'CASE',
+  LEARNING = 'LEARNING',
 }
 
 export type VisibilityResolver = (s: State) => boolean;

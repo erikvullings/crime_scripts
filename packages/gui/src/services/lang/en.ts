@@ -8,6 +8,10 @@ export const messages = {
     TITLE: 'Security first',
     DESC: 'All crime scripts are stored in a local file, and cached in your browser. Ho passwords required.',
   },
+  LANDING_LEARNING_TITLE: 'Practise crime-script analysis',
+  LANDING_LEARNING_DESCRIPTION:
+    'Reconstruct a script, compare your reasoning with its reference, and reflect on meaningful differences.',
+  LANDING_LEARNING_ACTION: 'Open learning mode',
   LANDING_GUIDE_TITLE: 'Learn PAX at your own pace',
   LANDING_GUIDE_DESCRIPTION:
     'Use the Dutch guide for viewing and editing scripts, importing and exporting data, and working with the provider-neutral LLM wizard.',
@@ -25,6 +29,7 @@ export const messages = {
   SETTINGS: { TITLE: 'Taxonomy', ROUTE: '/taxonomy' },
   LANDING: { TITLE: 'Introduction', ROUTE: '/' },
   CASE: { TITLE: 'Case file', ROUTE: '/case' },
+  LEARNING: { TITLE: 'Learning mode', ROUTE: '/learn' },
   ARTICLE: { TITLE: 'News', ROUTE: '/news' },
   USER: 'User',
   EDITOR: 'Editor',
@@ -144,6 +149,68 @@ export const messages = {
   USE_STARTER: 'Use starter library',
   LOAD_MODEL_FILE: 'Load your JSON model',
   GO_TO_HOME: 'Go to overview',
+  LEARNING_INTRO:
+    'Build your own interpretation of a crime script. PAX compares it with the source without treating a different answer as automatically wrong.',
+  LEARNING_CHOOSE_SOURCE: 'Choose your reference script',
+  LEARNING_SOURCE_HELP:
+    'Exercises are generated locally from scenes, activities, roles, indicators, and barriers in the available scripts.',
+  LEARNING_SOURCE: 'Reference script',
+  LEARNING_REVIEWED_ONLY: 'Use reviewed scripts only',
+  LEARNING_NO_REVIEWED: 'No reviewed scripts are available in the current script mode.',
+  LEARNING_LOADING_STARTER: 'Loading the starter library for your first exercise…',
+  LEARNING_STARTER_FALLBACK: 'No script was selected, so this exercise uses the starter library.',
+  LEARNING_LOAD_FAILED: 'The starter library could not be loaded. Return later or select a script from your workspace first.',
+  LEARNING_START: 'Start exercise',
+  LEARNING_REFERENCE_NOTE:
+    'The source is a reference for comparison, not an infallible answer key.',
+  LEARNING_UNREVIEWED_REFERENCE:
+    'This source has not been fully reviewed. Treat it as learning material, not established ground truth.',
+  LEARNING_PROGRESS: 'Exercise {current} of {total}',
+  LEARNING_EXIT: 'Choose another script',
+  LEARNING_SCENE_SELECTION_TITLE: 'Restore the missing scenes',
+  LEARNING_SCENE_SELECTION_INSTRUCTION:
+    'Select the scenes you think belong in this process. Some alternatives come from other scripts.',
+  LEARNING_SCENE_ORDER_TITLE: 'Order the scenes',
+  LEARNING_SCENE_ORDER_INSTRUCTION:
+    'Move the scenes into the order that best represents the criminal process.',
+  LEARNING_ACTIVITY_TITLE: 'Reconstruct the activities',
+  LEARNING_ACTIVITY_INSTRUCTION:
+    'Select the activities you think belong in this modus operandi.',
+  LEARNING_ROLE_TITLE: 'Assign the roles',
+  LEARNING_ROLE_INSTRUCTION:
+    'Select the roles you think participate in this activity.',
+  LEARNING_INDICATOR_TITLE: 'Identify relevant signals',
+  LEARNING_INDICATOR_INSTRUCTION:
+    'Select the indicators you would associate with this part of the process.',
+  LEARNING_MEASURE_TITLE: 'Choose possible barriers',
+  LEARNING_MEASURE_INSTRUCTION:
+    'Select the barriers you would connect to this part of the process.',
+  LEARNING_MOVE_UP: 'Move up',
+  LEARNING_MOVE_DOWN: 'Move down',
+  LEARNING_CHECK: 'Compare with reference',
+  LEARNING_MATCH_TITLE: 'Your answer matches the reference',
+  LEARNING_MATCH_DESCRIPTION:
+    'The selected content agrees with this source script. Other defensible interpretations may still exist.',
+  LEARNING_DIFF_TITLE: 'Your answer differs from the reference',
+  LEARNING_DIFF_DESCRIPTION:
+    'A difference is not automatically an error. Compare the choices and consider what evidence would support each interpretation.',
+  LEARNING_MATCHED: 'Also in the reference',
+  LEARNING_MISSING: 'Only in the reference',
+  LEARNING_ADDITIONAL: 'Your additional choices',
+  LEARNING_NONE: 'None',
+  LEARNING_ORDER_PAIRS: '{matches} of {total} relative ordering relationships match the reference.',
+  LEARNING_REFERENCE_ORDER: 'Reference order',
+  LEARNING_REFLECTION_LABEL: 'Explain your reasoning',
+  LEARNING_REFLECTION_PROMPT:
+    'What evidence supports your alternative, and what information would distinguish it from the reference?',
+  LEARNING_NEXT: 'Next exercise',
+  LEARNING_FINISH: 'Finish',
+  LEARNING_COMPLETE_TITLE: 'Exercise complete',
+  LEARNING_COMPLETE_DESCRIPTION:
+    'You compared {count} answers with the source and found {differences} differences to reflect on.',
+  LEARNING_COMPLETE_NOTE:
+    'Differences are prompts for investigation, not an automated judgment of correctness.',
+  LEARNING_NEW_EXERCISE: 'Create another exercise',
   SWITCH_TO_DUTCH: 'Switch to Dutch',
   START_EMPTY: 'Start empty',
   RETRY: 'Retry',

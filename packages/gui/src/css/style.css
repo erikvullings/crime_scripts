@@ -190,6 +190,437 @@
   color: var(--mm-nav-text);
 }
 
+.landing-learning {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1.25rem;
+  align-items: center;
+  margin-block: 2.5rem 1rem;
+  padding: 1.5rem 1.75rem;
+  background: color-mix(in srgb, var(--mm-primary-color) 9%, transparent);
+}
+
+.landing-learning-icon {
+  display: grid;
+  width: 3.25rem;
+  height: 3.25rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--mm-primary-color);
+  color: var(--mm-button-text, #fff);
+}
+
+.landing-learning-copy h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.65rem;
+}
+
+.landing-learning-copy p {
+  max-width: 65ch;
+  margin: 0;
+}
+
+.learning-page {
+  width: min(72rem, calc(100% - 2rem));
+  min-height: calc(100vh - 72px);
+  margin-inline: auto;
+  padding-block: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.learning-intro,
+.learning-exercise-header {
+  display: flex;
+  gap: 1.25rem;
+  align-items: flex-start;
+  padding-bottom: 1.75rem;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 15%, transparent);
+}
+
+.learning-intro-icon {
+  display: grid;
+  flex: 0 0 4rem;
+  height: 4rem;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--mm-primary-color);
+  color: var(--mm-button-text, #fff);
+}
+
+.learning-intro-icon .material-icons {
+  font-size: 2rem;
+}
+
+.learning-intro h1,
+.learning-exercise-header h1,
+.learning-complete h1 {
+  margin: 0 0 0.55rem;
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.12;
+}
+
+.learning-intro p {
+  max-width: 70ch;
+  margin: 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.learning-starter-note,
+.learning-reference-note,
+.learning-source-warning {
+  display: flex;
+  gap: 0.6rem;
+  align-items: flex-start;
+}
+
+.learning-starter-note {
+  margin-top: 0.75rem !important;
+  color: var(--mm-primary-color-dark);
+}
+
+.learning-starter-note .material-icons,
+.learning-reference-note .material-icons,
+.learning-source-warning .material-icons {
+  flex: 0 0 auto;
+  font-size: 1.25rem;
+}
+
+.learning-setup {
+  display: grid;
+  grid-template-columns: minmax(15rem, 0.8fr) minmax(20rem, 1.2fr);
+  gap: clamp(2rem, 7vw, 6rem);
+  padding-block: clamp(2rem, 6vw, 4rem);
+}
+
+.learning-setup h2,
+.learning-question h2 {
+  margin: 0 0 0.65rem;
+}
+
+.learning-setup-copy > p {
+  max-width: 62ch;
+  line-height: 1.6;
+}
+
+.learning-reference-note {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.learning-setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.learning-field {
+  display: grid;
+  gap: 0.4rem;
+  color: inherit;
+  font-weight: 600;
+}
+
+.learning-field select {
+  width: 100%;
+  min-height: 2.75rem;
+}
+
+.learning-toggle,
+.learning-choice {
+  color: inherit;
+}
+
+.learning-source-warning,
+.learning-empty {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  background: color-mix(in srgb, #e6a23c 13%, transparent);
+}
+
+.learning-start {
+  align-self: flex-start;
+}
+
+.learning-status,
+.learning-complete {
+  display: grid;
+  min-height: 65vh;
+  place-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.learning-status > .material-icons,
+.learning-complete > .material-icons {
+  margin-bottom: 1rem;
+  color: var(--mm-primary-color);
+  font-size: 3.5rem;
+}
+
+.learning-status p,
+.learning-complete p {
+  max-width: 62ch;
+}
+
+.learning-exercise-header {
+  display: block;
+}
+
+.learning-exercise-heading {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.learning-exercise-heading > div {
+  text-align: right;
+}
+
+.learning-exercise-heading p {
+  margin: 0;
+}
+
+.learning-progress {
+  width: 100%;
+  height: 0.45rem;
+  margin-top: 1.25rem;
+  accent-color: var(--mm-primary-color);
+}
+
+.learning-question {
+  padding-block: clamp(1.75rem, 5vw, 3.5rem);
+}
+
+.learning-question-heading {
+  max-width: 70ch;
+  margin-bottom: 1.5rem;
+}
+
+.learning-question-heading > p {
+  line-height: 1.55;
+}
+
+.learning-context {
+  margin: 0 0 1rem;
+  color: var(--mm-primary-color-dark);
+  font-weight: 600;
+}
+
+.learning-order-list,
+.learning-choice-list {
+  display: grid;
+  gap: 0.65rem;
+  max-width: 58rem;
+  margin: 0 0 1.5rem;
+}
+
+.learning-order-list {
+  padding: 0;
+  list-style: none;
+}
+
+.learning-order-item,
+.learning-choice {
+  display: flex;
+  gap: 0.9rem;
+  align-items: center;
+  min-height: 3.5rem;
+  padding: 0.8rem 1rem;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 12px;
+  background: var(--mm-surface, transparent);
+}
+
+.learning-choice {
+  cursor: pointer;
+}
+
+.learning-choice:hover,
+.learning-choice--selected {
+  background: color-mix(in srgb, var(--mm-primary-color) 10%, transparent);
+}
+
+.learning-choice:focus-within {
+  outline: 2px solid var(--mm-primary-color);
+  outline-offset: 2px;
+}
+
+.learning-order-number {
+  display: grid;
+  flex: 0 0 2rem;
+  height: 2rem;
+  place-items: center;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--mm-primary-color) 13%, transparent);
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+}
+
+.learning-candidate-copy {
+  display: grid;
+  flex: 1 1 auto;
+  gap: 0.2rem;
+}
+
+[data-mm-preset='compact-minimal'] .learning-choice > span.learning-candidate-copy {
+  display: grid;
+  height: auto;
+  line-height: normal;
+}
+
+.learning-candidate-copy small {
+  line-height: 1.45;
+  opacity: 0.78;
+}
+
+.learning-order-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 0.3rem;
+}
+
+.learning-icon-button {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  place-items: center;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.learning-icon-button:hover:not(:disabled),
+.learning-icon-button:focus-visible {
+  background: color-mix(in srgb, var(--mm-primary-color) 14%, transparent);
+}
+
+.learning-icon-button:disabled {
+  cursor: default;
+  opacity: 0.3;
+}
+
+.learning-check {
+  margin-top: 0.25rem;
+}
+
+.learning-feedback {
+  max-width: 62rem;
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--mm-primary-color) 8%, transparent);
+}
+
+.learning-feedback--match {
+  background: color-mix(in srgb, #2e7d32 11%, transparent);
+}
+
+.learning-feedback--difference {
+  background: color-mix(in srgb, #e6a23c 11%, transparent);
+}
+
+.learning-feedback-heading {
+  display: flex;
+  gap: 0.85rem;
+  align-items: flex-start;
+}
+
+.learning-feedback-heading > .material-icons {
+  color: var(--mm-primary-color-dark);
+  font-size: 1.75rem;
+}
+
+.learning-feedback-heading h3 {
+  margin: 0 0 0.35rem;
+}
+
+.learning-feedback-heading p {
+  max-width: 70ch;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.learning-comparison-columns {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.learning-comparison-group {
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+}
+
+.learning-comparison-group h4,
+.learning-order-feedback h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1rem;
+}
+
+.learning-comparison-group ul,
+.learning-order-feedback ol {
+  margin-bottom: 0;
+  padding-left: 1.25rem;
+}
+
+.learning-reflection {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1.75rem;
+  color: inherit;
+  font-weight: 600;
+}
+
+.learning-reflection small {
+  max-width: 70ch;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+.learning-reflection textarea {
+  min-height: 7rem;
+  padding: 0.75rem;
+  color: inherit;
+}
+
+.learning-next {
+  margin-top: 1.5rem;
+}
+
+@media only screen and (max-width: 700px) {
+  .landing-learning {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .landing-learning-action {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .learning-setup,
+  .learning-comparison-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .learning-exercise-heading {
+    display: grid;
+  }
+
+  .learning-exercise-heading > div {
+    text-align: left;
+  }
+
+  .learning-order-item {
+    align-items: flex-start;
+  }
+}
+
 .landing-guide {
   display: grid;
   grid-template-columns: minmax(16rem, 0.82fr) minmax(22rem, 1.18fr);

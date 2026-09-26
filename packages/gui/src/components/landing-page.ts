@@ -54,6 +54,19 @@ export const LandingPage: MeiosisComponent = () => {
             ]),
           ]),
         ]),
+        m('section.landing-learning.container[aria-labelledby=landing-learning-title]', [
+          m('.landing-learning-icon[aria-hidden=true]', m(Icon, { iconName: 'school' })),
+          m('.landing-learning-copy', [
+            m('h2#landing-learning-title', t('LANDING_LEARNING_TITLE')),
+            m('p', t('LANDING_LEARNING_DESCRIPTION')),
+          ]),
+          m(Button, {
+            className: 'landing-learning-action',
+            label: t('LANDING_LEARNING_ACTION'),
+            iconName: 'arrow_forward',
+            onclick: () => actions.changePage(Pages.LEARNING),
+          }),
+        ]),
         m(
           '.section',
           m('.row.container.center', [

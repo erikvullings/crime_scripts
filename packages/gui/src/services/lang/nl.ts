@@ -9,6 +9,10 @@ export const messagesNL: typeof messages = {
     TITLE: 'Veiligheid voorop',
     DESC: 'Alle misdaadscripts worden opgeslagen in een lokaal bestand en gecached in uw browser. Geen wachtwoord vereist, geen informatiedeling met derden. Dit bestand dient u natuurlijk wel zelf veilig te beheeren.',
   },
+  LANDING_LEARNING_TITLE: 'Oefen met crime-scriptanalyse',
+  LANDING_LEARNING_DESCRIPTION:
+    'Reconstrueer een script, vergelijk uw redenering met de referentie en reflecteer op betekenisvolle verschillen.',
+  LANDING_LEARNING_ACTION: 'Open de leermodus',
   LANDING_GUIDE_TITLE: 'Leer PAX in uw eigen tempo',
   LANDING_GUIDE_DESCRIPTION:
     'Gebruik de handleiding voor het bekijken en bewerken van scripts, het importeren en exporteren van gegevens en de provider-neutrale LLM-wizard.',
@@ -26,6 +30,7 @@ export const messagesNL: typeof messages = {
   SETTINGS: { TITLE: 'Taxonomie', ROUTE: '/taxonomie' },
   LANDING: { TITLE: 'Introductie', ROUTE: '/' },
   CASE: { TITLE: 'Casus', ROUTE: '/casus' },
+  LEARNING: { TITLE: 'Leermodus', ROUTE: '/leren' },
   ARTICLE: { TITLE: 'Nieuws', ROUTE: '/nieuws' },
   USER: 'Gebruiker',
   EDITOR: 'Redacteur',
@@ -146,6 +151,68 @@ export const messagesNL: typeof messages = {
   USE_STARTER: 'Gebruik starterbibliotheek',
   LOAD_MODEL_FILE: 'Laad je JSON-model',
   GO_TO_HOME: 'Naar overzicht',
+  LEARNING_INTRO:
+    'Bouw uw eigen interpretatie van een crime script. PAX vergelijkt die met de bron zonder een afwijkend antwoord automatisch fout te noemen.',
+  LEARNING_CHOOSE_SOURCE: 'Kies uw referentiescript',
+  LEARNING_SOURCE_HELP:
+    'Oefeningen worden lokaal opgebouwd uit scènes, activiteiten, rollen, indicatoren en barrières in de beschikbare scripts.',
+  LEARNING_SOURCE: 'Referentiescript',
+  LEARNING_REVIEWED_ONLY: 'Gebruik alleen beoordeelde scripts',
+  LEARNING_NO_REVIEWED: 'Er zijn geen beoordeelde scripts beschikbaar in de huidige scriptmodus.',
+  LEARNING_LOADING_STARTER: 'De starterbibliotheek wordt geladen voor uw eerste oefening…',
+  LEARNING_STARTER_FALLBACK: 'Er was geen script geselecteerd; daarom gebruikt deze oefening de starterbibliotheek.',
+  LEARNING_LOAD_FAILED: 'De starterbibliotheek kon niet worden geladen. Probeer het later opnieuw of selecteer eerst een script in uw werkruimte.',
+  LEARNING_START: 'Start oefening',
+  LEARNING_REFERENCE_NOTE:
+    'De bron is vergelijkingsmateriaal, geen onfeilbaar antwoordmodel.',
+  LEARNING_UNREVIEWED_REFERENCE:
+    'Deze bron is nog niet volledig beoordeeld. Gebruik hem als leermateriaal, niet als vaststaande waarheid.',
+  LEARNING_PROGRESS: 'Oefening {current} van {total}',
+  LEARNING_EXIT: 'Kies een ander script',
+  LEARNING_SCENE_SELECTION_TITLE: 'Herstel de ontbrekende scènes',
+  LEARNING_SCENE_SELECTION_INSTRUCTION:
+    'Selecteer de scènes die volgens u bij dit proces horen. Sommige alternatieven komen uit andere scripts.',
+  LEARNING_SCENE_ORDER_TITLE: 'Zet de scènes op volgorde',
+  LEARNING_SCENE_ORDER_INSTRUCTION:
+    'Plaats de scènes in de volgorde die volgens u het criminele proces het beste weergeeft.',
+  LEARNING_ACTIVITY_TITLE: 'Reconstrueer de activiteiten',
+  LEARNING_ACTIVITY_INSTRUCTION:
+    'Selecteer de activiteiten die volgens u bij deze modus operandi horen.',
+  LEARNING_ROLE_TITLE: 'Wijs de rollen toe',
+  LEARNING_ROLE_INSTRUCTION:
+    'Selecteer de rollen die volgens u bij deze activiteit betrokken zijn.',
+  LEARNING_INDICATOR_TITLE: 'Herken relevante signalen',
+  LEARNING_INDICATOR_INSTRUCTION:
+    'Selecteer de indicatoren die u met dit deel van het proces zou verbinden.',
+  LEARNING_MEASURE_TITLE: 'Kies mogelijke barrières',
+  LEARNING_MEASURE_INSTRUCTION:
+    'Selecteer de barrières die u met dit deel van het proces zou verbinden.',
+  LEARNING_MOVE_UP: 'Omhoog verplaatsen',
+  LEARNING_MOVE_DOWN: 'Omlaag verplaatsen',
+  LEARNING_CHECK: 'Vergelijk met referentie',
+  LEARNING_MATCH_TITLE: 'Uw antwoord komt overeen met de referentie',
+  LEARNING_MATCH_DESCRIPTION:
+    'De geselecteerde inhoud komt overeen met dit bronscript. Andere verdedigbare interpretaties kunnen nog steeds bestaan.',
+  LEARNING_DIFF_TITLE: 'Uw antwoord verschilt van de referentie',
+  LEARNING_DIFF_DESCRIPTION:
+    'Een verschil is niet automatisch een fout. Vergelijk de keuzes en bedenk welk bewijs elke interpretatie zou ondersteunen.',
+  LEARNING_MATCHED: 'Ook in de referentie',
+  LEARNING_MISSING: 'Alleen in de referentie',
+  LEARNING_ADDITIONAL: 'Uw aanvullende keuzes',
+  LEARNING_NONE: 'Geen',
+  LEARNING_ORDER_PAIRS: '{matches} van {total} onderlinge volgorderelaties komen overeen met de referentie.',
+  LEARNING_REFERENCE_ORDER: 'Referentievolgorde',
+  LEARNING_REFLECTION_LABEL: 'Licht uw redenering toe',
+  LEARNING_REFLECTION_PROMPT:
+    'Welk bewijs ondersteunt uw alternatief en welke informatie onderscheidt het van de referentie?',
+  LEARNING_NEXT: 'Volgende oefening',
+  LEARNING_FINISH: 'Afronden',
+  LEARNING_COMPLETE_TITLE: 'Oefening afgerond',
+  LEARNING_COMPLETE_DESCRIPTION:
+    'U vergeleek {count} antwoorden met de bron en vond {differences} verschillen om op te reflecteren.',
+  LEARNING_COMPLETE_NOTE:
+    'Verschillen zijn aanleiding voor nader onderzoek, geen automatisch oordeel over juistheid.',
+  LEARNING_NEW_EXERCISE: 'Maak nog een oefening',
   SWITCH_TO_DUTCH: 'Schakel naar Nederlands',
   START_EMPTY: 'Start leeg',
   RETRY: 'Opnieuw proberen',

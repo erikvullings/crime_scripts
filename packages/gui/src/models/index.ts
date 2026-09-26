@@ -2,6 +2,7 @@ export * from './data-model';
 export * from './activity-outline';
 export * from './icons';
 export * from './llm-script';
+export * from './learning-mode';
 export * from './model-merge';
 export * from './model-normalization';
 export * from './page';

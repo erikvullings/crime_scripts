@@ -1,5 +1,5 @@
 import m, { type RouteDefs } from 'mithril';
-import { AboutPage, CasePage, CrimeScriptPage, HomePage, LandingPage, SettingsPage } from '../components';
+import { AboutPage, CasePage, CrimeScriptPage, HomePage, LandingPage, LearningPage, SettingsPage } from '../components';
 import { Layout } from '../components/layout';
 import { type Page, Pages } from '../models';
 import { appActions, cells } from './meiosis';
@@ -48,6 +48,15 @@ class RoutingService {
         hasSidebar: false,
         visible: true, // ({ role }) => role === 'admin',
         component: CasePage,
+      },
+      {
+        id: Pages.LEARNING,
+        icon: 'school',
+        title: t('LEARNING', 'TITLE'),
+        route: t('LEARNING', 'ROUTE'),
+        hasSidebar: false,
+        visible: true,
+        component: LearningPage,
       },
       // {
       //   id: Pages.ARTICLE,

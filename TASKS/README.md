@@ -40,6 +40,14 @@ track interaction and activity-group terminology to be agreed before coding.
 - [x] 0013 Improve crime-script visualization *(needs 0010)*
 - [x] 0016 Link activities to crime scripts *(needs 0001, 0010)*
 
+## Learning
+
+Learning mode reuses the starter-library and viewer model as coached practice,
+while treating reference scripts as comparison material rather than ground
+truth.
+
+- [x] 0017 Add generic learning mode *(needs 0003, 0013)*
+
 ## Restricted workflows
 
 Restricted content remains outside the public repository; only classification, mode, safeguards, and assembly tooling are versioned here.
