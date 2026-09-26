@@ -4,8 +4,7 @@ A web application to create crime scripts.
 
 ## Documentation
 
-- [Nederlandse gebruikershandleiding](documentation/handleiding.nl.md)
-- [Korte video bij de gebruikershandleiding](documentation/assets/user-guide/pax-handleiding.webm)
+- [Nederlandse gebruikershandleiding met videorondleiding](https://tno.github.io/crime_scripts/#!/handleiding)
 - [Afgeschermd Witwassen-script maken met de CLI](documentation/restricted-witwassen-cli.nl.md)
 - [Korte video van de afgeschermde CLI-workflow](documentation/assets/restricted-cli/restricted-witwassen-cli.webm)
 - [Screenshots en video's opnieuw maken](documentation/media-productie.md)

@@ -4,7 +4,7 @@ Deze handleiding beschrijft de normale gebruikersroute, het bewerken van een
 crime script en de LLM-wizard. De beelden zijn gemaakt met openbare
 starterinhoud en synthetische testgegevens.
 
-[Bekijk de korte video (WebM, 568 kB)](assets/user-guide/pax-handleiding.webm)
+<!-- PAX_GUIDE_VIDEO -->
 
 ## 1. Werkruimte en scriptmodus
 

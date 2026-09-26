@@ -38,11 +38,18 @@ The checked-in media must be reproducible without real case data.
      documentation/assets/user-guide/pax-handleiding.webm
    rm /tmp/pax-user-guide-concat.txt
    ```
+6. Keep `documentation/assets/user-guide/pax-handleiding.nl.vtt` aligned with
+   the five three-second slides. The final prompt slide remains visible until
+   18 seconds. The in-app guide uses these timestamps for both captions and
+   seekable steps.
 
 ## Publication checks
 
 - Verify every control name against the current Dutch interface.
 - Open every relative link from `documentation/handleiding.nl.md`.
 - Check the WebM with `ffprobe`.
+- Open the in-app guide and verify that Dutch captions are enabled by default,
+  every step seeks to the matching slide, and the captions remain legible in
+  light and dark themes.
 - Ensure screenshots contain no restricted content, local paths, credentials,
   browser history, notifications, or personal bookmarks.

@@ -11,16 +11,16 @@ export const messagesNL: typeof messages = {
   },
   LANDING_GUIDE_TITLE: 'Leer PAX in uw eigen tempo',
   LANDING_GUIDE_DESCRIPTION:
-    'Gebruik de handleiding voor het bekijken en bewerken van scripts, het importeren en exporteren van gegevens en de provider-neutrale LLM-wizard.',
+    'Open de handleiding voor het bekijken en bewerken van scripts, het importeren en exporteren van gegevens en de provider-neutrale LLM-wizard.',
   LANDING_GUIDE_OPEN: 'Open de Nederlandse handleiding',
   LANDING_GUIDE_VIDEO_LABEL: 'Korte videorondleiding door de PAX-interface',
-  LANDING_GUIDE_VIDEO_CAPTION: 'Een korte rondleiding langs bekijken, bewerken en de LLM-wizard.',
-  LANDING_GUIDE_ADVANCED_TITLE: 'Geavanceerd: afgeschermde CLI-workflow',
-  LANDING_GUIDE_ADVANCED_DESCRIPTION:
-    'Voor geautoriseerde gebruikers die buiten de browser een afgeschermd script voorbereiden en vóór samenvoegen beoordelen.',
-  LANDING_GUIDE_CLI_OPEN: 'Open de CLI-handleiding voor Witwassen',
-  LANDING_GUIDE_CLI_VIDEO: 'Bekijk de CLI-rondleiding',
+  GUIDE_BACK: 'Terug naar de introductie',
+  GUIDE_VIDEO_TITLE: 'Volg de rondleiding stap voor stap',
+  GUIDE_VIDEO_DESCRIPTION:
+    'De Nederlandse ondertiteling staat standaard aan. Kies een stap om direct naar het bijbehorende scherm te gaan.',
+  GUIDE_VIDEO_CAPTION: 'De vijf stappen hiernaast leggen uit wat er op het scherm verandert.',
   HOME: { TITLE: 'Home', ROUTE: '/home' },
+  GUIDE: { TITLE: 'Gebruikershandleiding', ROUTE: '/handleiding' },
   ABOUT: { TITLE: 'Gebruikte definities in PAX', ROUTE: '/over', TEXT: situationCrimePreventionClassificationTableNL },
   CRIME_SCRIPT: { TITLE: 'Crime script', ROUTE: '/crime_script' },
   SETTINGS: { TITLE: 'Taxonomie', ROUTE: '/taxonomie' },
