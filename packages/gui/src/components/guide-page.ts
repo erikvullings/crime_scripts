@@ -22,13 +22,14 @@ import llmJsonScreenshotEn from '../../../../documentation/assets/user-guide/en/
 import llmReviewScreenshotEn from '../../../../documentation/assets/user-guide/en/07-llm-review.png';
 import { Pages } from '../models';
 import { i18n, type MeiosisComponent, t } from '../services';
+import { escapeMarkdownAssetUrl } from '../services/markdown-url';
 import { routingSvc } from '../services/routing-service';
 
 const VIDEO_MARKER = '<!-- PAX_GUIDE_VIDEO -->';
 
 const localizeGuide = (source: string, assets: Map<string, string>) =>
   [...assets].reduce(
-    (markdown, [path, url]) => markdown.split(path).join(url.split('_').join('%5F')),
+    (markdown, [path, url]) => markdown.split(path).join(escapeMarkdownAssetUrl(url)),
     source
   ).split(VIDEO_MARKER);
 
