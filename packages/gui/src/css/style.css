@@ -192,22 +192,13 @@
 
 .landing-learning {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(0, 1fr) auto;
   gap: 1.25rem;
   align-items: center;
   margin-block: 2.5rem 1rem;
   padding: 1.5rem 1.75rem;
   background: color-mix(in srgb, var(--mm-primary-color) 9%, transparent);
-}
-
-.landing-learning-icon {
-  display: grid;
-  width: 3.25rem;
-  height: 3.25rem;
-  place-items: center;
-  border-radius: 50%;
-  background: var(--mm-primary-color);
-  color: var(--mm-button-text, #fff);
+  text-align: left;
 }
 
 .landing-learning-copy h2 {
@@ -603,11 +594,10 @@
 
 @media only screen and (max-width: 700px) {
   .landing-learning {
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: 1fr;
   }
 
   .landing-learning-action {
-    grid-column: 1 / -1;
     justify-self: start;
   }
 
@@ -661,7 +651,7 @@
   line-height: 1.65;
 }
 
-.landing-guide-action {
+.landing-section-action {
   flex: 0 0 auto;
   display: inline-flex;
   min-height: 2.8rem;
@@ -671,26 +661,28 @@
   border-radius: 0.45rem;
   background: var(--mm-primary-color);
   color: var(--mm-button-text, #fff);
-  font-weight: 700;
+  font-weight: 500;
+  letter-spacing: 0.5px;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
-.landing-guide-action:hover {
+.landing-section-action:hover {
   filter: brightness(0.92);
 }
 
-.landing-guide-action:focus-visible,
+.landing-section-action:focus-visible,
 .landing-guide-advanced summary:focus-visible,
 .landing-guide-advanced a:focus-visible {
   outline: 2px solid var(--mm-primary-color);
   outline-offset: 3px;
 }
 
-.landing-guide-action .material-icons {
+.landing-section-action .material-icons {
   font-size: 1.2rem;
 }
 
-.landing-guide-action-trailing {
+.landing-section-action-trailing {
   margin-left: 0.15rem;
   opacity: 0.78;
 }

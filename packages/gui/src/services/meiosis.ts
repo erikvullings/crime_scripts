@@ -23,11 +23,11 @@ import { aggregateFlexSearchResults, crimeScriptFilterToText, scrollToTop, token
 import { i18n, routingSvc, t } from '.';
 import { flexSearchLookupUpdater } from './flex-search';
 import type { User, UserRole } from './login-service';
+import { ONBOARDING_CHOICE_KEY } from './workspace-source';
 
 // const settingsSvc = restServiceFactory<Settings>('settings');
 const PREVIEW_MODEL_KEY = 'CSS_PREVIEW_MODEL';
 const MODEL_KEY = 'CSS_MODEL';
-export const ONBOARDING_CHOICE_KEY = 'CSS_ONBOARDING_CHOICE';
 
 const translatedText = (value: unknown): string => Array.isArray(value) ? value.join('') : String(value);
 const USER_ROLE = 'CSS_USER_ROLE';
@@ -279,7 +279,8 @@ cells.map(() => {
   m.redraw();
 });
 
-export const loadData = async (ds = localStorage.getItem(MODEL_KEY)) => {
+export const loadData = async (uploadedData?: string | null) => {
+  const ds = uploadedData ?? localStorage.getItem(MODEL_KEY);
   let model: DataModel;
   let legacyActRepairs = { relinked: 0, removed: 0 };
   let danglingReferenceRepairs = { references: 0, items: 0 };
@@ -304,10 +305,11 @@ export const loadData = async (ds = localStorage.getItem(MODEL_KEY)) => {
   }
   const storedModelExists = Boolean(localStorage.getItem(MODEL_KEY));
   const onboardingChoiceExists = Boolean(localStorage.getItem(ONBOARDING_CHOICE_KEY));
-  if (ds && !storedModelExists && !onboardingChoiceExists) {
+  if (uploadedData) {
     localStorage.setItem(ONBOARDING_CHOICE_KEY, 'imported');
-  }
-  if (storedModelExists && !onboardingChoiceExists) {
+  } else if (ds && !storedModelExists && !onboardingChoiceExists) {
+    localStorage.setItem(ONBOARDING_CHOICE_KEY, 'imported');
+  } else if (storedModelExists && !onboardingChoiceExists) {
     localStorage.setItem(ONBOARDING_CHOICE_KEY, 'existing');
   }
   if (ds || storedModelExists) {
