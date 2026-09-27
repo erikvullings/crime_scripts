@@ -11,6 +11,7 @@ import { searchSelectPlugin } from './components/ui/search-select-plugin';
 import { SimpleListEditorPlugin } from './components/ui/simple-list-editor';
 import type { Languages } from './services';
 import { i18n } from './services';
+import { resolveGuiLanguage } from './services/gui-language';
 import { routingSvc } from './services/routing-service';
 import { LANGUAGE, SAVED } from './utils';
 
@@ -27,7 +28,8 @@ window.onbeforeunload = (e) => {
   e.preventDefault(); // This is necessary for older browsers
 };
 
-const guiLanguage = window.localStorage.getItem(LANGUAGE) || 'nl';
+const guiLanguage = resolveGuiLanguage(window.location.hash, window.localStorage.getItem(LANGUAGE));
+window.localStorage.setItem(LANGUAGE, guiLanguage);
 i18n.addOnChangeListener((locale: string) => {
   routingSvc.init(locale);
   m.route(document.body, routingSvc.defaultRoute, routingSvc.routingTable());

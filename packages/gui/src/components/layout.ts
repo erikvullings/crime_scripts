@@ -97,17 +97,9 @@ export const Layout: MeiosisComponent = () => {
               onclick: () => actions.completeOnboarding('empty'),
             },
             primaryAction: {
-              label: state.onboardingError
-                ? t('RETRY')
-                : i18n.currentLocale === 'nl'
-                  ? t('USE_STARTER')
-                  : t('SWITCH_TO_DUTCH'),
+              label: state.onboardingError ? t('RETRY') : t('USE_STARTER'),
               iconName: 'library_books',
               onclick: async () => {
-                if (i18n.currentLocale !== 'nl') {
-                  localStorage.setItem(LANGUAGE, 'nl');
-                  await i18n.loadAndSetLocale('nl');
-                }
                 if (await actions.completeOnboarding('starter')) {
                   actions.changePage(Pages.HOME);
                 }

@@ -1,6 +1,7 @@
 # PAX documentation
 
 - [Nederlandse gebruikershandleiding](handleiding.nl.md)
+- [English user guide](user-guide.en.md)
 - [Media opnieuw maken](media-productie.md)
 - [Restricted Witwassen-script maken met de CLI](restricted-witwassen-cli.nl.md)
 

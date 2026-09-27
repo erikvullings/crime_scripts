@@ -1,0 +1,29 @@
+WEBVTT
+
+00:00.000 --> 00:02.950
+Step 1. Open the public workspace and load the starter library
+or select an existing script.
+
+00:03.000 --> 00:05.950
+Step 2. Explore scenes, switch modus operandi,
+and highlight activities with the role pills.
+
+00:06.000 --> 00:08.950
+Step 3. Select Edit script to change script details,
+scenes, and activities.
+
+00:09.000 --> 00:11.950
+Step 4. Open Generate with LLM and describe
+the language, topic, region, detail level, and sources.
+
+00:12.000 --> 00:14.950
+Step 5. Review the generated prompt
+and copy it to an LLM of your choice.
+
+00:15.000 --> 00:17.950
+Step 6. Paste only the JSON response back into PAX.
+PAX processes and validates it locally.
+
+00:18.000 --> 00:24.000
+Step 7. Review scenes, taxonomy, and sources.
+Import only after a substantive review.

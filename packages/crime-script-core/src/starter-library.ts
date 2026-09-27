@@ -19,8 +19,8 @@ export type StarterSuggestion = (Indicator | Measure) & {
   sources: Literature[];
 };
 
-export const resolveStarterBundleUrl = (baseUrl: string): string =>
-  new URL('starter-bundles/nl.json', baseUrl).toString();
+export const resolveStarterBundleUrl = (baseUrl: string, locale: 'nl' | 'en' = 'nl'): string =>
+  new URL(`starter-bundles/${locale}.json`, baseUrl).toString();
 
 export const getMatchingStarterBundleMetadata = (
   crimeScript: Pick<CrimeScript, 'starterOrigin'>,

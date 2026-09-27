@@ -1,0 +1,29 @@
+WEBVTT
+
+00:00.000 --> 00:02.950
+Stap 1. Open de publieke werkruimte en laad de starterbibliotheek
+of kies een bestaand script.
+
+00:03.000 --> 00:05.950
+Stap 2. Bekijk scènes, wissel van modus operandi
+en markeer activiteiten met de rol-pillen.
+
+00:06.000 --> 00:08.950
+Stap 3. Kies Script bewerken om scriptgegevens,
+scènes en activiteiten aan te passen.
+
+00:09.000 --> 00:11.950
+Stap 4. Open Genereren met LLM en beschrijf
+taal, onderwerp, regio, detailniveau en bronnen.
+
+00:12.000 --> 00:14.950
+Stap 5. Controleer de gegenereerde prompt
+en kopieer deze naar een LLM naar keuze.
+
+00:15.000 --> 00:17.950
+Stap 6. Plak uitsluitend het JSON-antwoord terug.
+PAX verwerkt en controleert dit lokaal.
+
+00:18.000 --> 00:24.000
+Stap 7. Bekijk scènes, taxonomie en bronnen.
+Importeer pas na een inhoudelijke controle.

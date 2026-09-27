@@ -73,6 +73,10 @@ test('starter bundle URL respects the deployed application base path', () => {
     resolveStarterBundleUrl('https://example.test/crime_scripts/'),
     'https://example.test/crime_scripts/starter-bundles/nl.json'
   );
+  assert.equal(
+    resolveStarterBundleUrl('https://example.test/crime_scripts/', 'en'),
+    'https://example.test/crime_scripts/starter-bundles/en.json'
+  );
 });
 
 test('runtime validation accepts protected bundles without public editorial metadata', () => {
@@ -133,6 +137,53 @@ test('the Dutch starter fixture contains all researched topics', () => {
   });
   assert.deepEqual(fixture.crimeScripts.map(({ id }) => id), expectedDutchStarterIds);
   assert.deepEqual(fixture.crimeScripts.map(({ label }) => label), expectedDutchStarterLabels);
+});
+
+test('the English starter fixture mirrors the complete Dutch starter library', () => {
+  const raw = readFileSync('public/starter-bundles/en.json', 'utf8');
+  const fixture = validateStarterBundle(JSON.parse(raw));
+
+  assert.deepEqual(fixture.starterBundle, {
+    id: 'pax-en-starter',
+    version: '1.0.0',
+    locale: 'en',
+    title: 'English starter library',
+    publishedAt: '2026-09-17',
+    license: 'CC BY 4.0',
+    licenseUrl: 'https://creativecommons.org/licenses/by/4.0/',
+    attribution: 'English starter library for Crime Scripts, PAX/TNO, version 1.0.0 (2026), with AI assistance',
+    disclaimer: 'AI-generated and unreviewed; verify the content before use. Not legal advice.',
+  });
+  assert.equal(fixture.crimeScripts.length, expectedDutchStarterIds.length);
+  assert.deepEqual(
+    fixture.crimeScripts.map(({ label }) => label).sort(),
+    [
+      'Asbestos remediation chain',
+      'Co-digestion and waste streams',
+      'Cocaine import through seaports',
+      'Complex legal structures in healthcare',
+      'Criminal exploitation',
+      'Fake carriers on digital freight marketplaces',
+      'Human trafficking for sexual exploitation',
+      'Illegal asbestos removal',
+      'Illegal dumping of chemical waste',
+      'Labour exploitation',
+      'Money laundering through legitimate businesses',
+      'Phishing and payment fraud',
+      'Poaching and illegal wildlife trade',
+      'Risk chain for dog-bite incidents',
+      'Synthetic drug production',
+      'Theft of refined petroleum products through illegal pipeline tapping',
+      'Vehicle theft and export',
+    ].sort(),
+  );
+  fixture.crimeScripts.forEach((script) => {
+    assert.equal(script.language, 'en');
+    assert.equal(script.starterOrigin?.bundleId, fixture.starterBundle?.id);
+    assert.equal(script.starterOrigin?.bundleVersion, fixture.starterBundle?.version);
+    assert.match(script.id, /^en-starter:script:[a-z0-9-]+$/);
+  });
+  assert.doesNotMatch(raw, /nl-starter:/);
 });
 
 test('Dutch starter scripts meet source, provenance, scene, and editorial requirements', () => {
@@ -294,6 +345,26 @@ test('Dutch starter icon requirements cover every script exactly once', () => {
   });
 });
 
+test('English starter icon requirements cover every English script exactly once', () => {
+  const fixture = validateStarterBundle(JSON.parse(readFileSync('public/starter-bundles/en.json', 'utf8')));
+  const manifest = JSON.parse(readFileSync('public/starter-bundles/icon-requirements.en.json', 'utf8')) as {
+    bundleId: string;
+    bundleVersion: string;
+    requirements: Array<{ id: string; appliesTo: string[]; iconKey: string }>;
+  };
+
+  assert.equal(manifest.bundleId, fixture.starterBundle?.id);
+  assert.equal(manifest.bundleVersion, fixture.starterBundle?.version);
+  assert.deepEqual(
+    manifest.requirements.flatMap(({ appliesTo }) => appliesTo).sort(),
+    fixture.crimeScripts.map(({ id }) => id).sort(),
+  );
+  manifest.requirements.forEach((requirement) => {
+    assert.match(requirement.id, /^en-starter:icon:[a-z0-9-]+$/);
+    assert.ok(requirement.iconKey);
+  });
+});
+
 test('Dutch starter attribution licenses original content without relicensing sources', () => {
   const notice = readFileSync('public/starter-bundles/NOTICE.nl.md', 'utf8');
   assert.match(notice, /Creative Commons Naamsvermelding 4\.0 Internationaal/i);
@@ -302,6 +373,16 @@ test('Dutch starter attribution licenses original content without relicensing so
   assert.match(notice, /Onbeoordeeld/i);
   assert.match(notice, /bronnen[\s\S]*(?:eigen|oorspronkelijke).*licent/i);
   assert.match(notice, /geen\s+juridisch advies/i);
+});
+
+test('English starter attribution licenses original content without relicensing sources', () => {
+  const notice = readFileSync('public/starter-bundles/NOTICE.en.md', 'utf8');
+  assert.match(notice, /Creative Commons Attribution 4\.0 International/i);
+  assert.match(notice, /CC BY 4\.0/i);
+  assert.match(notice, /AI-generated/i);
+  assert.match(notice, /Unreviewed/i);
+  assert.match(notice, /sources[\s\S]*(?:own|original) licences/i);
+  assert.match(notice, /does not constitute legal advice/i);
 });
 
 test('schema-2 models gain schema-3 defaults without losing content', () => {

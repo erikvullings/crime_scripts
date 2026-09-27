@@ -1,5 +1,14 @@
 import m, { type RouteDefs } from 'mithril';
-import { AboutPage, CasePage, CrimeScriptPage, HomePage, LandingPage, LearningPage, SettingsPage } from '../components';
+import {
+  AboutPage,
+  CasePage,
+  CrimeScriptPage,
+  GuidePage,
+  HomePage,
+  LandingPage,
+  LearningPage,
+  SettingsPage,
+} from '../components';
 import { Layout } from '../components/layout';
 import { type Page, Pages } from '../models';
 import { appActions, cells } from './meiosis';
@@ -29,6 +38,14 @@ class RoutingService {
         visible: true,
         hasSidebar: true,
         component: HomePage,
+      },
+      {
+        id: Pages.GUIDE,
+        icon: 'help_outline',
+        title: t('GUIDE', 'TITLE'),
+        route: t('GUIDE', 'ROUTE'),
+        visible: false,
+        component: GuidePage,
       },
       {
         id: Pages.CRIME_SCRIPT,

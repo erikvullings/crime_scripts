@@ -1,7 +1,7 @@
 import { situationCrimePreventionClassificationTable } from '../abstract';
 
 export const messages = {
-  LANDING_CTA_DESCRIPTION: 'Load the Dutch example scripts into your local workspace and adapt them to your analysis.',
+  LANDING_CTA_DESCRIPTION: 'Load the English example scripts into your local workspace and adapt them to your analysis.',
   LANDING_CASES: { TITLE: 'Case management', DESC: 'Enter your case and find the most relevant crime scripts.' },
   LANDING_HAND: { TITLE: 'Work together', DESC: 'Work together to solve crimes and prevent them.' },
   LANDING_SECURITY: {
@@ -14,16 +14,16 @@ export const messages = {
   LANDING_LEARNING_ACTION: 'Open learning mode',
   LANDING_GUIDE_TITLE: 'Learn PAX at your own pace',
   LANDING_GUIDE_DESCRIPTION:
-    'Use the Dutch guide for viewing and editing scripts, importing and exporting data, and working with the provider-neutral LLM wizard.',
-  LANDING_GUIDE_OPEN: 'Open the Dutch user guide',
+    'Open the guide for viewing and editing scripts, importing and exporting data, and working with the provider-neutral LLM wizard.',
+  LANDING_GUIDE_OPEN: 'Open the user guide',
   LANDING_GUIDE_VIDEO_LABEL: 'Short video walkthrough of the PAX interface',
-  LANDING_GUIDE_VIDEO_CAPTION: 'A short walkthrough of viewing, editing, and the LLM wizard.',
-  LANDING_GUIDE_ADVANCED_TITLE: 'Advanced: restricted CLI workflow',
-  LANDING_GUIDE_ADVANCED_DESCRIPTION:
-    'For authorised users who prepare a restricted script outside the browser and review it before merging.',
-  LANDING_GUIDE_CLI_OPEN: 'Open the restricted Witwassen CLI guide',
-  LANDING_GUIDE_CLI_VIDEO: 'Watch the CLI walkthrough',
+  GUIDE_BACK: 'Back to introduction',
+  GUIDE_VIDEO_TITLE: 'Follow the walkthrough step by step',
+  GUIDE_VIDEO_DESCRIPTION:
+    'English captions are enabled by default. Select a step to jump directly to the matching screen.',
+  GUIDE_VIDEO_CAPTION: 'The seven steps below explain what changes on screen.',
   HOME: { TITLE: 'Home', ROUTE: '/home' },
+  GUIDE: { TITLE: 'User guide', ROUTE: '/guide' },
   ABOUT: { TITLE: 'Definitions used in PAX', ROUTE: '/about', TEXT: situationCrimePreventionClassificationTable },
   CRIME_SCRIPT: { TITLE: 'Crime script', ROUTE: '/crime_script' },
   SETTINGS: { TITLE: 'Taxonomy', ROUTE: '/taxonomy' },
@@ -145,7 +145,7 @@ export const messages = {
   RESTRICTED_SHARING_DISABLED: 'Permanent-link sharing is disabled for models containing restricted content.',
   NO_SCRIPTS_MODE: 'No scripts are available in the current mode.',
   ONBOARDING_TITLE: 'Choose your workspace',
-  ONBOARDING_DESCRIPTION: 'Start empty, switch to Dutch and load the starter library, or load your own JSON model.',
+  ONBOARDING_DESCRIPTION: 'Start with the English starter library, an empty workspace, or your own JSON model.',
   USE_STARTER: 'Use starter library',
   LOAD_MODEL_FILE: 'Load your JSON model',
   GO_TO_HOME: 'Go to overview',
@@ -223,7 +223,7 @@ export const messages = {
     '{references} references to {items} missing taxonomy items were removed automatically. The repaired model has been saved.',
   LOADING_STARTER: 'Loading starter library…',
   IMPORT_STARTER: 'Import starter library',
-  IMPORT_STARTER_EMPTY_CONFIRM: 'Load the Dutch starter library into this empty workspace?',
+  IMPORT_STARTER_EMPTY_CONFIRM: 'Load the English starter library into this empty workspace?',
   IMPORT_STARTER_PREVIEW: 'Import {count} scripts? {conflicts} conflicts will be skipped unless you choose otherwise.',
   IMPORT_CONFLICT: '"{name}" already exists. Enter skip, replace, or copy.',
   IMPORT_CONFLICT_ACTION: 'Existing script',

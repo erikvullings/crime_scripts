@@ -4,7 +4,7 @@ Deze handleiding beschrijft de normale gebruikersroute, het bewerken van een
 crime script en de LLM-wizard. De beelden zijn gemaakt met openbare
 starterinhoud en synthetische testgegevens.
 
-[Bekijk de korte video (WebM, 568 kB)](assets/user-guide/pax-handleiding.webm)
+<!-- PAX_GUIDE_VIDEO -->
 
 ## 1. Werkruimte en scriptmodus
 
@@ -88,13 +88,18 @@ Kies **Prompt maken** en controleer de gegenereerde prompt. Kopieer die zelf
 naar een LLM naar keuze. De prompt vraagt om defensieve analyse en sluit
 uitvoerbare delictinstructies en ontwijkingstactieken uit.
 
-![Gegenereerde prompt in donker thema](assets/user-guide/05-llm-prompt-dark.png)
+![Gegenereerde prompt in licht thema](assets/user-guide/05-llm-prompt-light.png)
 
 ### Stap 3 — JSON plakken
 
 Kopieer uitsluitend het JSON-antwoord van het LLM terug naar PAX. De wizard
 parseert en valideert het antwoord lokaal. Een foutmelding benoemt het veld of
 de ontbrekende verwijzing; pas het antwoord buiten PAX aan en probeer opnieuw.
+
+De afbeelding gebruikt reproduceerbare synthetische JSON. Het gebruikte LLM
+maakt niet uit voor deze handmatige, provider-neutrale overdracht.
+
+![Synthetische JSON geplakt in PAX](assets/user-guide/06-llm-json-paste.png)
 
 ### Stap 4 — Controleren en importeren
 
@@ -109,6 +114,8 @@ Controleer vóór import:
 De werkruimte verandert pas na de expliciete importbevestiging. Een
 geïmporteerd script blijft **AI-gegenereerd** en **Onbeoordeeld** totdat een
 mens het inhoudelijk heeft beoordeeld.
+
+![Lokale controle van het gegenereerde script](assets/user-guide/07-llm-review.png)
 
 ## 5. Import, export en herstel
 

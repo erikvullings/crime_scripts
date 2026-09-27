@@ -1,6 +1,7 @@
 export * from './about-page';
 export * from './case-page';
 export * from './crime-script-page';
+export * from './guide-page';
 export * from './home-page';
 export * from './landing-page';
 export * from './learning-page';
