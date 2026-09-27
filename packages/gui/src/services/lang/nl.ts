@@ -414,6 +414,7 @@ export const messagesNL: typeof messages = {
   INTRODUCTION: 'Introductie',
   SEARCH: 'Zoek...',
   SEARCH_TOOLTIP: 'Type / om te zoeken',
+  CRIME_SCRIPT_COUNT: '{count} Crime Scripts',
   HITS: {
     0: 'Geen resultaten gevonden.',
     1: '1 resultaat gevonden:',

@@ -411,6 +411,7 @@ export const messages = {
   INTRODUCTION: 'Introduction',
   SEARCH: 'Search...',
   SEARCH_TOOLTIP: 'Type / to search',
+  CRIME_SCRIPT_COUNT: '{count} Crime Scripts',
   HITS: {
     0: 'No results found.',
     1: '1 result found:',
