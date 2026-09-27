@@ -71,3 +71,6 @@ scripts.
   Verified with 105 passing GUI tests (one pre-existing skip), typecheck,
   production build, desktop/mobile/dark browser checks, keyboard-focus checks,
   and the Impeccable detector.
+- 2026-09-27 GitHub Copilot: Increased learning-choice title and description
+  typography, spacing, and contrast after live testing showed that the compact
+  preset made explanatory text difficult to read.
