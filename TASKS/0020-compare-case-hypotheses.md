@@ -1,6 +1,6 @@
 # 0020 Compare case hypotheses
 
-Status: in_progress
+Status: done
 Priority: medium
 Subsystem: frontend
 Depends on: 0019
@@ -46,3 +46,15 @@ but must be framed as questions to investigate rather than inferred facts.
 - 2026-09-27 GitHub Copilot: Started after 0019 completed. Comparison will use
   the existing typed evidence matches directly rather than recomputing or
   interpreting rendered UI labels.
+- 2026-09-27 GitHub Copilot: Added the pure `compareCaseHypotheses` helper in
+  `packages/gui/src/models/case-matching.ts` with focused tests in
+  `packages/gui/test/case-comparison.test.ts`. The case route now lets users
+  select up to three hypotheses, compares shared, distinguishing, unexplained,
+  and scene evidence without scores, and generates at most five deterministic,
+  deduplicated, candidate-balanced verification questions from indicators and
+  conditions. Analyst notes are held only in the component and are cleared with
+  the case. Added complete English/Dutch copy and responsive comparison styles.
+  Verified one-result handling, two- and three-hypothesis layouts, focus,
+  transient notes, long prompts, desktop and 390px mobile width, no console
+  errors, no horizontal overflow, the final Impeccable detector, full GUI
+  tests, typecheck, and production build.

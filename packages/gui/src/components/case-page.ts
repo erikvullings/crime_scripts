@@ -7,6 +7,7 @@ import {
   type CrimeScript,
   type CrimeScriptFilter,
   Pages,
+  compareCaseHypotheses,
   matchCaseEvidence,
 } from '../models';
 import { attributeFilterFormFactory, crimeScriptFilterFormFactory } from '../models/forms';
@@ -51,6 +52,8 @@ export const CasePage: MeiosisComponent = () => {
   let inputError = false;
   let formVersion = 0;
   let resultContext = '';
+  let selectedScriptIds = new Set<string>();
+  let analystNotes = new Map<string, string>();
 
   const focusAfterRender = (selector: string) => {
     requestAnimationFrame(() => document.querySelector<HTMLElement>(selector)?.focus());
@@ -89,6 +92,11 @@ export const CasePage: MeiosisComponent = () => {
           filters,
           tokenize: tokenizeForLanguage,
         });
+        selectedScriptIds = new Set(
+          [...selectedScriptIds].filter((scriptId) =>
+            results.some((result) => result.scriptId === scriptId)
+          )
+        );
         focusAfterRender('.case-results-heading');
       };
       const clearSearch = () => {
@@ -98,11 +106,16 @@ export const CasePage: MeiosisComponent = () => {
         hasSearched = false;
         inputError = false;
         formVersion += 1;
+        selectedScriptIds = new Set();
+        analystNotes = new Map();
         focusAfterRender('#case-observations');
       };
       if (hasSearched && resultContext !== currentContext) runSearch();
 
       const scriptsById = new Map(model.crimeScripts.map((script) => [script.id, script]));
+      const selectedResults = results.filter(({ scriptId }) => selectedScriptIds.has(scriptId));
+      const comparison = compareCaseHypotheses({ model, results: selectedResults });
+      const comparisonReady = selectedResults.length >= 2;
 
       return m('main#case-page.case-page', [
         m('header.case-intro', [
@@ -187,6 +200,8 @@ export const CasePage: MeiosisComponent = () => {
             : m('.case-result-list', results.map((result, index) => {
               const script = scriptsById.get(result.scriptId);
               if (!script) return null;
+              const selected = selectedScriptIds.has(result.scriptId);
+              const selectionLimitReached = !selected && selectedScriptIds.size >= 3;
               return m('article.case-result', { key: result.scriptId }, [
                 m('.case-result-header', [
                   m('.case-result-rank[aria-hidden=true]', index + 1),
@@ -196,6 +211,21 @@ export const CasePage: MeiosisComponent = () => {
                       m('span', script.language.toUpperCase()),
                       m('span', t(script.classification === 'restricted' ? 'RESTRICTED' : 'PUBLIC')),
                       m('span', t(reviewedScript(script) ? 'REVIEWED' : 'UNREVIEWED')),
+                    ]),
+                    results.length > 1 && m('label.case-compare-choice', [
+                      m('input[type=checkbox]', {
+                        checked: selected,
+                        disabled: selectionLimitReached,
+                        onchange: (event: InputEvent) => {
+                          const checked = (event.target as HTMLInputElement).checked;
+                          if (checked && selectedScriptIds.size < 3) {
+                            selectedScriptIds.add(result.scriptId);
+                          } else if (!checked) {
+                            selectedScriptIds.delete(result.scriptId);
+                          }
+                        },
+                      }),
+                      m('span', t('CASE_COMPARE_INCLUDE')),
                     ]),
                   ]),
                   m('.case-fit', [
@@ -272,6 +302,122 @@ export const CasePage: MeiosisComponent = () => {
                 ]),
               ]);
             })),
+          results.length > 0 && m('section.case-compare-toolbar[aria-labelledby=case-compare-heading]', [
+            m('div', [
+              m('h3#case-compare-heading', t('CASE_COMPARE_HEADING')),
+              m('p', results.length === 1
+                ? t('CASE_COMPARE_SINGLE')
+                : t('CASE_COMPARE_INTRO')),
+            ]),
+            results.length > 1 && m('.case-compare-toolbar-actions', [
+              m('p[aria-live=polite]', t('CASE_COMPARE_SELECTION_COUNT', selectedScriptIds.size)),
+              selectedScriptIds.size >= 3 && m('small', t('CASE_COMPARE_LIMIT')),
+              comparisonReady && m(Button, {
+                type: 'button',
+                label: t('CASE_COMPARE_VIEW'),
+                iconName: 'compare_arrows',
+                onclick: () => focusAfterRender('#case-comparison'),
+              }),
+            ]),
+          ]),
+          comparisonReady && m('section#case-comparison.case-comparison[tabindex=-1][aria-labelledby=case-comparison-heading]', [
+            m('.case-comparison-header', [
+              m('div', [
+                m('h3#case-comparison-heading', t('CASE_COMPARISON_HEADING', selectedResults.length)),
+                m('p', t('CASE_COMPARISON_NOTICE')),
+              ]),
+              m(Icon, { iconName: 'difference' }),
+            ]),
+            m('.case-comparison-summary', [
+              m('section', [
+                m('h4', t('CASE_SHARED_HEADING')),
+                comparison.sharedEvidence.length > 0
+                  ? m('ul.case-comparison-evidence', comparison.sharedEvidence.map(({ id, label }) =>
+                    m('li', { key: id }, label)
+                  ))
+                  : m('p', t('CASE_SHARED_EMPTY')),
+              ]),
+              m('section', [
+                m('h4', t('CASE_UNEXPLAINED_COMPARISON_HEADING')),
+                comparison.unexplainedEvidence.length > 0
+                  ? m('ul.case-comparison-evidence.case-comparison-evidence--unexplained',
+                    comparison.unexplainedEvidence.map(({ id, label }) =>
+                      m('li', { key: id }, label)
+                    )
+                  )
+                  : m('p', t('CASE_UNEXPLAINED_EMPTY')),
+              ]),
+            ]),
+            m('.case-comparison-grid', comparison.candidates.map((candidate) => {
+              const script = scriptsById.get(candidate.scriptId);
+              if (!script) return null;
+              return m('article.case-comparison-candidate', { key: candidate.scriptId }, [
+                m('h4', script.label),
+                m('section', [
+                  m('h5', t('CASE_DISTINGUISHING_HEADING')),
+                  candidate.distinguishingEvidence.length > 0
+                    ? m('ul.case-comparison-evidence',
+                      candidate.distinguishingEvidence.map(({ evidence }) =>
+                        m('li', { key: evidence.id }, evidence.label)
+                      )
+                    )
+                    : m('p', t('CASE_DISTINGUISHING_EMPTY')),
+                ]),
+                candidate.scenes.length > 0 && m('section.case-comparison-scenes', [
+                  m('h5', t('CASE_COMPARE_SCENES')),
+                  m('ul', candidate.scenes.slice(0, 3).map((scene) =>
+                    m('li', { key: `${scene.sceneId}:${scene.variantId || ''}` }, [
+                      m('a', {
+                        href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${script.id}`),
+                        onclick: () => {
+                          if (scene.variantId) {
+                            actions.setLocation(script.id, scene.variantId, scene.sceneId);
+                          }
+                        },
+                      }, scene.variantLabel
+                        && scene.variantLabel !== scene.sceneLabel
+                        ? `${scene.sceneLabel} — ${scene.variantLabel}`
+                        : scene.sceneLabel),
+                    ])
+                  )),
+                ]),
+                m('label.case-analyst-note', [
+                  m('span', t('CASE_ANALYST_NOTE')),
+                  m('textarea', {
+                    rows: 4,
+                    value: analystNotes.get(candidate.scriptId) || '',
+                    placeholder: t('CASE_ANALYST_NOTE_PLACEHOLDER'),
+                    oninput: (event: InputEvent) => {
+                      analystNotes.set(
+                        candidate.scriptId,
+                        (event.target as HTMLTextAreaElement).value
+                      );
+                    },
+                  }),
+                ]),
+              ]);
+            })),
+            m('section.case-follow-up[aria-labelledby=case-follow-up-heading]', [
+              m('.case-follow-up-heading', [
+                m(Icon, { iconName: 'fact_check' }),
+                m('div', [
+                  m('h4#case-follow-up-heading', t('CASE_FOLLOW_UP_HEADING')),
+                  m('p', t('CASE_FOLLOW_UP_NOTICE')),
+                ]),
+              ]),
+              comparison.followUpPrompts.length > 0
+                ? m('ol', comparison.followUpPrompts.map((prompt) => {
+                  const labels = prompt.scriptIds
+                    .map((scriptId) => scriptsById.get(scriptId)?.label)
+                    .filter((label): label is string => Boolean(label));
+                  return m('li', { key: prompt.id }, [
+                    m('strong', t('CASE_FOLLOW_UP_QUESTION', { label: prompt.label })),
+                    m('span', t('CASE_APPEARS_IN', { scripts: labels.join(', ') })),
+                  ]);
+                }))
+                : m('p', t('CASE_FOLLOW_UP_EMPTY')),
+            ]),
+          ]),
         ]),
       ]);
     },

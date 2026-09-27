@@ -188,6 +188,42 @@ export const messagesNL: typeof messages = {
   CASE_NO_MATCHES_TITLE: 'Geen scripts voldoen aan deze vereisten',
   CASE_NO_MATCHES_BODY:
     'Verwijder een onzeker verplicht kenmerk, gebruik een synoniem of beschrijf de waarneming algemener.',
+  CASE_COMPARE_HEADING: 'Vergelijk hypothesen',
+  CASE_COMPARE_INTRO:
+    'Selecteer twee of drie scripts om te vergelijken wat ze verklaren en wat ze kan onderscheiden.',
+  CASE_COMPARE_SINGLE:
+    'Er is maar één hypothese beschikbaar. Verfijn de waarnemingen om een alternatief te vinden.',
+  CASE_COMPARE_SELECTION_COUNT: {
+    0: 'Geen hypothesen geselecteerd',
+    1: '1 van 3 hypothesen geselecteerd',
+    n: '{n} van 3 hypothesen geselecteerd',
+  },
+  CASE_COMPARE_LIMIT: 'Verwijder één selectie voordat u een andere toevoegt.',
+  CASE_COMPARE_INCLUDE: 'Opnemen in vergelijking',
+  CASE_COMPARE_VIEW: 'Bekijk vergelijking',
+  CASE_COMPARISON_HEADING: {
+    1: 'Vergelijking van 1 hypothese',
+    n: 'Vergelijking van {n} hypothesen',
+  },
+  CASE_COMPARISON_NOTICE:
+    'Gebruik de verschillen om alternatieven te toetsen. Overeenkomst met een script bevestigt niet dat dit is gebeurd.',
+  CASE_SHARED_HEADING: 'Bewijs dat alle hypothesen delen',
+  CASE_SHARED_EMPTY: 'Geen ingevoerde waarneming komt in alle geselecteerde hypothesen voor.',
+  CASE_UNEXPLAINED_COMPARISON_HEADING: 'Bewijs dat geen van de hypothesen verklaart',
+  CASE_UNEXPLAINED_EMPTY: 'Samen dekken de geselecteerde hypothesen alle ingevoerde waarnemingen.',
+  CASE_DISTINGUISHING_HEADING: 'Bewijs dat deze hypothese onderscheidt',
+  CASE_DISTINGUISHING_EMPTY:
+    'Geen ingevoerde waarneming onderscheidt deze hypothese van alle andere selecties.',
+  CASE_COMPARE_SCENES: 'Relevante scènes',
+  CASE_ANALYST_NOTE: 'Tijdelijke analistennotitie',
+  CASE_ANALYST_NOTE_PLACEHOLDER: 'Waarom deze hypothese behouden, afwijzen of opnieuw bekijken?',
+  CASE_FOLLOW_UP_HEADING: 'Vragen om te verifiëren',
+  CASE_FOLLOW_UP_NOTICE:
+    'Dit zijn mogelijke bewijscontroles op basis van scriptindicatoren en -voorwaarden. Het zijn geen bekende feiten of onderzoeksinstructies.',
+  CASE_FOLLOW_UP_QUESTION: 'Is er waarneembaar bewijs voor ‘{label}’?',
+  CASE_APPEARS_IN: 'Komt voor in: {scripts}',
+  CASE_FOLLOW_UP_EMPTY:
+    'De geselecteerde scripts bevatten geen onderscheidende indicatoren of voorwaarden om vragen van te maken.',
   ONBOARDING_TITLE: 'Kies je werkruimte',
   ONBOARDING_DESCRIPTION: 'Start met de Nederlandse starterbibliotheek, met een lege werkruimte of laad je eigen JSON-model.',
   USE_STARTER: 'Gebruik starterbibliotheek',

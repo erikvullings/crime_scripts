@@ -56,7 +56,7 @@ last.
 
 - [x] 0018 Make case matching reliable
 - [x] 0019 Explain case search results *(needs 0018)*
-- [ ] 0020 Compare case hypotheses *(needs 0019)*
+- [x] 0020 Compare case hypotheses *(needs 0019)*
 
 ## Restricted workflows
 

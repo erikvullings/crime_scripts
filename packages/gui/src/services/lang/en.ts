@@ -186,6 +186,42 @@ export const messages = {
   CASE_NO_MATCHES_TITLE: 'No scripts meet these constraints',
   CASE_NO_MATCHES_BODY:
     'Remove an uncertain required characteristic, use a synonym, or describe the observation more broadly.',
+  CASE_COMPARE_HEADING: 'Compare hypotheses',
+  CASE_COMPARE_INTRO:
+    'Select two or three scripts to compare what they explain and what could distinguish them.',
+  CASE_COMPARE_SINGLE:
+    'Only one hypothesis is available. Refine the observations to find an alternative to compare.',
+  CASE_COMPARE_SELECTION_COUNT: {
+    0: 'No hypotheses selected',
+    1: '1 of 3 hypotheses selected',
+    n: '{n} of 3 hypotheses selected',
+  },
+  CASE_COMPARE_LIMIT: 'Remove one selection before adding another.',
+  CASE_COMPARE_INCLUDE: 'Include in comparison',
+  CASE_COMPARE_VIEW: 'View comparison',
+  CASE_COMPARISON_HEADING: {
+    1: 'Comparison of 1 hypothesis',
+    n: 'Comparison of {n} hypotheses',
+  },
+  CASE_COMPARISON_NOTICE:
+    'Use the differences to test alternatives. Similarity with a script does not confirm that it occurred.',
+  CASE_SHARED_HEADING: 'Evidence shared by every hypothesis',
+  CASE_SHARED_EMPTY: 'No entered observation is shared by every selected hypothesis.',
+  CASE_UNEXPLAINED_COMPARISON_HEADING: 'Evidence unexplained by every hypothesis',
+  CASE_UNEXPLAINED_EMPTY: 'Together, the selected hypotheses cover every entered observation.',
+  CASE_DISTINGUISHING_HEADING: 'Evidence that distinguishes this hypothesis',
+  CASE_DISTINGUISHING_EMPTY:
+    'No entered observation distinguishes this hypothesis from all other selections.',
+  CASE_COMPARE_SCENES: 'Relevant scenes',
+  CASE_ANALYST_NOTE: 'Transient analyst note',
+  CASE_ANALYST_NOTE_PLACEHOLDER: 'Why retain, reject, or revisit this hypothesis?',
+  CASE_FOLLOW_UP_HEADING: 'Questions to verify',
+  CASE_FOLLOW_UP_NOTICE:
+    'These are possible evidence checks derived from script indicators and conditions. They are not known facts or investigative instructions.',
+  CASE_FOLLOW_UP_QUESTION: 'Is there observable evidence of “{label}”?',
+  CASE_APPEARS_IN: 'Appears in: {scripts}',
+  CASE_FOLLOW_UP_EMPTY:
+    'The selected scripts contain no distinct indicators or conditions to turn into questions.',
   ONBOARDING_TITLE: 'Choose your workspace',
   ONBOARDING_DESCRIPTION: 'Start with the English starter library, an empty workspace, or your own JSON model.',
   USE_STARTER: 'Use starter library',

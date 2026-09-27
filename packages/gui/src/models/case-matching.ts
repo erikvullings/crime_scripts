@@ -78,6 +78,32 @@ export type CaseMatchRequest = {
   tokenize: CaseTokenizer;
 };
 
+export type CaseComparisonCandidate = {
+  scriptId: ID;
+  distinguishingEvidence: CaseEvidenceMatch[];
+  scenes: CaseSceneMatch[];
+};
+
+export type CaseFollowUpPrompt = {
+  id: string;
+  field: 'condition' | 'indicator';
+  label: string;
+  scriptIds: ID[];
+};
+
+export type CaseHypothesisComparison = {
+  sharedEvidence: CaseEvidenceItem[];
+  candidates: CaseComparisonCandidate[];
+  unexplainedEvidence: CaseEvidenceItem[];
+  followUpPrompts: CaseFollowUpPrompt[];
+};
+
+export type CaseComparisonRequest = {
+  model: DataModel;
+  results: CaseMatchResult[];
+  promptLimit?: number;
+};
+
 type FilterKey = keyof CrimeScriptFilter;
 
 type SearchRecord = CaseMatchLocation & {
@@ -115,6 +141,125 @@ const FIELD_BY_FILTER: Record<FilterKey, CaseMatchField> = {
 const unique = <T>(values: T[]) => [...new Set(values)];
 
 const rawTerms = (text: string) => text.match(/[\p{L}\p{N}][\p{L}\p{N}'’-]*/gu) || [];
+
+const normalizeComparisonLabel = (label: string) =>
+  label
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .toLocaleLowerCase()
+    .replace(/[^\p{L}\p{N}]+/gu, ' ')
+    .trim();
+
+const comparisonEvidenceKey = ({ id, label, source }: CaseEvidenceItem) =>
+  source === 'structured'
+    ? id
+    : `text:${normalizeComparisonLabel(label)}`;
+
+export const compareCaseHypotheses = ({
+  model,
+  results,
+  promptLimit = 5,
+}: CaseComparisonRequest): CaseHypothesisComparison => {
+  const evidenceByKey = new Map<string, CaseEvidenceItem>();
+  const matchedScriptsByKey = new Map<string, Set<ID>>();
+
+  results.forEach((result) => {
+    [...result.matchedEvidence.map(({ evidence }) => evidence), ...result.unmatchedEvidence]
+      .forEach((evidence) => evidenceByKey.set(comparisonEvidenceKey(evidence), evidence));
+    result.matchedEvidence.forEach(({ evidence }) => {
+      const key = comparisonEvidenceKey(evidence);
+      const scriptIds = matchedScriptsByKey.get(key) || new Set<ID>();
+      scriptIds.add(result.scriptId);
+      matchedScriptsByKey.set(key, scriptIds);
+    });
+  });
+
+  const selectedScriptIds = results.map(({ scriptId }) => scriptId);
+  const factors = new Map<string, CaseFollowUpPrompt & { scriptIdSet: Set<ID> }>();
+  if (results.length > 1) {
+    model.crimeScripts
+      .filter(({ id }) => selectedScriptIds.includes(id))
+      .forEach((script) => {
+        script.stages.forEach((scene) => {
+          scene.variants.forEach((variant) => {
+            ([
+              ['indicator', variant.indicators || []],
+              ['condition', variant.conditions || []],
+            ] as const).forEach(([field, items]) => {
+              items.forEach(({ label }) => {
+                const normalizedLabel = normalizeComparisonLabel(label);
+                if (!normalizedLabel) return;
+                const existing = factors.get(normalizedLabel);
+                if (existing) {
+                  existing.scriptIdSet.add(script.id);
+                  return;
+                }
+                factors.set(normalizedLabel, {
+                  id: `${field}:${normalizedLabel}`,
+                  field,
+                  label,
+                  scriptIds: [],
+                  scriptIdSet: new Set([script.id]),
+                });
+              });
+            });
+          });
+        });
+      });
+  }
+
+  const factorRank = (
+    left: CaseFollowUpPrompt & { scriptIdSet: Set<ID> },
+    right: CaseFollowUpPrompt & { scriptIdSet: Set<ID> }
+  ) =>
+    left.scriptIdSet.size - right.scriptIdSet.size ||
+    Number(left.field === 'condition') - Number(right.field === 'condition') ||
+    left.label.localeCompare(right.label);
+  const remainingFactors = [...factors.values()]
+    .filter(({ scriptIdSet }) => scriptIdSet.size < results.length)
+    .sort(factorRank);
+  const promptCountByScript = new Map(selectedScriptIds.map((scriptId) => [scriptId, 0]));
+  const selectedFactors = [];
+  while (selectedFactors.length < Math.max(0, promptLimit) && remainingFactors.length > 0) {
+    remainingFactors.sort((left, right) => {
+      const leftCount = Math.min(
+        ...[...left.scriptIdSet].map((scriptId) => promptCountByScript.get(scriptId) || 0)
+      );
+      const rightCount = Math.min(
+        ...[...right.scriptIdSet].map((scriptId) => promptCountByScript.get(scriptId) || 0)
+      );
+      return leftCount - rightCount || factorRank(left, right);
+    });
+    const next = remainingFactors.shift();
+    if (!next) break;
+    selectedFactors.push(next);
+    next.scriptIdSet.forEach((scriptId) =>
+      promptCountByScript.set(scriptId, (promptCountByScript.get(scriptId) || 0) + 1)
+    );
+  }
+  const followUpPrompts = selectedFactors
+    .map(({ scriptIdSet, ...prompt }) => ({
+      ...prompt,
+      scriptIds: selectedScriptIds.filter((scriptId) => scriptIdSet.has(scriptId)),
+    }));
+
+  return {
+    sharedEvidence: [...evidenceByKey]
+      .filter(([key]) => matchedScriptsByKey.get(key)?.size === results.length)
+      .map(([, evidence]) => evidence),
+    candidates: results.map((result) => ({
+      scriptId: result.scriptId,
+      distinguishingEvidence: result.matchedEvidence.filter(({ evidence }) =>
+        (matchedScriptsByKey.get(comparisonEvidenceKey(evidence))?.size || 0) < results.length
+      ),
+      scenes: result.scenes,
+    })),
+    unexplainedEvidence: [...evidenceByKey]
+      .filter(([key]) => !matchedScriptsByKey.has(key))
+      .map(([, evidence]) => evidence),
+    followUpPrompts,
+  };
+};
 
 const textEvidence = (
   text: string,
