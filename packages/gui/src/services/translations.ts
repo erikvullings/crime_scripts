@@ -54,15 +54,28 @@ export const I18N: I18n = {};
 
 export let t: Translate<typeof messages, Options> = setGuiLanguage(i18n.currentLocale);
 
-// export let stemmer: Stemmer;
-// export let tokenizer = new WordTokenizer();
+const languageStemmers = new Map<Languages, LanguageStemmer>();
+
+const stemmerFor = (language: Languages) => {
+  const existing = languageStemmers.get(language);
+  if (existing) return existing;
+  const stemmer = new LanguageStemmer(language);
+  languageStemmers.set(language, stemmer);
+  return stemmer;
+};
+
+export const tokenizeForLanguage = (text: string, language: Languages) => {
+  const stopwords = language === 'nl' ? stopwordsNl : stopwordsEn;
+  return stemmerFor(language)
+    .stemText(text)
+    .filter((word) => word.length > 2 && !stopwords.includes(word));
+};
 
 async function init(locales: Locales, selectedLocale: Languages) {
   i18n.locales = locales;
   const defaultLocale = (Object.keys(locales) as Languages[]).filter((l) => (locales[l] as Locale).default).shift();
   if (defaultLocale) {
     i18n.defaultLocale = defaultLocale || selectedLocale;
-    i18n.stemmer = new LanguageStemmer(i18n.defaultLocale);
   }
   document.documentElement.setAttribute('lang', selectedLocale);
   await loadAndSetLocale(selectedLocale);
@@ -75,6 +88,7 @@ function addOnChangeListener(listener: Listener) {
 async function loadAndSetLocale(newLocale: Languages) {
   const resolvedLocale = supported(newLocale) ? newLocale : i18n.defaultLocale;
   i18n.currentLocale = resolvedLocale;
+  i18n.stemmer = stemmerFor(resolvedLocale);
   document.documentElement.setAttribute('lang', resolvedLocale);
   i18n.stopwords = resolvedLocale === 'nl' ? stopwordsNl : stopwordsEn;
   // stemmer = newLocale === 'nl' ? PorterStemmerNl : PorterStemmer;

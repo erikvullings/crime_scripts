@@ -25,9 +25,7 @@ export const CasePage: MeiosisComponent = () => {
     view: ({ attrs: { state, actions } }) => {
       const { caseResults = [], caseFilter, crimeScriptFilter = {} as CrimeScriptFilter, model, scriptMode } = state;
       const visibleScriptIds = new Set(scriptsForMode(model.crimeScripts, scriptMode).map(({ id }) => id));
-      const visibleCaseResults = caseResults.filter(({ crimeScriptIdx }) =>
-        visibleScriptIds.has(model.crimeScripts[crimeScriptIdx]?.id)
-      );
+      const visibleCaseResults = caseResults.filter(({ scriptId }) => visibleScriptIds.has(scriptId));
       const { update } = actions;
 
       return m('#case-page.row.case.page', [
@@ -57,35 +55,34 @@ export const CasePage: MeiosisComponent = () => {
             visibleCaseResults.length > 0 && [
               m(
                 'ol',
-                visibleCaseResults.map(({ crimeScriptIdx, totalScore, acts }) =>
-                  m(
+                visibleCaseResults.map(({ scriptId, score, scenes }) => {
+                  const script = model.crimeScripts.find(({ id }) => id === scriptId);
+                  return script && m(
                     'li',
-                    `${model.crimeScripts[crimeScriptIdx].label} (score ${totalScore})`,
-                    m(
+                    `${script.label} (score ${score})`,
+                    scenes.length > 0 && m(
                       'ul.browser-default',
-                      acts.map(({ sceneIdx, variantIdx, score }) => {
-                        const scene = model.crimeScripts[crimeScriptIdx].stages[sceneIdx];
-                        const variant = scene?.variants[variantIdx];
-                        return m(
+                      scenes.map((scene) =>
+                        m(
                           'li',
                           m(
                             'a.truncate',
                             {
                               style: { cursor: 'pointer' },
-                              href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${model.crimeScripts[crimeScriptIdx].id}`),
+                              href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${script.id}`),
                               onclick: () => {
-                                if (scene && variant) {
-                                  actions.setLocation(model.crimeScripts[crimeScriptIdx].id, variant.id, scene.id);
+                                if (scene.variantId) {
+                                  actions.setLocation(script.id, scene.variantId, scene.sceneId);
                                 }
                               },
                             },
-                            `${variant?.label || t('TEXT')} (score: ${score})`
+                            `${scene.variantLabel || scene.sceneLabel} (score: ${scene.strength})`
                           )
-                        );
-                      })
+                        )
+                      )
                     )
-                  )
-                )
+                  );
+                })
               ),
             ],
           ]),

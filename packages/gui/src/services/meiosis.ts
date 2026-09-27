@@ -4,6 +4,7 @@ import m, { type FactoryComponent } from 'mithril';
 import { snackbar } from 'mithril-materialized';
 import {
   type CrimeScriptFilter,
+  type CaseMatchResult,
   type DataModel,
   type FlexSearchResult,
   type ID,
@@ -16,11 +17,12 @@ import {
   resolveStarterBundleUrl,
   validateStarterBundle,
   Pages,
+  matchCaseEvidence,
   type SearchResult,
   type Settings,
 } from '../models';
-import { aggregateFlexSearchResults, crimeScriptFilterToText, scrollToTop, tokenize } from '../utils';
-import { i18n, routingSvc, t } from '.';
+import { aggregateFlexSearchResults, scrollToTop, tokenize } from '../utils';
+import { i18n, routingSvc, t, tokenizeForLanguage } from '.';
 import { flexSearchLookupUpdater } from './flex-search';
 import type { User, UserRole } from './login-service';
 
@@ -50,7 +52,7 @@ export interface State {
   searchFilter: string;
   searchResults: SearchResult[];
   caseFilter: string;
-  caseResults: SearchResult[];
+  caseResults: CaseMatchResult[];
   crimeScriptFilter: CrimeScriptFilter;
   /** For finding search results */
   lookup: Map<string, FlexSearchResult[]>;
@@ -232,28 +234,25 @@ export const setSearchResults: Service<State> = {
 };
 
 export const setCaseSearchResults: Service<State> = {
-  onchange: (state) => state.caseFilter + JSON.stringify(state.crimeScriptFilter || {}),
+  onchange: (state) =>
+    [
+      state.caseFilter,
+      JSON.stringify(state.crimeScriptFilter || {}),
+      state.scriptMode,
+      state.model.lastUpdate,
+    ].join('|'),
   run: (cell) => {
     const state = cell.getState();
-    const { lookup, caseFilter, crimeScriptFilter, model } = state;
-    const { products = [], transports = [], attributes = [], geoLocations = [], locations = [], cast = [] } = model;
-    const crimeScriptLabels = crimeScriptFilterToText(
-      [...products, ...transports, ...attributes, ...geoLocations, ...locations, ...cast],
-      crimeScriptFilter
-    );
-    const allFlexResults: FlexSearchResult[] = [];
-    if (crimeScriptLabels || caseFilter) {
-      const searchWords = tokenize(`${crimeScriptLabels || ''} ${caseFilter || ''}`, i18n.stopwords);
-      searchWords
-        .map((word) => lookup.get(word))
-        .filter((results) => typeof results !== 'undefined')
-        .forEach((results) => {
-          results.forEach((res) => allFlexResults.push(res));
-        });
-    }
-    const caseResults = aggregateFlexSearchResults(allFlexResults);
-
-    cell.update({ caseResults });
+    const { caseFilter, crimeScriptFilter, model, scriptMode } = state;
+    cell.update({
+      caseResults: matchCaseEvidence({
+        model,
+        scriptMode,
+        text: caseFilter,
+        filters: crimeScriptFilter,
+        tokenize: tokenizeForLanguage,
+      }),
+    });
   },
 };
 

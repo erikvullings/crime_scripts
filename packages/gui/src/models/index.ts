@@ -1,5 +1,6 @@
 export * from './data-model';
 export * from './activity-outline';
+export * from './case-matching';
 export * from './icons';
 export * from './llm-script';
 export * from './learning-mode';

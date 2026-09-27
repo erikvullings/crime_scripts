@@ -48,6 +48,16 @@ truth.
 
 - [x] 0017 Add generic learning mode *(needs 0003, 0013)*
 
+## Case analysis
+
+Case analysis is implemented in three stages: reliable retrieval first,
+explainable evidence and results second, and comparative hypothesis testing
+last.
+
+- [x] 0018 Make case matching reliable
+- [ ] 0019 Explain case search results *(needs 0018)*
+- [ ] 0020 Compare case hypotheses *(needs 0019)*
+
 ## Restricted workflows
 
 Restricted content remains outside the public repository; only classification, mode, safeguards, and assembly tooling are versioned here.
