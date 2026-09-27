@@ -105,7 +105,7 @@ test('the production deployment contains the catalogue metadata, notice, and eve
   const catalogue = readJson<CatalogueManifest>('icons/catalogue.json');
   const deployedRoot = '../../docs/icons';
 
-  ['nl.json', 'icon-requirements.nl.json'].forEach((file) => {
+  ['nl.json', 'en.json', 'icon-requirements.nl.json', 'icon-requirements.en.json', 'NOTICE.nl.md', 'NOTICE.en.md'].forEach((file) => {
     assert.equal(
       readFileSync(`../../docs/starter-bundles/${file}`, 'utf8'),
       readFileSync(publicFile(`starter-bundles/${file}`), 'utf8')

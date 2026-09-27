@@ -356,7 +356,7 @@ export const loadData = async (ds = localStorage.getItem(MODEL_KEY)) => {
 };
 
 export const fetchStarterBundle = async (): Promise<DataModel> => {
-  const response = await fetch(resolveStarterBundleUrl(document.baseURI), { credentials: 'same-origin' });
+  const response = await fetch(resolveStarterBundleUrl(document.baseURI, i18n.currentLocale), { credentials: 'same-origin' });
   if (!response.ok) throw new Error(`Starter library could not be loaded (${response.status}).`);
   return validateStarterBundle(await response.json());
 };

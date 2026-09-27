@@ -1,38 +1,38 @@
 import m from 'mithril';
 import { SlimdownView } from 'mithril-ui-form';
-import guideSource from '../../../../documentation/handleiding.nl.md?raw';
-import guideCaptions from '../../../../documentation/assets/user-guide/pax-handleiding.nl.vtt?url';
-import guideVideo from '../../../../documentation/assets/user-guide/pax-handleiding.webm';
-import homeScreenshot from '../../../../documentation/assets/user-guide/01-home.png';
-import scriptScreenshot from '../../../../documentation/assets/user-guide/02-script-view.png';
-import editorScreenshot from '../../../../documentation/assets/user-guide/03-script-edit.png';
-import llmBriefScreenshot from '../../../../documentation/assets/user-guide/04-llm-brief.png';
-import llmPromptScreenshot from '../../../../documentation/assets/user-guide/05-llm-prompt-light.png';
-import llmJsonScreenshot from '../../../../documentation/assets/user-guide/06-llm-json-paste.png';
-import llmReviewScreenshot from '../../../../documentation/assets/user-guide/07-llm-review.png';
+import guideSourceNl from '../../../../documentation/handleiding.nl.md?raw';
+import guideSourceEn from '../../../../documentation/user-guide.en.md?raw';
+import guideCaptionsNl from '../../../../documentation/assets/user-guide/pax-handleiding.nl.vtt?url';
+import guideCaptionsEn from '../../../../documentation/assets/user-guide/en/pax-user-guide.en.vtt?url';
+import guideVideoNl from '../../../../documentation/assets/user-guide/pax-handleiding.webm';
+import guideVideoEn from '../../../../documentation/assets/user-guide/en/pax-user-guide.webm';
+import homeScreenshotNl from '../../../../documentation/assets/user-guide/01-home.png';
+import scriptScreenshotNl from '../../../../documentation/assets/user-guide/02-script-view.png';
+import editorScreenshotNl from '../../../../documentation/assets/user-guide/03-script-edit.png';
+import llmBriefScreenshotNl from '../../../../documentation/assets/user-guide/04-llm-brief.png';
+import llmPromptScreenshotNl from '../../../../documentation/assets/user-guide/05-llm-prompt-light.png';
+import llmJsonScreenshotNl from '../../../../documentation/assets/user-guide/06-llm-json-paste.png';
+import llmReviewScreenshotNl from '../../../../documentation/assets/user-guide/07-llm-review.png';
+import homeScreenshotEn from '../../../../documentation/assets/user-guide/en/01-home.png';
+import scriptScreenshotEn from '../../../../documentation/assets/user-guide/en/02-script-view.png';
+import editorScreenshotEn from '../../../../documentation/assets/user-guide/en/03-script-edit.png';
+import llmBriefScreenshotEn from '../../../../documentation/assets/user-guide/en/04-llm-brief.png';
+import llmPromptScreenshotEn from '../../../../documentation/assets/user-guide/en/05-llm-prompt-light.png';
+import llmJsonScreenshotEn from '../../../../documentation/assets/user-guide/en/06-llm-json-paste.png';
+import llmReviewScreenshotEn from '../../../../documentation/assets/user-guide/en/07-llm-review.png';
 import { Pages } from '../models';
-import { type MeiosisComponent, t } from '../services';
+import { i18n, type MeiosisComponent, t } from '../services';
 import { routingSvc } from '../services/routing-service';
 
 const VIDEO_MARKER = '<!-- PAX_GUIDE_VIDEO -->';
 
-const guideAssets = new Map([
-  ['assets/user-guide/01-home.png', homeScreenshot],
-  ['assets/user-guide/02-script-view.png', scriptScreenshot],
-  ['assets/user-guide/03-script-edit.png', editorScreenshot],
-  ['assets/user-guide/04-llm-brief.png', llmBriefScreenshot],
-  ['assets/user-guide/05-llm-prompt-light.png', llmPromptScreenshot],
-  ['assets/user-guide/06-llm-json-paste.png', llmJsonScreenshot],
-  ['assets/user-guide/07-llm-review.png', llmReviewScreenshot],
-]);
+const localizeGuide = (source: string, assets: Map<string, string>) =>
+  [...assets].reduce(
+    (markdown, [path, url]) => markdown.split(path).join(url.split('_').join('%5F')),
+    source
+  ).split(VIDEO_MARKER);
 
-const localizedGuide = [...guideAssets].reduce(
-  (markdown, [path, url]) => markdown.split(path).join(url.split('_').join('%5F')),
-  guideSource
-);
-const [guideIntroduction, guideBody] = localizedGuide.split(VIDEO_MARKER);
-
-const videoSteps = [
+const videoStepsNl = [
   {
     start: 0,
     end: 3,
@@ -84,6 +84,93 @@ const videoSteps = [
   },
 ];
 
+const videoStepsEn = [
+  {
+    start: 0,
+    end: 3,
+    time: '0:00',
+    title: 'Open the workspace',
+    description: 'Load the starter library or select an existing script.',
+  },
+  {
+    start: 3,
+    end: 6,
+    time: '0:03',
+    title: 'View a script',
+    description: 'Explore scenes, modi operandi, activities, and role pills.',
+  },
+  {
+    start: 6,
+    end: 9,
+    time: '0:06',
+    title: 'Edit a script',
+    description: 'Change script details, scenes, and activities.',
+  },
+  {
+    start: 9,
+    end: 12,
+    time: '0:09',
+    title: 'Complete the LLM brief',
+    description: 'Describe the language, topic, region, detail level, and sources.',
+  },
+  {
+    start: 12,
+    end: 15,
+    time: '0:12',
+    title: 'Review the prompt',
+    description: 'Check and copy the prompt to an LLM of your choice.',
+  },
+  {
+    start: 15,
+    end: 18,
+    time: '0:15',
+    title: 'Paste the JSON',
+    description: 'Paste only the JSON response back into PAX.',
+  },
+  {
+    start: 18,
+    end: 24,
+    time: '0:18',
+    title: 'Review the result',
+    description: 'Check scenes, taxonomy, and sources before confirming import.',
+  },
+];
+
+const guides = {
+  nl: {
+    sections: localizeGuide(guideSourceNl, new Map([
+      ['assets/user-guide/01-home.png', homeScreenshotNl],
+      ['assets/user-guide/02-script-view.png', scriptScreenshotNl],
+      ['assets/user-guide/03-script-edit.png', editorScreenshotNl],
+      ['assets/user-guide/04-llm-brief.png', llmBriefScreenshotNl],
+      ['assets/user-guide/05-llm-prompt-light.png', llmPromptScreenshotNl],
+      ['assets/user-guide/06-llm-json-paste.png', llmJsonScreenshotNl],
+      ['assets/user-guide/07-llm-review.png', llmReviewScreenshotNl],
+    ])),
+    captions: guideCaptionsNl,
+    video: guideVideoNl,
+    steps: videoStepsNl,
+    captionLanguage: 'nl',
+    captionLabel: 'Nederlands',
+  },
+  en: {
+    sections: localizeGuide(guideSourceEn, new Map([
+      ['assets/user-guide/en/01-home.png', homeScreenshotEn],
+      ['assets/user-guide/en/02-script-view.png', scriptScreenshotEn],
+      ['assets/user-guide/en/03-script-edit.png', editorScreenshotEn],
+      ['assets/user-guide/en/04-llm-brief.png', llmBriefScreenshotEn],
+      ['assets/user-guide/en/05-llm-prompt-light.png', llmPromptScreenshotEn],
+      ['assets/user-guide/en/06-llm-json-paste.png', llmJsonScreenshotEn],
+      ['assets/user-guide/en/07-llm-review.png', llmReviewScreenshotEn],
+    ])),
+    captions: guideCaptionsEn,
+    video: guideVideoEn,
+    steps: videoStepsEn,
+    captionLanguage: 'en',
+    captionLabel: 'English',
+  },
+};
+
 export const GuidePage: MeiosisComponent = () => {
   let activeStep = 0;
   let videoElement: HTMLVideoElement | undefined;
@@ -96,8 +183,11 @@ export const GuidePage: MeiosisComponent = () => {
     }) => {
       setPage(Pages.GUIDE);
     },
-    view: () =>
-      m('article.guide-page', [
+    view: () => {
+      const guide = guides[i18n.currentLocale];
+      const [guideIntroduction, guideBody] = guide.sections;
+      const videoSteps = guide.steps;
+      return m('article.guide-page', [
         m(
           'a.guide-back-link',
           { href: routingSvc.href(Pages.LANDING) },
@@ -129,13 +219,13 @@ export const GuidePage: MeiosisComponent = () => {
                 },
               },
               [
-                m('source', { src: guideVideo, type: 'video/webm' }),
+                m('source', { src: guide.video, type: 'video/webm' }),
                 m('track', {
                   default: true,
                   kind: 'captions',
-                  src: guideCaptions,
-                  srclang: 'nl',
-                  label: 'Nederlands',
+                  src: guide.captions,
+                  srclang: guide.captionLanguage,
+                  label: guide.captionLabel,
                 }),
               ]
             ),
@@ -172,6 +262,7 @@ export const GuidePage: MeiosisComponent = () => {
           ]),
         ]),
         m('.guide-copy', m(SlimdownView, { md: guideBody })),
-      ]),
+      ]);
+    },
   };
 };

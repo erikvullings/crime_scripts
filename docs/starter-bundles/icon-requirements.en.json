@@ -1,0 +1,144 @@
+{
+  "schemaVersion": 1,
+  "bundleId": "pax-en-starter",
+  "bundleVersion": "1.0.0",
+  "style": "Monochrome black, solid fill, simple shapes within a 100×100 viewBox; no text.",
+  "requirements": [
+    {
+      "id": "en-starter:icon:script-cocaine-import-havens",
+      "description": "Black solid-fill icon of a container ship with a shield representing port resilience.",
+      "appliesTo": [
+        "en-starter:script:cocaine-import-havens"
+      ],
+      "iconKey": "builtin:port-security"
+    },
+    {
+      "id": "en-starter:icon:script-synthetische-drugsproductie",
+      "description": "Black solid-fill icon of a laboratory flask combined with pills.",
+      "appliesTo": [
+        "en-starter:script:synthetische-drugsproductie"
+      ],
+      "iconKey": "builtin:laboratory"
+    },
+    {
+      "id": "en-starter:icon:script-arbeidsuitbuiting",
+      "description": "Black solid-fill icon of a clenched fist between two spanners and a broken chain.",
+      "appliesTo": [
+        "en-starter:script:arbeidsuitbuiting"
+      ],
+      "iconKey": "builtin:labour-exploitation"
+    },
+    {
+      "id": "en-starter:icon:script-mensenhandel-seksuele-uitbuiting",
+      "description": "Black solid-fill icon of two people connected by a movement.",
+      "appliesTo": [
+        "en-starter:script:mensenhandel-seksuele-uitbuiting"
+      ],
+      "iconKey": "builtin:human-trafficking"
+    },
+    {
+      "id": "en-starter:icon:script-witwassen-legale-ondernemingen",
+      "description": "Black solid-fill icon of a washing machine with a euro symbol, combined with a shopfront.",
+      "appliesTo": [
+        "en-starter:script:witwassen-legale-ondernemingen"
+      ],
+      "iconKey": "builtin:money-laundering"
+    },
+    {
+      "id": "en-starter:icon:script-illegale-dumping-chemisch-afval",
+      "description": "Black solid-fill icon of illegal waste dumping near water and industry.",
+      "appliesTo": [
+        "en-starter:script:illegale-dumping-chemisch-afval"
+      ],
+      "iconKey": "builtin:illegal-dumping"
+    },
+    {
+      "id": "en-starter:icon:script-stroperij-illegale-wildhandel",
+      "description": "Two-part composition depicting poaching and illegal wildlife trade.",
+      "appliesTo": [
+        "en-starter:script:stroperij-illegale-wildhandel"
+      ],
+      "iconKey": "builtin:poaching"
+    },
+    {
+      "id": "en-starter:icon:script-voertuigdiefstal-export",
+      "description": "Black solid-fill icon of vehicle theft featuring a car and a masked offender.",
+      "appliesTo": [
+        "en-starter:script:voertuigdiefstal-export"
+      ],
+      "iconKey": "builtin:car-theft"
+    },
+    {
+      "id": "en-starter:icon:script-phishing-betaalfraude",
+      "description": "Two-part composition depicting a phishing message with a fish hook and payment fraud.",
+      "appliesTo": [
+        "en-starter:script:phishing-betaalfraude"
+      ],
+      "iconKey": "builtin:phishing"
+    },
+    {
+      "id": "en-starter:icon:script-illegale-asbestverwijdering",
+      "description": "Black solid-fill icon of a construction panel with a fibre warning and protective shield.",
+      "appliesTo": [
+        "en-starter:script:illegale-asbestverwijdering"
+      ],
+      "iconKey": "builtin:illegal-asbestos-removal"
+    },
+    {
+      "id": "en-starter:icon:script-asbestsaneringsketen",
+      "description": "Reusable catalogue icon for the public Asbestos removal chain model.",
+      "appliesTo": [
+        "en-starter:script:asbestsaneringsketen"
+      ],
+      "iconKey": "builtin:illegal-asbestos-removal"
+    },
+    {
+      "id": "en-starter:icon:script-bijtincidenten-honden",
+      "description": "Reusable catalogue icon for the public Risk chain for dog-bite incidents model.",
+      "appliesTo": [
+        "en-starter:script:bijtincidenten-honden"
+      ],
+      "iconKey": "builtin:animal-trafficking"
+    },
+    {
+      "id": "en-starter:icon:script-co-vergisting",
+      "description": "Reusable catalogue icon for the public Co-digestion and waste streams model.",
+      "appliesTo": [
+        "en-starter:script:co-vergisting"
+      ],
+      "iconKey": "builtin:hazardous-waste"
+    },
+    {
+      "id": "en-starter:icon:script-complexe-zorgstructuren",
+      "description": "Reusable catalogue icon for the public Complex legal structures in healthcare model.",
+      "appliesTo": [
+        "en-starter:script:complexe-zorgstructuren"
+      ],
+      "iconKey": "builtin:financial-investigation"
+    },
+    {
+      "id": "en-starter:icon:script-criminele-uitbuiting",
+      "description": "Reusable catalogue icon for the public Criminal exploitation model.",
+      "appliesTo": [
+        "en-starter:script:criminele-uitbuiting"
+      ],
+      "iconKey": "builtin:human-trafficking"
+    },
+    {
+      "id": "en-starter:icon:script-fake-carriers",
+      "description": "Reusable catalogue icon for the public Fake carriers on digital freight marketplaces model.",
+      "appliesTo": [
+        "en-starter:script:fake-carriers"
+      ],
+      "iconKey": "builtin:cargo-ship"
+    },
+    {
+      "id": "en-starter:icon:script-pijplijndiefstal-olieproducten",
+      "description": "Black solid-fill icon of secure transport representing the theft and distribution of petroleum products.",
+      "appliesTo": [
+        "en-starter:script:pijplijndiefstal-olieproducten"
+      ],
+      "iconKey": "builtin:secure-transport"
+    }
+  ]
+}
