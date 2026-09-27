@@ -4,7 +4,6 @@ import m, { type FactoryComponent } from 'mithril';
 import { snackbar } from 'mithril-materialized';
 import {
   type CrimeScriptFilter,
-  type CaseMatchResult,
   type DataModel,
   type FlexSearchResult,
   type ID,
@@ -17,12 +16,11 @@ import {
   resolveStarterBundleUrl,
   validateStarterBundle,
   Pages,
-  matchCaseEvidence,
   type SearchResult,
   type Settings,
 } from '../models';
 import { aggregateFlexSearchResults, scrollToTop, tokenize } from '../utils';
-import { i18n, routingSvc, t, tokenizeForLanguage } from '.';
+import { i18n, routingSvc, t } from '.';
 import { flexSearchLookupUpdater } from './flex-search';
 import type { User, UserRole } from './login-service';
 
@@ -51,8 +49,6 @@ export interface State {
   attributeFilter: string;
   searchFilter: string;
   searchResults: SearchResult[];
-  caseFilter: string;
-  caseResults: CaseMatchResult[];
   crimeScriptFilter: CrimeScriptFilter;
   /** For finding search results */
   lookup: Map<string, FlexSearchResult[]>;
@@ -233,29 +229,6 @@ export const setSearchResults: Service<State> = {
   },
 };
 
-export const setCaseSearchResults: Service<State> = {
-  onchange: (state) =>
-    [
-      state.caseFilter,
-      JSON.stringify(state.crimeScriptFilter || {}),
-      state.scriptMode,
-      state.model.lastUpdate,
-    ].join('|'),
-  run: (cell) => {
-    const state = cell.getState();
-    const { caseFilter, crimeScriptFilter, model, scriptMode } = state;
-    cell.update({
-      caseResults: matchCaseEvidence({
-        model,
-        scriptMode,
-        text: caseFilter,
-        filters: crimeScriptFilter,
-        tokenize: tokenizeForLanguage,
-      }),
-    });
-  },
-};
-
 const config: MeiosisConfig<State> = {
   app: {
     initial: {
@@ -268,7 +241,7 @@ const config: MeiosisConfig<State> = {
       needsOnboarding: false,
       crimeScriptFilter: {} as CrimeScriptFilter,
     } as State,
-    services: [setSearchResults, setCaseSearchResults, flexSearchLookupUpdater],
+    services: [setSearchResults, flexSearchLookupUpdater],
   },
 };
 export const cells = meiosisSetup<State>(config);

@@ -144,6 +144,48 @@ export const messages = {
   RESTRICTED_EXPORT_CONFIRM: 'This export contains restricted content. Continue and store it securely?',
   RESTRICTED_SHARING_DISABLED: 'Permanent-link sharing is disabled for models containing restricted content.',
   NO_SCRIPTS_MODE: 'No scripts are available in the current mode.',
+  CASE_HEADING: 'Explore possible crime scripts',
+  CASE_INTRO:
+    'Record observable case facts and compare them with the scripts in this workspace. Suggestions are starting points for analysis, not conclusions.',
+  CASE_PRIVACY:
+    'Case observations stay in this browser session and are not added to the crime-script model.',
+  CASE_EVIDENCE_HEADING: 'Describe the observations',
+  CASE_OBSERVATIONS_LABEL: 'Observed objects and circumstances',
+  CASE_OBSERVATIONS_HINT:
+    'Enter separate, concrete observations, for example: damaged container seal, rented van, port access pass.',
+  CASE_FILTERS_HEADING: 'Add required characteristics',
+  CASE_FILTERS_HINT:
+    'Selected characteristics are required in every suggestion. Leave them empty when they are uncertain.',
+  CASE_SEARCH_ACTION: 'Find possible scripts',
+  CASE_CLEAR_ACTION: 'Clear case',
+  CASE_INPUT_REQUIRED: 'Enter at least one observation or select a required characteristic.',
+  CASE_INITIAL_HEADING: 'Start with what is known',
+  CASE_INITIAL_BODY:
+    'Use factual observations rather than assumptions. You can refine the evidence and search again at any time.',
+  CASE_RESULTS_HEADING: 'Possible crime-script hypotheses',
+  CASE_RESULTS_SUMMARY: {
+    0: 'No scripts have evidence worth comparing.',
+    1: '1 script has evidence worth comparing.',
+    n: '{n} scripts have evidence worth comparing.',
+  },
+  CASE_HYPOTHESIS_NOTICE:
+    'These suggestions support comparison. They do not determine what happened in the case.',
+  CASE_FIT_BROAD: 'Broad evidence overlap',
+  CASE_FIT_PARTIAL: 'Partial evidence overlap',
+  CASE_FIT_LIMITED: 'Limited evidence overlap',
+  CASE_EVIDENCE_COVERAGE: '{matched} of {total} observations matched',
+  CASE_MATCHED_HEADING: 'Evidence found in this script',
+  CASE_UNMATCHED_HEADING: 'Entered evidence not found',
+  CASE_ALL_EVIDENCE_MATCHED: 'Every entered observation appears in this script.',
+  CASE_RELEVANT_SCENES: 'Most relevant scenes',
+  CASE_SCENE_MATCHES: {
+    1: '1 matching observation',
+    n: '{n} matching observations',
+  },
+  CASE_OPEN_SCRIPT: 'Open full script',
+  CASE_NO_MATCHES_TITLE: 'No scripts meet these constraints',
+  CASE_NO_MATCHES_BODY:
+    'Remove an uncertain required characteristic, use a synonym, or describe the observation more broadly.',
   ONBOARDING_TITLE: 'Choose your workspace',
   ONBOARDING_DESCRIPTION: 'Start with the English starter library, an empty workspace, or your own JSON model.',
   USE_STARTER: 'Use starter library',

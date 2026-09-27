@@ -1,12 +1,60 @@
 import m from 'mithril';
-import { TextInput } from 'mithril-materialized';
+import { Button, FlatButton, Icon } from 'mithril-materialized';
 import { type FormAttributes, LayoutForm, type UIForm } from 'mithril-ui-form';
-import { type CrimeScriptFilter, Pages, scriptsForMode } from '../models';
+import {
+  type CaseEvidenceMatch,
+  type CaseMatchResult,
+  type CrimeScript,
+  type CrimeScriptFilter,
+  Pages,
+  matchCaseEvidence,
+} from '../models';
 import { attributeFilterFormFactory, crimeScriptFilterFormFactory } from '../models/forms';
-import { I18N, type MeiosisComponent, routingSvc, t } from '../services';
+import { I18N, type MeiosisComponent, routingSvc, t, tokenizeForLanguage } from '../services';
+
+const emptyFilters = (): CrimeScriptFilter => ({
+  productIds: [],
+  geoLocationIds: [],
+  locationIds: [],
+  roleIds: [],
+  attributeIds: [],
+  transportIds: [],
+});
+
+const hasSelectedFilters = (filters: CrimeScriptFilter) =>
+  Object.values(filters).some((ids) => ids.length > 0);
+
+const fitLabel = (score: number) =>
+  score >= 85
+    ? t('CASE_FIT_BROAD')
+    : score >= 60
+      ? t('CASE_FIT_PARTIAL')
+      : t('CASE_FIT_LIMITED');
+
+const matchContext = ({ evidence, locations }: CaseEvidenceMatch) => {
+  const labels = [...new Set(
+    locations
+      .map(({ variantLabel, sceneLabel, label }) => variantLabel || sceneLabel || label)
+      .filter((label) => label && label !== evidence.label)
+  )];
+  return labels.slice(0, 2).join(' · ');
+};
+
+const reviewedScript = (script: CrimeScript) => script.status >= 4 && script.unreviewed !== true;
 
 export const CasePage: MeiosisComponent = () => {
   let crimeScriptFilterForm: UIForm<CrimeScriptFilter>;
+  let evidenceText = '';
+  let filters = emptyFilters();
+  let results: CaseMatchResult[] = [];
+  let hasSearched = false;
+  let inputError = false;
+  let formVersion = 0;
+  let resultContext = '';
+
+  const focusAfterRender = (selector: string) => {
+    requestAnimationFrame(() => document.querySelector<HTMLElement>(selector)?.focus());
+  };
 
   return {
     oninit: ({
@@ -23,69 +71,208 @@ export const CasePage: MeiosisComponent = () => {
       setPage(Pages.CASE);
     },
     view: ({ attrs: { state, actions } }) => {
-      const { caseResults = [], caseFilter, crimeScriptFilter = {} as CrimeScriptFilter, model, scriptMode } = state;
-      const visibleScriptIds = new Set(scriptsForMode(model.crimeScripts, scriptMode).map(({ id }) => id));
-      const visibleCaseResults = caseResults.filter(({ scriptId }) => visibleScriptIds.has(scriptId));
-      const { update } = actions;
+      const { model, scriptMode } = state;
+      const currentContext = `${model.lastUpdate}:${scriptMode}`;
+      const runSearch = () => {
+        if (!evidenceText.trim() && !hasSelectedFilters(filters)) {
+          inputError = true;
+          focusAfterRender('#case-observations');
+          return;
+        }
+        inputError = false;
+        hasSearched = true;
+        resultContext = currentContext;
+        results = matchCaseEvidence({
+          model,
+          scriptMode,
+          text: evidenceText,
+          filters,
+          tokenize: tokenizeForLanguage,
+        });
+        focusAfterRender('.case-results-heading');
+      };
+      const clearSearch = () => {
+        evidenceText = '';
+        filters = emptyFilters();
+        results = [];
+        hasSearched = false;
+        inputError = false;
+        formVersion += 1;
+        focusAfterRender('#case-observations');
+      };
+      if (hasSearched && resultContext !== currentContext) runSearch();
 
-      return m('#case-page.row.case.page', [
-        m(LayoutForm, {
-          form: crimeScriptFilterForm,
-          obj: crimeScriptFilter,
-          onchange: () => {
-            actions.update({ crimeScriptFilter });
-          },
-          i18n: I18N,
-        } as FormAttributes<CrimeScriptFilter>),
-        m('.col.s12', [
-          m(TextInput, {
-            label: t('FOUND_ITEMS'),
-            iconName: 'search',
-            className: 'center-align',
-            defaultValue: caseFilter,
-            onchange: (v) => {
-              // const caseTags = tags.map((tag) => tag.tag);
-              update({ caseFilter: v });
-            },
-          }),
+      const scriptsById = new Map(model.crimeScripts.map((script) => [script.id, script]));
+
+      return m('main#case-page.case-page', [
+        m('header.case-intro', [
+          m('h1', t('CASE_HEADING')),
+          m('p', t('CASE_INTRO')),
+          m('.case-privacy-note', [
+            m(Icon, { iconName: 'lock_outline' }),
+            m('span', t('CASE_PRIVACY')),
+          ]),
         ]),
-        visibleCaseResults &&
-          m('.col.s12', [
-            m('p', t('HITS', visibleCaseResults.length)),
-            visibleCaseResults.length > 0 && [
-              m(
-                'ol',
-                visibleCaseResults.map(({ scriptId, score, scenes }) => {
-                  const script = model.crimeScripts.find(({ id }) => id === scriptId);
-                  return script && m(
-                    'li',
-                    `${script.label} (score ${score})`,
-                    scenes.length > 0 && m(
-                      'ul.browser-default',
-                      scenes.map((scene) =>
-                        m(
-                          'li',
-                          m(
-                            'a.truncate',
-                            {
-                              style: { cursor: 'pointer' },
-                              href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${script.id}`),
-                              onclick: () => {
-                                if (scene.variantId) {
-                                  actions.setLocation(script.id, scene.variantId, scene.sceneId);
-                                }
-                              },
-                            },
-                            `${scene.variantLabel || scene.sceneLabel} (score: ${scene.strength})`
-                          )
+        m('section.case-evidence-workspace[aria-labelledby=case-evidence-heading]', [
+          m('.case-evidence-copy', [
+            m('h2#case-evidence-heading', t('CASE_EVIDENCE_HEADING')),
+            m('p', t('CASE_OBSERVATIONS_HINT')),
+            m('label.case-evidence-label[for=case-observations]', t('CASE_OBSERVATIONS_LABEL')),
+            m('textarea#case-observations', {
+              value: evidenceText,
+              rows: 6,
+              'aria-describedby': inputError ? 'case-input-error' : undefined,
+              'aria-invalid': inputError ? 'true' : undefined,
+              oninput: (event: InputEvent) => {
+                evidenceText = (event.target as HTMLTextAreaElement).value;
+                inputError = false;
+              },
+            }),
+            inputError && m('p#case-input-error.case-input-error[role=alert]', t('CASE_INPUT_REQUIRED')),
+          ]),
+          m('.case-filter-panel', [
+            m('h2', { key: 'heading' }, t('CASE_FILTERS_HEADING')),
+            m('p', { key: 'hint' }, t('CASE_FILTERS_HINT')),
+            m('.case-filter-fields.row', { key: `filters-${formVersion}` }, m(LayoutForm, {
+              form: crimeScriptFilterForm,
+              obj: filters,
+              onchange: () => {
+                inputError = false;
+              },
+              i18n: I18N,
+            } as FormAttributes<CrimeScriptFilter>)),
+          ]),
+          m('.case-actions', [
+            m(Button, {
+              type: 'button',
+              label: t('CASE_SEARCH_ACTION'),
+              iconName: 'manage_search',
+              onclick: runSearch,
+            }),
+            m(FlatButton, {
+              type: 'button',
+              label: t('CASE_CLEAR_ACTION'),
+              iconName: 'restart_alt',
+              disabled: !evidenceText && !hasSelectedFilters(filters) && !hasSearched,
+              onclick: clearSearch,
+            }),
+          ]),
+        ]),
+        !hasSearched && m('section.case-empty-state[aria-labelledby=case-initial-heading]', [
+          m(Icon, { iconName: 'travel_explore' }),
+          m('div', [
+            m('h2#case-initial-heading', t('CASE_INITIAL_HEADING')),
+            m('p', t('CASE_INITIAL_BODY')),
+          ]),
+        ]),
+        hasSearched && m('section.case-results[aria-live=polite]', [
+          m('.case-results-heading[tabindex=-1]', [
+            m('div', [
+              m('h2', t('CASE_RESULTS_HEADING')),
+              m('p', t('CASE_RESULTS_SUMMARY', results.length)),
+            ]),
+            m('.case-hypothesis-note', [
+              m(Icon, { iconName: 'info_outline' }),
+              m('span', t('CASE_HYPOTHESIS_NOTICE')),
+            ]),
+          ]),
+          results.length === 0
+            ? m('.case-no-results', [
+              m(Icon, { iconName: 'search_off' }),
+              m('div', [
+                m('h3', t('CASE_NO_MATCHES_TITLE')),
+                m('p', t('CASE_NO_MATCHES_BODY')),
+              ]),
+            ])
+            : m('.case-result-list', results.map((result, index) => {
+              const script = scriptsById.get(result.scriptId);
+              if (!script) return null;
+              return m('article.case-result', { key: result.scriptId }, [
+                m('.case-result-header', [
+                  m('.case-result-rank[aria-hidden=true]', index + 1),
+                  m('.case-result-title', [
+                    m('h3', script.label),
+                    m('.case-result-meta', [
+                      m('span', script.language.toUpperCase()),
+                      m('span', t(script.classification === 'restricted' ? 'RESTRICTED' : 'PUBLIC')),
+                      m('span', t(reviewedScript(script) ? 'REVIEWED' : 'UNREVIEWED')),
+                    ]),
+                  ]),
+                  m('.case-fit', [
+                    m('strong', fitLabel(result.score)),
+                    m('span', t('CASE_EVIDENCE_COVERAGE', {
+                      matched: result.matchedEvidence.length,
+                      total: result.matchedEvidence.length + result.unmatchedEvidence.length,
+                    })),
+                    m('meter', {
+                      min: 0,
+                      max: 1,
+                      value: result.coverage,
+                      'aria-label': t('CASE_EVIDENCE_COVERAGE', {
+                        matched: result.matchedEvidence.length,
+                        total: result.matchedEvidence.length + result.unmatchedEvidence.length,
+                      }),
+                    }),
+                  ]),
+                ]),
+                m('.case-result-detail', [
+                  m('section', [
+                    m('h4', t('CASE_MATCHED_HEADING')),
+                    m('ul.case-evidence-list', result.matchedEvidence.map((match) => {
+                      const context = matchContext(match);
+                      return m('li', [
+                        m(Icon, { iconName: 'check_circle' }),
+                        m('span', [
+                          m('strong', match.evidence.label),
+                          context && m('small', context),
+                        ]),
+                      ]);
+                    })),
+                  ]),
+                  m('section', [
+                    m('h4', t('CASE_UNMATCHED_HEADING')),
+                    result.unmatchedEvidence.length > 0
+                      ? m('ul.case-evidence-list.case-evidence-list--unmatched',
+                        result.unmatchedEvidence.map(({ id, label }) =>
+                          m('li', { key: id }, [
+                            m(Icon, { iconName: 'help_outline' }),
+                            m('span', label),
+                          ])
                         )
                       )
-                    )
-                  );
-                })
-              ),
-            ],
-          ]),
+                      : m('p.case-all-explained', t('CASE_ALL_EVIDENCE_MATCHED')),
+                  ]),
+                ]),
+                result.scenes.length > 0 && m('section.case-scenes', [
+                  m('h4', t('CASE_RELEVANT_SCENES')),
+                  m('ul', result.scenes.slice(0, 3).map((scene) =>
+                    m('li', [
+                      m('a', {
+                        href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${script.id}`),
+                        onclick: () => {
+                          if (scene.variantId) {
+                            actions.setLocation(script.id, scene.variantId, scene.sceneId);
+                          }
+                        },
+                      }, scene.variantLabel
+                        && scene.variantLabel !== scene.sceneLabel
+                        ? `${scene.sceneLabel} — ${scene.variantLabel}`
+                        : scene.sceneLabel),
+                      m('span', t('CASE_SCENE_MATCHES', scene.matchedEvidenceIds.length)),
+                    ])
+                  )),
+                ]),
+                m('.case-result-actions', [
+                  m('a.btn-flat', {
+                    href: routingSvc.href(Pages.CRIME_SCRIPT, `id=${script.id}`),
+                  }, [
+                    m(Icon, { iconName: 'menu_book' }),
+                    t('CASE_OPEN_SCRIPT'),
+                  ]),
+                ]),
+              ]);
+            })),
+        ]),
       ]);
     },
   };

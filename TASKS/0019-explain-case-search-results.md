@@ -1,6 +1,6 @@
 # 0019 Explain case search results
 
-Status: in_progress
+Status: done
 Priority: high
 Subsystem: frontend
 Depends on: 0018
@@ -50,3 +50,14 @@ remaining fast for occasional users.
 - 2026-09-27 GitHub Copilot: Started after 0018 completed. The next step is to
   replace the legacy filter-and-ordered-list layout with a localized,
   non-persistent evidence form and explainable hypothesis cards.
+- 2026-09-27 GitHub Copilot: Rebuilt
+  `packages/gui/src/components/case-page.ts` as a deliberate local-only evidence
+  workflow. It now validates input, treats structured selections as required
+  characteristics, announces results, uses descriptive overlap bands, explains
+  matched and unmatched observations, exposes relevant scene links, and shows
+  script language, classification, and review state. Added complete English and
+  Dutch copy plus responsive case styles in `packages/gui/src/css/style.css`.
+  Case observations no longer live in shared Meiosis state. Verified input
+  errors, clear/reset, focus restoration, desktop and 390px mobile layouts,
+  zero horizontal overflow, no browser console errors, GUI typecheck, full GUI
+  tests, and the production build.

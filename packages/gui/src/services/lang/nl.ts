@@ -146,6 +146,48 @@ export const messagesNL: typeof messages = {
   RESTRICTED_EXPORT_CONFIRM: 'Deze export bevat afgeschermde inhoud. Doorgaan en veilig opslaan?',
   RESTRICTED_SHARING_DISABLED: 'Permanente links zijn uitgeschakeld voor modellen met afgeschermde inhoud.',
   NO_SCRIPTS_MODE: 'Er zijn geen scripts beschikbaar in de huidige modus.',
+  CASE_HEADING: 'Verken mogelijke crime scripts',
+  CASE_INTRO:
+    'Leg waarneembare feiten uit de casus vast en vergelijk ze met de scripts in deze werkruimte. Suggesties zijn startpunten voor analyse, geen conclusies.',
+  CASE_PRIVACY:
+    'Casuswaarnemingen blijven in deze browsersessie en worden niet aan het crime-scriptmodel toegevoegd.',
+  CASE_EVIDENCE_HEADING: 'Beschrijf de waarnemingen',
+  CASE_OBSERVATIONS_LABEL: 'Aangetroffen objecten en omstandigheden',
+  CASE_OBSERVATIONS_HINT:
+    'Voer afzonderlijke, concrete waarnemingen in, bijvoorbeeld: beschadigd containerzegel, gehuurde bestelbus, haventoegangspas.',
+  CASE_FILTERS_HEADING: 'Voeg vereiste kenmerken toe',
+  CASE_FILTERS_HINT:
+    'Geselecteerde kenmerken zijn verplicht voor iedere suggestie. Laat ze leeg wanneer ze onzeker zijn.',
+  CASE_SEARCH_ACTION: 'Zoek mogelijke scripts',
+  CASE_CLEAR_ACTION: 'Wis casus',
+  CASE_INPUT_REQUIRED: 'Voer minimaal één waarneming in of selecteer een vereist kenmerk.',
+  CASE_INITIAL_HEADING: 'Begin met wat bekend is',
+  CASE_INITIAL_BODY:
+    'Gebruik feitelijke waarnemingen in plaats van aannames. U kunt het bewijs steeds verfijnen en opnieuw zoeken.',
+  CASE_RESULTS_HEADING: 'Mogelijke crime-scripthypothesen',
+  CASE_RESULTS_SUMMARY: {
+    0: 'Geen scripts bevatten bewijs dat het vergelijken waard is.',
+    1: '1 script bevat bewijs dat het vergelijken waard is.',
+    n: '{n} scripts bevatten bewijs dat het vergelijken waard is.',
+  },
+  CASE_HYPOTHESIS_NOTICE:
+    'Deze suggesties ondersteunen de vergelijking. Ze bepalen niet wat er in de casus is gebeurd.',
+  CASE_FIT_BROAD: 'Brede overeenkomst met het bewijs',
+  CASE_FIT_PARTIAL: 'Gedeeltelijke overeenkomst met het bewijs',
+  CASE_FIT_LIMITED: 'Beperkte overeenkomst met het bewijs',
+  CASE_EVIDENCE_COVERAGE: '{matched} van {total} waarnemingen komen overeen',
+  CASE_MATCHED_HEADING: 'Bewijs gevonden in dit script',
+  CASE_UNMATCHED_HEADING: 'Ingevoerd bewijs niet gevonden',
+  CASE_ALL_EVIDENCE_MATCHED: 'Elke ingevoerde waarneming komt in dit script voor.',
+  CASE_RELEVANT_SCENES: 'Meest relevante scènes',
+  CASE_SCENE_MATCHES: {
+    1: '1 overeenkomende waarneming',
+    n: '{n} overeenkomende waarnemingen',
+  },
+  CASE_OPEN_SCRIPT: 'Open volledig script',
+  CASE_NO_MATCHES_TITLE: 'Geen scripts voldoen aan deze vereisten',
+  CASE_NO_MATCHES_BODY:
+    'Verwijder een onzeker verplicht kenmerk, gebruik een synoniem of beschrijf de waarneming algemener.',
   ONBOARDING_TITLE: 'Kies je werkruimte',
   ONBOARDING_DESCRIPTION: 'Start met de Nederlandse starterbibliotheek, met een lege werkruimte of laad je eigen JSON-model.',
   USE_STARTER: 'Gebruik starterbibliotheek',

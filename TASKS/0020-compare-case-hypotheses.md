@@ -1,6 +1,6 @@
 # 0020 Compare case hypotheses
 
-Status: open
+Status: in_progress
 Priority: medium
 Subsystem: frontend
 Depends on: 0019
@@ -43,3 +43,6 @@ but must be framed as questions to investigate rather than inferred facts.
 - 2026-09-27 GitHub Copilot: Created as the final stage so comparison and
   follow-up prompts consume the trusted results and explanations from 0018 and
   0019.
+- 2026-09-27 GitHub Copilot: Started after 0019 completed. Comparison will use
+  the existing typed evidence matches directly rather than recomputing or
+  interpreting rendered UI labels.
