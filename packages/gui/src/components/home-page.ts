@@ -81,6 +81,9 @@ export const HomePage: MeiosisComponent = () => {
             );
           }
           : (_cs: CrimeScript, _idx: number, _arr: CrimeScript[]) => true;
+      const visibleCrimeScripts = scriptsForMode(crimeScripts, scriptMode)
+        .sort(sortByLabel)
+        .filter(csFilter);
 
       return m('#home-page.row.home.page', [
         wizardOpen &&
@@ -142,10 +145,10 @@ export const HomePage: MeiosisComponent = () => {
         m(
           '.crime-scenes',
           m('ul.collection.with-header', [
-            m('li.collection-header', m('h4', 'Crime Scripts')),
-            scriptsForMode(crimeScripts, scriptMode)
-              .sort(sortByLabel)
-              .filter(csFilter)
+            m('li.collection-header', m('h4', t('CRIME_SCRIPT_COUNT', {
+              count: visibleCrimeScripts.length,
+            }))),
+            visibleCrimeScripts
               .map(({ icon, icons, url, label, description, id, classification, productIds = [], geoLocationIds = [] }) => {
                 const onclick = () => {
                   actions.changePage(Pages.CRIME_SCRIPT, { id });

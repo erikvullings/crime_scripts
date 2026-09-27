@@ -1,28 +1,72 @@
 # PAX gebruikershandleiding
 
-Deze handleiding beschrijft de normale gebruikersroute, het bewerken van een
-crime script en de LLM-wizard. De beelden zijn gemaakt met openbare
-starterinhoud en synthetische testgegevens.
+Deze handleiding beschrijft het menu, delen en inlezen, de normale
+gebruikersroute, het bewerken van een crime script en de LLM-wizard. De beelden
+zijn gemaakt met openbare starterinhoud en synthetische testgegevens.
 
 <!-- PAX_GUIDE_VIDEO -->
 
-## 1. Werkruimte en scriptmodus
+## 1. Menu, rol, taal en scriptmodus
 
 PAX bewaart de werkruimte lokaal in de browser. Kies bij de eerste start de
-Nederlandse starterbibliotheek of een lege werkruimte. Gebruik **Scriptmodus**
-om te wisselen tussen:
+Nederlandse starterbibliotheek, een lege werkruimte of een eigen JSON-model.
+Open het menu linksboven om de werkruimte en weergave in te stellen.
+
+Kies eerst de rol die past bij je taak:
+
+- **Gebruiker**: scripts bekijken, doorzoeken en exporteren.
+- **Redacteur**: ook bestaande scripts bewerken en verwijderen.
+- **Beheerder**: daarnaast scripts maken, de LLM-wizard gebruiken en gedeelde
+  taxonomie zoals rollen, attributen en locaties bewerken.
+
+Je kunt dus pas een script bewerken nadat je **Redacteur** of **Beheerder**
+kiest. Rollen en andere gedeelde taxonomie kun je alleen als **Beheerder**
+toevoegen of wijzigen. De rolkeuze is prototypegedrag in de browser en geen
+authenticatie of toegangsbeveiliging.
+
+Met **Taal** kies je de taal van de interface en van een later ingelezen
+starterbibliotheek. Bestaande scripts worden niet automatisch vertaald.
+
+Gebruik **Scriptmodus** om te wisselen tussen:
 
 - **Publieke modus**: toont en exporteert alleen publieke scripts.
-- **Beperkte modus**: kan ook beperkte scripts tonen. Export en delen vragen
-  extra bevestiging; een permanente link is niet beschikbaar als de werkruimte
-  beperkte inhoud bevat.
+- **Afgeschermde modus**: toont waar beschikbaar de afgeschermde tegenhanger.
+  Export vraagt extra bevestiging; een permanente link is niet beschikbaar als
+  het model afgeschermde inhoud bevat.
 
-De gekozen modus is geen vervanging voor toegangsbeveiliging. Deel een JSON- of
-Word-export alleen via een passend beveiligd kanaal.
+Ook de scriptmodus is geen toegangsbeveiliging. Deel afgeschermde informatie
+alleen via een passend beveiligd kanaal.
 
-![Startscherm met scriptfilters en starterbibliotheek](assets/user-guide/01-home.png)
+![Menu met werkruimteacties, rol, taal en scriptmodus](assets/user-guide/08-menu.png)
 
-## 2. Een script bekijken
+## 2. Importeren, exporteren en delen
+
+Het menu bevat acties voor de hele werkruimte:
+
+- **Sla model op als JSON** maakt een bewerkbare export van de collectie. In
+  publieke modus bevat die alleen publieke scripts.
+- **Lees model in als JSON** maakt het gekozen bestand de huidige lokale
+  werkruimte. Exporteer de bestaande werkruimte eerst als die behouden moet
+  blijven.
+- **Maak permanente link** kopieert een URL waarin het publieke model is
+  opgenomen. De ontvanger opent daarmee een kopie in de eigen browser.
+  Permanente links zijn uitgeschakeld voor modellen met afgeschermde inhoud.
+
+Voor één script open je **Meer acties** bij dat script:
+
+- **Exporteer naar JSON** maakt een bewerkbaar bestand met het script en de
+  benodigde taxonomie.
+- **Exporteer naar Word** maakt een leesrapport; dit is geen bewerkbaar
+  PAX-model.
+
+De ontvanger kiest **Lees model in als JSON** om een collectie- of
+scriptbestand te openen. Dit vervangt de huidige lokale werkruimte en voegt
+niet automatisch samen. Controleer vóór delen altijd classificatie en
+bestandsnaam en gebruik voor afgeschermde bestanden een beveiligd kanaal.
+
+![Scriptacties voor gerichte JSON- en Word-export](assets/user-guide/09-script-sharing.png)
+
+## 3. Een script bekijken
 
 1. Zoek of filter een script op de startpagina.
 2. Open het script door de kaart of **meer**-actie te kiezen.
@@ -37,7 +81,7 @@ Word-export alleen via een passend beveiligd kanaal.
 
 ![Viewer voor Phishing en betaalfraude](assets/user-guide/02-script-view.png)
 
-## 3. Een script bewerken
+## 4. Een script bewerken
 
 Kies **Script bewerken**. De editor bestaat uit een scène-overzicht en het
 detail van de geselecteerde scène.
@@ -59,7 +103,7 @@ herstelpunt.
 
 ![Crime-scripteditor met scène-overzicht](assets/user-guide/03-script-edit.png)
 
-## 4. Een script voorbereiden met de LLM-wizard
+## 5. Een script voorbereiden met de LLM-wizard
 
 Kies op de startpagina **Genereren met LLM**. PAX gebruikt een handmatige,
 provider-neutrale overdracht: de toepassing benadert geen LLM, bewaart geen
@@ -117,12 +161,14 @@ mens het inhoudelijk heeft beoordeeld.
 
 ![Lokale controle van het gegenereerde script](assets/user-guide/07-llm-review.png)
 
-## 5. Import, export en herstel
+## 6. Veilig uitwisselen en herstellen
 
-- Exporteer de volledige werkruimte als JSON voor een lokaal herstelpunt.
-- Een script-JSON is geschikt voor gerichte review en uitwisseling.
-- Een Word-export is een leesrapport en geen volledige vervanging van de
-  bewerkbare JSON.
+- Exporteer de volledige werkruimte als JSON voor een lokaal herstelpunt vóór
+  je een ander model inleest.
+- Gebruik een script-JSON voor gerichte review en uitwisseling en een
+  collectie-JSON om een volledige werkruimte over te dragen.
+- Behandel een permanente link als gevoelige informatie: het publieke model
+  staat gecodeerd in de URL.
 - Controleer altijd bestandsnaam en classificatie voor delen.
 - Wis lokale appgegevens alleen nadat een bruikbaar herstelbestand is
   gecontroleerd.

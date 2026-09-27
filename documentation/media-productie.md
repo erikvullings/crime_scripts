@@ -14,28 +14,39 @@ The checked-in media must be reproducible without real case data.
    library matching the interface language.
 3. Capture, in order:
    - the home page;
+   - the open application menu showing collection actions, role, language,
+     and script mode;
    - the `Phishing en betaalfraude` viewer;
+   - the open **Meer acties** menu for that script;
    - the script editor without changing content;
    - the empty LLM brief;
    - a prompt generated from synthetic values, in light theme;
    - deterministic synthetic JSON pasted into PAX;
    - PAX's local validation preview before import.
-4. Save the PNG files as `01-home.png` through
-   `07-llm-review.png` in `documentation/assets/user-guide/`. The JSON example
-   must validate in the current wizard. Do not imply that a specific LLM
-   generated it unless that interaction was genuinely captured.
+4. Save the original seven PNG files as `01-home.png` through
+   `07-llm-review.png`, the application menu as `08-menu.png`, and the script
+   action menu as `09-script-sharing.png` in
+   `documentation/assets/user-guide/`. The JSON example must validate in the
+   current wizard. Do not imply that a specific LLM generated it unless that
+   interaction was genuinely captured.
 5. Generate the silent WebM slideshow:
 
    ```sh
    printf "file '%s'\nduration 3\n" \
      "$PWD/documentation/assets/user-guide/01-home.png" \
+     > /tmp/pax-user-guide-concat.txt
+   printf "file '%s'\nduration 9\n" \
+     "$PWD/documentation/assets/user-guide/08-menu.png" \
+     >> /tmp/pax-user-guide-concat.txt
+   printf "file '%s'\nduration 3\n" \
      "$PWD/documentation/assets/user-guide/02-script-view.png" \
+     "$PWD/documentation/assets/user-guide/09-script-sharing.png" \
      "$PWD/documentation/assets/user-guide/03-script-edit.png" \
      "$PWD/documentation/assets/user-guide/04-llm-brief.png" \
      "$PWD/documentation/assets/user-guide/05-llm-prompt-light.png" \
      "$PWD/documentation/assets/user-guide/06-llm-json-paste.png" \
      "$PWD/documentation/assets/user-guide/07-llm-review.png" \
-     > /tmp/pax-user-guide-concat.txt
+     >> /tmp/pax-user-guide-concat.txt
    printf "file '%s'\n" \
      "$PWD/documentation/assets/user-guide/07-llm-review.png" \
      >> /tmp/pax-user-guide-concat.txt
@@ -46,28 +57,35 @@ The checked-in media must be reproducible without real case data.
    rm /tmp/pax-user-guide-concat.txt
    ```
 6. Keep `documentation/assets/user-guide/pax-handleiding.nl.vtt` aligned with
-   the seven three-second slides. The final validation slide remains visible
-   until 24 seconds. The in-app guide uses these timestamps for both captions
-   and seekable steps.
+   the walkthrough. The menu slide remains visible from 3 through 12 seconds
+   for the role, language/mode, and collection-sharing cues. The final
+   validation slide remains visible until 36 seconds. The in-app guide uses
+   these timestamps for both captions and seekable steps.
 
 ### English walkthrough
 
 Repeat the same sequence with the English interface and English starter
 library. Save the screenshots under
 `documentation/assets/user-guide/en/`, keep
-`pax-user-guide.en.vtt` aligned with the seven slides, and generate
+`pax-user-guide.en.vtt` aligned with the walkthrough, and generate
 `pax-user-guide.webm`:
 
 ```sh
 printf "file '%s'\nduration 3\n" \
   "$PWD/documentation/assets/user-guide/en/01-home.png" \
+  > /tmp/pax-user-guide-en-concat.txt
+printf "file '%s'\nduration 9\n" \
+  "$PWD/documentation/assets/user-guide/en/08-menu.png" \
+  >> /tmp/pax-user-guide-en-concat.txt
+printf "file '%s'\nduration 3\n" \
   "$PWD/documentation/assets/user-guide/en/02-script-view.png" \
+  "$PWD/documentation/assets/user-guide/en/09-script-sharing.png" \
   "$PWD/documentation/assets/user-guide/en/03-script-edit.png" \
   "$PWD/documentation/assets/user-guide/en/04-llm-brief.png" \
   "$PWD/documentation/assets/user-guide/en/05-llm-prompt-light.png" \
   "$PWD/documentation/assets/user-guide/en/06-llm-json-paste.png" \
   "$PWD/documentation/assets/user-guide/en/07-llm-review.png" \
-  > /tmp/pax-user-guide-en-concat.txt
+  >> /tmp/pax-user-guide-en-concat.txt
 printf "file '%s'\n" \
   "$PWD/documentation/assets/user-guide/en/07-llm-review.png" \
   >> /tmp/pax-user-guide-en-concat.txt

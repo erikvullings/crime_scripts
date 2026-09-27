@@ -13,6 +13,8 @@ import llmBriefScreenshotNl from '../../../../documentation/assets/user-guide/04
 import llmPromptScreenshotNl from '../../../../documentation/assets/user-guide/05-llm-prompt-light.png';
 import llmJsonScreenshotNl from '../../../../documentation/assets/user-guide/06-llm-json-paste.png';
 import llmReviewScreenshotNl from '../../../../documentation/assets/user-guide/07-llm-review.png';
+import menuScreenshotNl from '../../../../documentation/assets/user-guide/08-menu.png';
+import scriptSharingScreenshotNl from '../../../../documentation/assets/user-guide/09-script-sharing.png';
 import homeScreenshotEn from '../../../../documentation/assets/user-guide/en/01-home.png';
 import scriptScreenshotEn from '../../../../documentation/assets/user-guide/en/02-script-view.png';
 import editorScreenshotEn from '../../../../documentation/assets/user-guide/en/03-script-edit.png';
@@ -20,6 +22,8 @@ import llmBriefScreenshotEn from '../../../../documentation/assets/user-guide/en
 import llmPromptScreenshotEn from '../../../../documentation/assets/user-guide/en/05-llm-prompt-light.png';
 import llmJsonScreenshotEn from '../../../../documentation/assets/user-guide/en/06-llm-json-paste.png';
 import llmReviewScreenshotEn from '../../../../documentation/assets/user-guide/en/07-llm-review.png';
+import menuScreenshotEn from '../../../../documentation/assets/user-guide/en/08-menu.png';
+import scriptSharingScreenshotEn from '../../../../documentation/assets/user-guide/en/09-script-sharing.png';
 import { Pages } from '../models';
 import { i18n, type MeiosisComponent, t } from '../services';
 import { escapeMarkdownAssetUrl } from '../services/markdown-url';
@@ -45,41 +49,69 @@ const videoStepsNl = [
     start: 3,
     end: 6,
     time: '0:03',
-    title: 'Een script bekijken',
-    description: 'Bekijk scènes, modi operandi, activiteiten en rol-pillen.',
+    title: 'Een rol kiezen',
+    description: 'Redacteur ontgrendelt scriptbewerking; Beheerder ook rollen en andere taxonomie. Dit is geen toegangsbeveiliging.',
   },
   {
     start: 6,
     end: 9,
     time: '0:06',
-    title: 'Een script bewerken',
-    description: 'Wijzig scriptgegevens, scènes en activiteiten.',
+    title: 'Taal en scriptmodus kiezen',
+    description: 'Kies de interface-taal en werk in publieke of afgeschermde modus.',
   },
   {
     start: 9,
     end: 12,
     time: '0:09',
-    title: 'De LLM-opdracht invullen',
-    description: 'Beschrijf taal, onderwerp, regio, detailniveau en bronnen.',
+    title: 'De collectie uitwisselen',
+    description: 'Download of upload JSON; inlezen vervangt de lokale werkruimte. Een publieke permanente link opent een kopie.',
   },
   {
     start: 12,
     end: 15,
     time: '0:12',
-    title: 'De prompt controleren',
-    description: 'Controleer en kopieer de prompt naar een LLM naar keuze.',
+    title: 'Een script bekijken',
+    description: 'Bekijk scènes, modi operandi, activiteiten en rol-pillen.',
   },
   {
     start: 15,
     end: 18,
     time: '0:15',
+    title: 'Eén script uitwisselen',
+    description: 'Exporteer bewerkbare JSON of een Word-leesrapport. De ontvanger leest de JSON in via het menu.',
+  },
+  {
+    start: 18,
+    end: 21,
+    time: '0:18',
+    title: 'Een script bewerken',
+    description: 'Wijzig scriptgegevens, scènes en activiteiten.',
+  },
+  {
+    start: 21,
+    end: 24,
+    time: '0:21',
+    title: 'De LLM-opdracht invullen',
+    description: 'Beschrijf taal, onderwerp, regio, detailniveau en bronnen.',
+  },
+  {
+    start: 24,
+    end: 27,
+    time: '0:24',
+    title: 'De prompt controleren',
+    description: 'Controleer en kopieer de prompt naar een LLM naar keuze.',
+  },
+  {
+    start: 27,
+    end: 30,
+    time: '0:27',
     title: 'De JSON plakken',
     description: 'Plak uitsluitend het JSON-antwoord terug in PAX.',
   },
   {
-    start: 18,
-    end: 24,
-    time: '0:18',
+    start: 30,
+    end: 36,
+    time: '0:30',
     title: 'Het resultaat controleren',
     description: 'Bekijk scènes, taxonomie en bronnen vóór de importbevestiging.',
   },
@@ -97,41 +129,69 @@ const videoStepsEn = [
     start: 3,
     end: 6,
     time: '0:03',
-    title: 'View a script',
-    description: 'Explore scenes, modi operandi, activities, and role pills.',
+    title: 'Select a role',
+    description: 'Editor unlocks script editing; Administrator also unlocks roles and other taxonomy. This is not access control.',
   },
   {
     start: 6,
     end: 9,
     time: '0:06',
-    title: 'Edit a script',
-    description: 'Change script details, scenes, and activities.',
+    title: 'Select language and script mode',
+    description: 'Choose the interface language and work in public or restricted mode.',
   },
   {
     start: 9,
     end: 12,
     time: '0:09',
-    title: 'Complete the LLM brief',
-    description: 'Describe the language, topic, region, detail level, and sources.',
+    title: 'Exchange the collection',
+    description: 'Download or upload JSON; uploading replaces the local workspace. A public permanent link opens a copy.',
   },
   {
     start: 12,
     end: 15,
     time: '0:12',
-    title: 'Review the prompt',
-    description: 'Check and copy the prompt to an LLM of your choice.',
+    title: 'View a script',
+    description: 'Explore scenes, modi operandi, activities, and role pills.',
   },
   {
     start: 15,
     end: 18,
     time: '0:15',
+    title: 'Exchange one script',
+    description: 'Export editable JSON or a Word reading report. The recipient uploads the JSON through the menu.',
+  },
+  {
+    start: 18,
+    end: 21,
+    time: '0:18',
+    title: 'Edit a script',
+    description: 'Change script details, scenes, and activities.',
+  },
+  {
+    start: 21,
+    end: 24,
+    time: '0:21',
+    title: 'Complete the LLM brief',
+    description: 'Describe the language, topic, region, detail level, and sources.',
+  },
+  {
+    start: 24,
+    end: 27,
+    time: '0:24',
+    title: 'Review the prompt',
+    description: 'Check and copy the prompt to an LLM of your choice.',
+  },
+  {
+    start: 27,
+    end: 30,
+    time: '0:27',
     title: 'Paste the JSON',
     description: 'Paste only the JSON response back into PAX.',
   },
   {
-    start: 18,
-    end: 24,
-    time: '0:18',
+    start: 30,
+    end: 36,
+    time: '0:30',
     title: 'Review the result',
     description: 'Check scenes, taxonomy, and sources before confirming import.',
   },
@@ -147,6 +207,8 @@ const guides = {
       ['assets/user-guide/05-llm-prompt-light.png', llmPromptScreenshotNl],
       ['assets/user-guide/06-llm-json-paste.png', llmJsonScreenshotNl],
       ['assets/user-guide/07-llm-review.png', llmReviewScreenshotNl],
+      ['assets/user-guide/08-menu.png', menuScreenshotNl],
+      ['assets/user-guide/09-script-sharing.png', scriptSharingScreenshotNl],
     ])),
     captions: guideCaptionsNl,
     video: guideVideoNl,
@@ -163,6 +225,8 @@ const guides = {
       ['assets/user-guide/en/05-llm-prompt-light.png', llmPromptScreenshotEn],
       ['assets/user-guide/en/06-llm-json-paste.png', llmJsonScreenshotEn],
       ['assets/user-guide/en/07-llm-review.png', llmReviewScreenshotEn],
+      ['assets/user-guide/en/08-menu.png', menuScreenshotEn],
+      ['assets/user-guide/en/09-script-sharing.png', scriptSharingScreenshotEn],
     ])),
     captions: guideCaptionsEn,
     video: guideVideoEn,

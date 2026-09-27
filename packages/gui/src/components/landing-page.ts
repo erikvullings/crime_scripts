@@ -2,7 +2,13 @@ import m from 'mithril';
 import { Button, Icon } from 'mithril-materialized';
 import background from '../assets/background.webp';
 import { Pages } from '../models';
-import { APP_TITLE, type MeiosisComponent, t } from '../services';
+import {
+  APP_TITLE,
+  hasUserLoadedCollection,
+  type MeiosisComponent,
+  ONBOARDING_CHOICE_KEY,
+  t,
+} from '../services';
 import { routingSvc } from '../services/routing-service';
 
 // const readerAvailable = window.File && window.FileReader && window.FileList && window.Blob;
@@ -18,8 +24,10 @@ export const LandingPage: MeiosisComponent = () => {
     }) => {
       setPage(Pages.LANDING);
     },
-    view: ({ attrs: { actions } }) => [
-      m('.center', [
+    view: ({ attrs: { actions } }) => {
+      const highlightOverview = hasUserLoadedCollection(localStorage.getItem(ONBOARDING_CHOICE_KEY));
+
+      return m('.center', [
         m('.landing-hero', [
           m('img.landing-hero-image[width=1408][height=704]', { src: background, alt: '' }),
           m('.landing-hero-content', [
@@ -27,7 +35,7 @@ export const LandingPage: MeiosisComponent = () => {
             m('p', t('LANDING_CTA_DESCRIPTION')),
             m('.landing-hero-actions', [
               m(Button, {
-                className: 'landing-hero-cta',
+                className: `landing-hero-cta${highlightOverview ? ' landing-hero-cta--secondary' : ''}`,
                 label: starterLoading ? t('LOADING_STARTER') : t('USE_STARTER'),
                 iconName: 'library_books',
                 disabled: starterLoading,
@@ -39,7 +47,7 @@ export const LandingPage: MeiosisComponent = () => {
                 },
               }),
               m(Button, {
-                className: 'landing-hero-cta landing-hero-cta--secondary',
+                className: `landing-hero-cta${highlightOverview ? '' : ' landing-hero-cta--secondary'}`,
                 label: t('GO_TO_HOME'),
                 iconName: 'home',
                 onclick: () => actions.changePage(Pages.HOME),
@@ -48,17 +56,17 @@ export const LandingPage: MeiosisComponent = () => {
           ]),
         ]),
         m('section.landing-learning.container[aria-labelledby=landing-learning-title]', [
-          m('.landing-learning-icon[aria-hidden=true]', m(Icon, { iconName: 'school' })),
           m('.landing-learning-copy', [
             m('h2#landing-learning-title', t('LANDING_LEARNING_TITLE')),
             m('p', t('LANDING_LEARNING_DESCRIPTION')),
           ]),
-          m(Button, {
-            className: 'landing-learning-action',
-            label: t('LANDING_LEARNING_ACTION'),
-            iconName: 'arrow_forward',
-            onclick: () => actions.changePage(Pages.LEARNING),
-          }),
+          m('a.landing-section-action.landing-learning-action', {
+            href: routingSvc.href(Pages.LEARNING),
+          }, [
+            m('i.material-icons[aria-hidden=true]', 'school'),
+            m('span', t('LANDING_LEARNING_ACTION')),
+            m('i.material-icons.landing-section-action-trailing[aria-hidden=true]', 'arrow_forward'),
+          ]),
         ]),
         m(
           '.section',
@@ -96,13 +104,13 @@ export const LandingPage: MeiosisComponent = () => {
             m('h2#landing-guide-title', t('LANDING_GUIDE_TITLE')),
             m('p', t('LANDING_GUIDE_DESCRIPTION')),
           ]),
-          m('a.landing-guide-action', { href: routingSvc.href(Pages.GUIDE) }, [
+          m('a.landing-section-action.landing-guide-action', { href: routingSvc.href(Pages.GUIDE) }, [
             m('i.material-icons[aria-hidden=true]', 'menu_book'),
             m('span', t('LANDING_GUIDE_OPEN')),
-            m('i.material-icons.landing-guide-action-trailing[aria-hidden=true]', 'arrow_forward'),
+            m('i.material-icons.landing-section-action-trailing[aria-hidden=true]', 'arrow_forward'),
           ]),
         ]),
-      ]),
-    ],
+      ]);
+    },
   };
 };
