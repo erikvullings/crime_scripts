@@ -1,27 +1,70 @@
 # PAX user guide
 
-This guide covers the standard user journey, editing a crime script, and the
-LLM wizard. The images use public starter content and synthetic test data.
+This guide covers the menu, sharing and loading, the standard user journey,
+editing a crime script, and the LLM wizard. The images use public starter
+content and synthetic test data.
 
 <!-- PAX_GUIDE_VIDEO -->
 
-## 1. Workspace and script mode
+## 1. Menu, role, language, and script mode
 
 PAX stores the workspace locally in the browser. On first use, choose the
-English starter library or an empty workspace. Use **Script mode** to switch
-between:
+English starter library, an empty workspace, or your own JSON model. Open the
+menu in the top-left corner to configure the workspace and view.
+
+First select the role that matches your task:
+
+- **User**: view, search, and export scripts.
+- **Editor**: also edit and delete existing scripts.
+- **Administrator**: additionally create scripts, use the LLM wizard, and edit
+  shared taxonomy such as roles, attributes, and locations.
+
+You can only edit a script after selecting **Editor** or **Administrator**.
+Only an **Administrator** can add or change roles and other shared taxonomy.
+The role selector is prototype behavior in the browser, not authentication or
+access control.
+
+Use **Language** to select the interface language and the language of a starter
+library imported later. Existing scripts are not translated automatically.
+
+Use **Script mode** to switch between:
 
 - **Public mode**: shows and exports public scripts only.
-- **Restricted mode**: can also show restricted scripts. Exporting and sharing
-  require additional confirmation; a permanent link is unavailable while the
-  workspace contains restricted content.
+- **Restricted mode**: shows a restricted counterpart where one is available.
+  Exporting requires additional confirmation; a permanent link is unavailable
+  while the model contains restricted content.
 
-The selected mode is not a substitute for access control. Share JSON or Word
-exports only through an appropriately secured channel.
+Script mode is not access control either. Share restricted information only
+through an appropriately secured channel.
 
-![Home page with script filters and starter library](assets/user-guide/en/01-home.png)
+![Menu with workspace actions, role, language, and script mode](assets/user-guide/en/08-menu.png)
 
-## 2. View a script
+## 2. Import, export, and share
+
+The menu contains actions for the complete workspace:
+
+- **Download model as JSON** creates an editable export of the collection. In
+  public mode it contains public scripts only.
+- **Upload model as JSON** makes the selected file the current local
+  workspace. Export the existing workspace first if it must be retained.
+- **Create permanent link** copies a URL containing the public model. Its
+  recipient opens a copy in their own browser. Permanent links are disabled
+  for models containing restricted content.
+
+For one script, open **More actions** on that script:
+
+- **Export to JSON** creates an editable file containing the script and its
+  required taxonomy.
+- **Export to Word** creates a reading report; it is not an editable PAX model.
+
+The recipient selects **Upload model as JSON** to open a collection or
+single-script file. This replaces the current local workspace; it does not
+merge arbitrary files automatically. Before sharing, always check the
+classification and filename, and use a secure channel for restricted files.
+
+![Script actions for focused JSON and Word export](assets/user-guide/en/09-script-sharing.png)
+
+## 3. View a script
 
 1. Search for or filter a script on the home page.
 2. Open it by selecting the card or the **more** action.
@@ -35,7 +78,7 @@ exports only through an appropriately secured channel.
 
 ![Viewer for Phishing and payment fraud](assets/user-guide/en/02-script-view.png)
 
-## 3. Edit a script
+## 4. Edit a script
 
 Select **Edit script**. The editor contains a scene overview and details for
 the selected scene.
@@ -56,7 +99,7 @@ operations. Before substantial changes, save a JSON export as a recovery point.
 
 ![Crime-script editor with scene overview](assets/user-guide/en/03-script-edit.png)
 
-## 4. Prepare a script with the LLM wizard
+## 5. Prepare a script with the LLM wizard
 
 Select **Generate with LLM** on the home page. PAX uses a manual,
 provider-neutral hand-off: the application does not contact an LLM, store an
@@ -114,11 +157,13 @@ a substantive review.
 
 ![Local review of the generated script](assets/user-guide/en/07-llm-review.png)
 
-## 5. Import, export, and recovery
+## 6. Safe exchange and recovery
 
-- Export the complete workspace as JSON for a local recovery point.
-- A script JSON file is suitable for focused review and exchange.
-- A Word export is a reading report, not a complete replacement for editable
-  JSON.
+- Export the complete workspace as JSON for a local recovery point before
+  loading another model.
+- Use a script JSON file for focused review and exchange, and a collection JSON
+  file to transfer a complete workspace.
+- Treat a permanent link as sensitive information: the public model is encoded
+  in its URL.
 - Always check the filename and classification before sharing.
 - Clear local application data only after verifying a usable recovery file.
