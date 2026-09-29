@@ -495,6 +495,10 @@
   border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
 }
 
+.case-result-detail.is-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .case-result h4 {
   margin: 0 0 0.65rem;
   font-size: 1rem;
@@ -533,6 +537,16 @@
 .case-evidence-list small {
   margin-top: 0.1rem;
   opacity: 0.75;
+}
+
+.case-evidence-list .case-evidence-completeness {
+  color: var(--mm-primary-color);
+  font-weight: 600;
+  opacity: 1;
+}
+
+.case-evidence-list .case-evidence-partial .case-evidence-completeness {
+  color: #9a5c00;
 }
 
 .case-evidence-parts {

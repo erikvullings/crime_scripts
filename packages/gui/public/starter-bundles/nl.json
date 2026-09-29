@@ -259,7 +259,7 @@
               "indicators": [
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:indicator:signaal",
-                  "label": "Ongebruikelijke toegangspogingen, gedeelde passen of afwijkende dienstpatronen.",
+                  "label": "Haventoegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon.",
                   "description": "Dit is een mogelijk signaal, geen bewijs op zichzelf. Beoordeel het in samenhang met andere informatie."
                 }
               ],
@@ -267,7 +267,7 @@
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:activity:kern",
                   "label": "Een facilitator probeert invloed of toegang in de havenketen te verkrijgen",
-                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over facilitator, invloed, toegang en havenketen inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Ongebruikelijke toegangspogingen, gedeelde passen of afwijkende dienstpatronen’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
+                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over facilitator, invloed, toegang en havenketen inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Haventoegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
                   "type": 1,
                   "cast": [
                     "nl-starter:cast:facilitator",
@@ -295,7 +295,7 @@
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:activity:opvolging",
                   "label": "Beperk rechten tot taken en controleer toegang en integriteit periodiek",
-                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over beperk, rechten, taken, toegang en integriteit inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Ongebruikelijke toegangspogingen, gedeelde passen of afwijkende dienstpatronen’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
+                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over beperk, rechten, taken, toegang en integriteit inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Haventoegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
                   "type": 1,
                   "cast": [
                     "nl-starter:cast:facilitator",
@@ -347,7 +347,7 @@
               "indicators": [
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:uithalen:variant:hoofdroute:indicator:signaal",
-                  "label": "Verbroken verzegeling, ongeplande verplaatsing of een mismatch in registratie.",
+                  "label": "Beschadigd containerzegel, ongeplande verplaatsing of een mismatch in registratie.",
                   "description": "Dit is een mogelijk signaal, geen bewijs op zichzelf. Beoordeel het in samenhang met andere informatie."
                 }
               ],
@@ -355,7 +355,7 @@
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:uithalen:variant:hoofdroute:activity:kern",
                   "label": "Verdachte goederen worden buiten het normale logistieke proces gebracht",
-                  "description": "Binnen ‘Onttrekking aan de goederenstroom’ geven gegevens over verdachte goederen buiten het normale logistieke proces inzicht in de verhouding tussen Crimineel netwerk en Facilitator. De betrokken partners — Havenbedrijf en terminalbeheerders; Douane; Politie — wegen het signaal ‘Verbroken verzegeling, ongeplande verplaatsing of een mismatch in registratie’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
+                  "description": "Binnen ‘Onttrekking aan de goederenstroom’ geven gegevens over verdachte goederen buiten het normale logistieke proces inzicht in de verhouding tussen Crimineel netwerk en Facilitator. De betrokken partners — Havenbedrijf en terminalbeheerders; Douane; Politie — wegen het signaal ‘Beschadigd containerzegel, ongeplande verplaatsing of een mismatch in registratie’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
                   "type": 1,
                   "cast": [
                     "nl-starter:cast:crimineel-netwerk",
@@ -387,7 +387,7 @@
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:uithalen:variant:hoofdroute:activity:opvolging",
                   "label": "Borg cameratoezicht, meldprocedures en snelle gezamenlijke opvolging",
-                  "description": "Binnen ‘Onttrekking aan de goederenstroom’ geven gegevens over cameratoezicht, meldprocedures en opvolging inzicht in de verhouding tussen Crimineel netwerk en Facilitator. De betrokken partners — Havenbedrijf en terminalbeheerders; Douane; Politie — wegen het signaal ‘Verbroken verzegeling, ongeplande verplaatsing of een mismatch in registratie’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
+                  "description": "Binnen ‘Onttrekking aan de goederenstroom’ geven gegevens over cameratoezicht, meldprocedures en opvolging inzicht in de verhouding tussen Crimineel netwerk en Facilitator. De betrokken partners — Havenbedrijf en terminalbeheerders; Douane; Politie — wegen het signaal ‘Beschadigd containerzegel, ongeplande verplaatsing of een mismatch in registratie’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
                   "type": 1,
                   "cast": [
                     "nl-starter:cast:crimineel-netwerk",

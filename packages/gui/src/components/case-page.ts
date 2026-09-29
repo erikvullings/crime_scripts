@@ -251,7 +251,9 @@ export const CasePage: MeiosisComponent = () => {
                     }),
                   ]),
                 ]),
-                m('.case-result-detail', [
+                m('.case-result-detail', {
+                  class: result.unmatchedEvidence.length === 0 ? 'is-single' : '',
+                }, [
                   m('section', [
                     m('h4', t('CASE_MATCHED_HEADING')),
                     m('ul.case-evidence-list', result.matchedEvidence.map((match) => {
@@ -262,6 +264,9 @@ export const CasePage: MeiosisComponent = () => {
                         m(Icon, { iconName: partial ? 'adjust' : 'check_circle' }),
                         m('span', [
                           m('strong', match.evidence.label),
+                          m('small.case-evidence-completeness',
+                            t(partial ? 'CASE_PARTIAL_MATCH' : 'CASE_FULL_MATCH')
+                          ),
                           context && m('small', context),
                           partial && m('small.case-evidence-parts', [
                             m('span', t('CASE_MATCHED_PARTS', {
@@ -275,25 +280,16 @@ export const CasePage: MeiosisComponent = () => {
                       ]);
                     })),
                   ]),
-                  m('section', [
+                  result.unmatchedEvidence.length > 0 && m('section', [
                     m('h4', t('CASE_UNMATCHED_HEADING')),
-                    result.unmatchedEvidence.length > 0
-                      ? m('ul.case-evidence-list.case-evidence-list--unmatched',
-                        result.unmatchedEvidence.map(({ id, label }) =>
-                          m('li', { key: id }, [
-                            m(Icon, { iconName: 'help_outline' }),
-                            m('span', label),
-                          ])
-                        )
-                      )
-                      : m(
-                        'p.case-all-explained',
-                        t(
-                          hasPartialEvidence
-                            ? 'CASE_PARTIAL_EVIDENCE_NOTICE'
-                            : 'CASE_ALL_EVIDENCE_MATCHED'
-                        )
+                    m('ul.case-evidence-list.case-evidence-list--unmatched',
+                      result.unmatchedEvidence.map(({ id, label }) =>
+                        m('li', { key: id }, [
+                          m(Icon, { iconName: 'help_outline' }),
+                          m('span', label),
+                        ])
                       ),
+                    ),
                   ]),
                 ]),
                 result.scenes.length > 0 && m('section.case-scenes', [

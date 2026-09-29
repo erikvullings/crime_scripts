@@ -259,7 +259,7 @@
               "indicators": [
                 {
                   "id": "en-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:indicator:signaal",
-                  "label": "Unusual access attempts, shared passes, or irregular service patterns.",
+                  "label": "Port access pass used in an unusual access attempt, shared use, or an irregular shift pattern.",
                   "description": "This is a possible signal, not evidence on its own. Assess it in conjunction with other information."
                 }
               ],
@@ -267,7 +267,7 @@
                 {
                   "id": "en-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:activity:kern",
                   "label": "A facilitator attempts to gain influence or access within the port chain",
-                  "description": "Within ‘Unlawful access’, data relating to “A facilitator attempts to gain influence or access within the port chain” provide insight into the relationship between Facilitator and Logistics worker. The partners involved — Port authority and terminal operators; Police — assess the indicator ‘Unusual access attempts, shared passes, or irregular service patterns’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
+                  "description": "Within ‘Unlawful access’, data relating to “A facilitator attempts to gain influence or access within the port chain” provide insight into the relationship between Facilitator and Logistics worker. The partners involved — Port authority and terminal operators; Police — assess the indicator ‘Port access pass used in an unusual access attempt, shared use, or an irregular shift pattern’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
                   "type": 1,
                   "cast": [
                     "en-starter:cast:facilitator",
@@ -295,7 +295,7 @@
                 {
                   "id": "en-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:activity:opvolging",
                   "label": "Limit rights to tasks and periodically check access and integrity",
-                  "description": "Within ‘Unlawful access’, data relating to “Limit rights to tasks and periodically check access and integrity” provide insight into the relationship between Facilitator and Logistics worker. The partners involved — Port authority and terminal operators; Police — assess the indicator ‘Unusual access attempts, shared passes, or irregular service patterns’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
+                  "description": "Within ‘Unlawful access’, data relating to “Limit rights to tasks and periodically check access and integrity” provide insight into the relationship between Facilitator and Logistics worker. The partners involved — Port authority and terminal operators; Police — assess the indicator ‘Port access pass used in an unusual access attempt, shared use, or an irregular shift pattern’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
                   "type": 1,
                   "cast": [
                     "en-starter:cast:facilitator",
@@ -347,7 +347,7 @@
               "indicators": [
                 {
                   "id": "en-starter:script:cocaine-import-havens:scene:uithalen:variant:hoofdroute:indicator:signaal",
-                  "label": "Broken seal, unplanned movement, or a mismatch in registration.",
+                  "label": "Damaged container seal, unplanned movement, or a mismatch in registration.",
                   "description": "This is a possible signal, not evidence on its own. Assess it in conjunction with other information."
                 }
               ],
@@ -355,7 +355,7 @@
                 {
                   "id": "en-starter:script:cocaine-import-havens:scene:uithalen:variant:hoofdroute:activity:kern",
                   "label": "Suspect goods are removed from the normal logistic process",
-                  "description": "Within ‘Diversion from the goods flow’, data relating to “Suspect goods are removed from the normal logistic process” provide insight into the relationship between Criminal network and Facilitator. The partners involved — Port authority and terminal operators; Customs; Police — assess the indicator ‘Broken seal, unplanned movement, or a mismatch in registration’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
+                  "description": "Within ‘Diversion from the goods flow’, data relating to “Suspect goods are removed from the normal logistic process” provide insight into the relationship between Criminal network and Facilitator. The partners involved — Port authority and terminal operators; Customs; Police — assess the indicator ‘Damaged container seal, unplanned movement, or a mismatch in registration’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
                   "type": 1,
                   "cast": [
                     "en-starter:cast:crimineel-netwerk",
@@ -387,7 +387,7 @@
                 {
                   "id": "en-starter:script:cocaine-import-havens:scene:uithalen:variant:hoofdroute:activity:opvolging",
                   "label": "Secure camera surveillance, reporting procedures, and rapid joint follow-up",
-                  "description": "Within ‘Diversion from the goods flow’, data relating to “Secure camera surveillance, reporting procedures, and rapid joint follow-up” provide insight into the relationship between Criminal network and Facilitator. The partners involved — Port authority and terminal operators; Customs; Police — assess the indicator ‘Broken seal, unplanned movement, or a mismatch in registration’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
+                  "description": "Within ‘Diversion from the goods flow’, data relating to “Secure camera surveillance, reporting procedures, and rapid joint follow-up” provide insight into the relationship between Criminal network and Facilitator. The partners involved — Port authority and terminal operators; Customs; Police — assess the indicator ‘Damaged container seal, unplanned movement, or a mismatch in registration’ in conjunction with other information. A single anomaly does not, by itself, establish wrongdoing.",
                   "type": 1,
                   "cast": [
                     "en-starter:cast:crimineel-netwerk",

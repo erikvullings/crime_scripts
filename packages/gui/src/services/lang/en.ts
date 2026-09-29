@@ -177,6 +177,8 @@ export const messages = {
   CASE_EVIDENCE_COVERAGE_PARTIAL:
     '{matched} of {total} observations matched at least in part',
   CASE_MATCHED_HEADING: 'Evidence found in this script',
+  CASE_FULL_MATCH: 'Full match',
+  CASE_PARTIAL_MATCH: 'Partial match',
   CASE_MATCHED_PARTS: 'Matched: {terms}',
   CASE_MISSING_PARTS: 'Not found: {terms}',
   CASE_UNMATCHED_HEADING: 'Entered evidence not found',

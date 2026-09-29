@@ -13,8 +13,16 @@ import {
   suggestionKey,
   validateStarterBundle,
 } from '../src/models/starter-library.ts';
+import { matchCaseEvidence, type CaseTokenizer } from '../src/models/case-matching.ts';
 import { normalizeDataModel } from '../src/models/model-normalization.ts';
 import { scriptsForMode } from '../src/models/script-classification.ts';
+
+const tokenize: CaseTokenizer = (text) =>
+  text
+    .normalize('NFKD')
+    .replace(/\p{M}/gu, '')
+    .toLowerCase()
+    .match(/[\p{L}\p{N}]+/gu) || [];
 
 const bundle = (): DataModel =>
   normalizeDataModel({
@@ -137,6 +145,32 @@ test('the Dutch starter fixture contains all researched topics', () => {
   });
   assert.deepEqual(fixture.crimeScripts.map(({ id }) => id), expectedDutchStarterIds);
   assert.deepEqual(fixture.crimeScripts.map(({ label }) => label), expectedDutchStarterLabels);
+});
+
+test('the Dutch harbor starter fully matches the documented case observations', () => {
+  const fixture = validateStarterBundle(
+    JSON.parse(readFileSync('public/starter-bundles/nl.json', 'utf8'))
+  );
+
+  const [result] = matchCaseEvidence({
+    model: fixture,
+    scriptMode: 'public',
+    text: 'haventoegangspas, beschadigd containerzegel',
+    tokenize,
+  });
+
+  assert.equal(result.scriptId, 'nl-starter:script:cocaine-import-havens');
+  assert.deepEqual(
+    result.matchedEvidence.map(({ evidence, termCoverage }) => ({
+      label: evidence.label,
+      termCoverage,
+    })),
+    [
+      { label: 'haventoegangspas', termCoverage: 1 },
+      { label: 'beschadigd containerzegel', termCoverage: 1 },
+    ]
+  );
+  assert.deepEqual(result.unmatchedEvidence, []);
 });
 
 test('the English starter fixture mirrors the complete Dutch starter library', () => {

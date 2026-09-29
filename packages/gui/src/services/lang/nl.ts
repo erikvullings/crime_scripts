@@ -179,6 +179,8 @@ export const messagesNL: typeof messages = {
   CASE_EVIDENCE_COVERAGE_PARTIAL:
     '{matched} van {total} waarnemingen komen minstens gedeeltelijk overeen',
   CASE_MATCHED_HEADING: 'Bewijs gevonden in dit script',
+  CASE_FULL_MATCH: 'Volledige overeenkomst',
+  CASE_PARTIAL_MATCH: 'Gedeeltelijke overeenkomst',
   CASE_MATCHED_PARTS: 'Overeenkomst: {terms}',
   CASE_MISSING_PARTS: 'Niet gevonden: {terms}',
   CASE_UNMATCHED_HEADING: 'Ingevoerd bewijs niet gevonden',
