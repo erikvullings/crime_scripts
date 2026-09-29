@@ -15,6 +15,8 @@ import llmJsonScreenshotNl from '../../../../documentation/assets/user-guide/06-
 import llmReviewScreenshotNl from '../../../../documentation/assets/user-guide/07-llm-review.png';
 import menuScreenshotNl from '../../../../documentation/assets/user-guide/08-menu.png';
 import scriptSharingScreenshotNl from '../../../../documentation/assets/user-guide/09-script-sharing.png';
+import caseAnalysisScreenshotNl from '../../../../documentation/assets/user-guide/10-case-analysis.png';
+import learningModeScreenshotNl from '../../../../documentation/assets/user-guide/11-learning-mode.png';
 import homeScreenshotEn from '../../../../documentation/assets/user-guide/en/01-home.png';
 import scriptScreenshotEn from '../../../../documentation/assets/user-guide/en/02-script-view.png';
 import editorScreenshotEn from '../../../../documentation/assets/user-guide/en/03-script-edit.png';
@@ -24,6 +26,8 @@ import llmJsonScreenshotEn from '../../../../documentation/assets/user-guide/en/
 import llmReviewScreenshotEn from '../../../../documentation/assets/user-guide/en/07-llm-review.png';
 import menuScreenshotEn from '../../../../documentation/assets/user-guide/en/08-menu.png';
 import scriptSharingScreenshotEn from '../../../../documentation/assets/user-guide/en/09-script-sharing.png';
+import caseAnalysisScreenshotEn from '../../../../documentation/assets/user-guide/en/10-case-analysis.png';
+import learningModeScreenshotEn from '../../../../documentation/assets/user-guide/en/11-learning-mode.png';
 import { Pages } from '../models';
 import { i18n, type MeiosisComponent, t } from '../services';
 import { escapeMarkdownAssetUrl } from '../services/markdown-url';
@@ -115,6 +119,20 @@ const videoStepsNl = [
     title: 'Het resultaat controleren',
     description: 'Bekijk scènes, taxonomie en bronnen vóór de importbevestiging.',
   },
+  {
+    start: 36,
+    end: 40,
+    time: '0:36',
+    title: 'Een casus verkennen',
+    description: 'Vergelijk concrete waarnemingen en zie per resultaat volledige, gedeeltelijke en ontbrekende overeenkomsten.',
+  },
+  {
+    start: 40,
+    end: 44,
+    time: '0:40',
+    title: 'Oefenen in de leermodus',
+    description: 'Reconstrueer delen van een publiek script en vergelijk uw interpretatie zonder afwijkingen automatisch fout te noemen.',
+  },
 ];
 
 const videoStepsEn = [
@@ -195,6 +213,20 @@ const videoStepsEn = [
     title: 'Review the result',
     description: 'Check scenes, taxonomy, and sources before confirming import.',
   },
+  {
+    start: 36,
+    end: 40,
+    time: '0:36',
+    title: 'Explore a case',
+    description: 'Compare concrete observations and see full, partial, and missing matches for each result.',
+  },
+  {
+    start: 40,
+    end: 44,
+    time: '0:40',
+    title: 'Practise in learning mode',
+    description: 'Reconstruct parts of a public script and compare your interpretation without treating differences as automatically wrong.',
+  },
 ];
 
 const guides = {
@@ -209,6 +241,8 @@ const guides = {
       ['assets/user-guide/07-llm-review.png', llmReviewScreenshotNl],
       ['assets/user-guide/08-menu.png', menuScreenshotNl],
       ['assets/user-guide/09-script-sharing.png', scriptSharingScreenshotNl],
+      ['assets/user-guide/10-case-analysis.png', caseAnalysisScreenshotNl],
+      ['assets/user-guide/11-learning-mode.png', learningModeScreenshotNl],
     ])),
     captions: guideCaptionsNl,
     video: guideVideoNl,
@@ -227,6 +261,8 @@ const guides = {
       ['assets/user-guide/en/07-llm-review.png', llmReviewScreenshotEn],
       ['assets/user-guide/en/08-menu.png', menuScreenshotEn],
       ['assets/user-guide/en/09-script-sharing.png', scriptSharingScreenshotEn],
+      ['assets/user-guide/en/10-case-analysis.png', caseAnalysisScreenshotEn],
+      ['assets/user-guide/en/11-learning-mode.png', learningModeScreenshotEn],
     ])),
     captions: guideCaptionsEn,
     video: guideVideoEn,

@@ -103,7 +103,42 @@ herstelpunt.
 
 ![Crime-scripteditor met scène-overzicht](assets/user-guide/03-script-edit.png)
 
-## 5. Een script voorbereiden met de LLM-wizard
+## 5. Een casus verkennen
+
+Open **Casus** en voer concrete waarnemingen in, één per regel of gescheiden
+door komma's. PAX vergelijkt deze lokaal met de beschikbare crime scripts.
+Geselecteerde producten, locaties, rollen, attributen en transportmiddelen
+gelden als vereisten; laat ze leeg wanneer ze onzeker zijn.
+
+Per hypothese zie je:
+
+- hoeveel waarnemingen volledig of gedeeltelijk overeenkomen;
+- welke termen wel en niet zijn gevonden;
+- in welke scènes de overeenkomsten voorkomen;
+- welke ingevoerde waarnemingen niet zijn verklaard.
+
+Een overeenkomst is een startpunt voor analyse, geen conclusie over wat er is
+gebeurd. Vergelijk waar mogelijk twee of drie hypothesen en leg vast welke
+aanvullende informatie het onderscheid kan maken.
+
+![Casusanalyse met volledige en gedeeltelijke overeenkomsten](assets/user-guide/10-case-analysis.png)
+
+## 6. Oefenen in de leermodus
+
+Open **Leermodus** en kies een publiek referentiescript. Zonder eigen selectie
+gebruikt PAX de starterbibliotheek. Oefeningen laten scènes en activiteiten
+aanvullen of ordenen en vragen om passende rollen, indicatoren of barrières.
+Keuzeopties kunnen ook uit andere scripts komen.
+
+Na **Vergelijk met referentie** toont PAX overeenkomsten en verschillen. Een
+afwijkend antwoord wordt niet automatisch fout genoemd: andere keuzes kunnen
+ook verdedigbaar zijn en horen aanleiding te geven tot reflectie. Let bij
+onbeoordeelde starters op de waarschuwing dat het referentiescript
+leermateriaal is en geen vaststaande waarheid.
+
+![Oefening met openbare starterinhoud in de leermodus](assets/user-guide/11-learning-mode.png)
+
+## 7. Een script voorbereiden met de LLM-wizard
 
 Kies op de startpagina **Genereren met LLM**. PAX gebruikt een handmatige,
 provider-neutrale overdracht: de toepassing benadert geen LLM, bewaart geen
@@ -161,7 +196,7 @@ mens het inhoudelijk heeft beoordeeld.
 
 ![Lokale controle van het gegenereerde script](assets/user-guide/07-llm-review.png)
 
-## 6. Veilig uitwisselen en herstellen
+## 8. Veilig uitwisselen en herstellen
 
 - Exporteer de volledige werkruimte als JSON voor een lokaal herstelpunt vóór
   je een ander model inleest.

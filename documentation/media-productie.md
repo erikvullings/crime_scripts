@@ -22,10 +22,13 @@ The checked-in media must be reproducible without real case data.
    - the empty LLM brief;
    - a prompt generated from synthetic values, in light theme;
    - deterministic synthetic JSON pasted into PAX;
-   - PAX's local validation preview before import.
+   - PAX's local validation preview before import;
+   - case-analysis results with one full and one partial match;
+   - an active learning-mode exercise.
 4. Save the original seven PNG files as `01-home.png` through
    `07-llm-review.png`, the application menu as `08-menu.png`, and the script
-   action menu as `09-script-sharing.png` in
+   action menu as `09-script-sharing.png`. Save the case and learning captures
+   as `10-case-analysis.png` and `11-learning-mode.png` in
    `documentation/assets/user-guide/`. The JSON example must validate in the
    current wizard. Do not imply that a specific LLM generated it unless that
    interaction was genuinely captured.
@@ -45,22 +48,29 @@ The checked-in media must be reproducible without real case data.
      "$PWD/documentation/assets/user-guide/04-llm-brief.png" \
      "$PWD/documentation/assets/user-guide/05-llm-prompt-light.png" \
      "$PWD/documentation/assets/user-guide/06-llm-json-paste.png" \
+     >> /tmp/pax-user-guide-concat.txt
+   printf "file '%s'\nduration 6\n" \
      "$PWD/documentation/assets/user-guide/07-llm-review.png" \
      >> /tmp/pax-user-guide-concat.txt
+   printf "file '%s'\nduration 4\n" \
+     "$PWD/documentation/assets/user-guide/10-case-analysis.png" \
+     "$PWD/documentation/assets/user-guide/11-learning-mode.png" \
+     >> /tmp/pax-user-guide-concat.txt
    printf "file '%s'\n" \
-     "$PWD/documentation/assets/user-guide/07-llm-review.png" \
+     "$PWD/documentation/assets/user-guide/11-learning-mode.png" \
      >> /tmp/pax-user-guide-concat.txt
    ffmpeg -y -f concat -safe 0 -i /tmp/pax-user-guide-concat.txt \
      -vf "fps=24,scale=1440:900:force_original_aspect_ratio=decrease,pad=1440:900:(ow-iw)/2:(oh-ih)/2:color=white,format=yuv420p" \
-     -c:v libvpx-vp9 -crf 36 -b:v 0 -an \
+     -c:v libvpx-vp9 -crf 36 -b:v 0 -an -t 44 \
      documentation/assets/user-guide/pax-handleiding.webm
    rm /tmp/pax-user-guide-concat.txt
    ```
 6. Keep `documentation/assets/user-guide/pax-handleiding.nl.vtt` aligned with
    the walkthrough. The menu slide remains visible from 3 through 12 seconds
-   for the role, language/mode, and collection-sharing cues. The final
-   validation slide remains visible until 36 seconds. The in-app guide uses
-   these timestamps for both captions and seekable steps.
+   for the role, language/mode, and collection-sharing cues. The validation
+   slide remains visible until 36 seconds, followed by case analysis until 40
+   seconds and learning mode until 44 seconds. The in-app guide uses these
+   timestamps for both captions and seekable steps.
 
 ### English walkthrough
 
@@ -84,14 +94,20 @@ printf "file '%s'\nduration 3\n" \
   "$PWD/documentation/assets/user-guide/en/04-llm-brief.png" \
   "$PWD/documentation/assets/user-guide/en/05-llm-prompt-light.png" \
   "$PWD/documentation/assets/user-guide/en/06-llm-json-paste.png" \
+  >> /tmp/pax-user-guide-en-concat.txt
+printf "file '%s'\nduration 6\n" \
   "$PWD/documentation/assets/user-guide/en/07-llm-review.png" \
   >> /tmp/pax-user-guide-en-concat.txt
+printf "file '%s'\nduration 4\n" \
+  "$PWD/documentation/assets/user-guide/en/10-case-analysis.png" \
+  "$PWD/documentation/assets/user-guide/en/11-learning-mode.png" \
+  >> /tmp/pax-user-guide-en-concat.txt
 printf "file '%s'\n" \
-  "$PWD/documentation/assets/user-guide/en/07-llm-review.png" \
+  "$PWD/documentation/assets/user-guide/en/11-learning-mode.png" \
   >> /tmp/pax-user-guide-en-concat.txt
 ffmpeg -y -f concat -safe 0 -i /tmp/pax-user-guide-en-concat.txt \
   -vf "fps=24,scale=1440:900:force_original_aspect_ratio=decrease,pad=1440:900:(ow-iw)/2:(oh-ih)/2:color=white,format=yuv420p" \
-  -c:v libvpx-vp9 -crf 36 -b:v 0 -an \
+  -c:v libvpx-vp9 -crf 36 -b:v 0 -an -t 44 \
   documentation/assets/user-guide/en/pax-user-guide.webm
 rm /tmp/pax-user-guide-en-concat.txt
 ```

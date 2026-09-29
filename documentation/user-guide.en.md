@@ -99,7 +99,42 @@ operations. Before substantial changes, save a JSON export as a recovery point.
 
 ![Crime-script editor with scene overview](assets/user-guide/en/03-script-edit.png)
 
-## 5. Prepare a script with the LLM wizard
+## 5. Explore a case
+
+Open **Case file** and enter concrete observations, one per line or separated
+by commas. PAX compares them locally with the available crime scripts.
+Selected products, locations, roles, attributes, and transports are treated as
+requirements; leave them empty when they are uncertain.
+
+Each hypothesis shows:
+
+- how many observations match fully or partially;
+- which terms were and were not found;
+- which scenes contain the matches;
+- which entered observations remain unexplained.
+
+A match is a starting point for analysis, not a conclusion about what
+happened. Where possible, compare two or three hypotheses and record what
+additional information could distinguish them.
+
+![Case analysis with full and partial matches](assets/user-guide/en/10-case-analysis.png)
+
+## 6. Practise in learning mode
+
+Open **Learning mode** and choose a public reference script. If you have not
+selected your own content, PAX uses the starter library. Exercises ask you to
+complete or order scenes and activities and to select suitable roles,
+indicators, or barriers. Options may also come from other scripts.
+
+After selecting **Compare with reference**, PAX shows similarities and
+differences. A different answer is not treated as automatically wrong: other
+choices may be defensible and should prompt reflection. For unreviewed starter
+content, heed the warning that the reference is learning material rather than
+established truth.
+
+![Exercise with public starter content in learning mode](assets/user-guide/en/11-learning-mode.png)
+
+## 7. Prepare a script with the LLM wizard
 
 Select **Generate with LLM** on the home page. PAX uses a manual,
 provider-neutral hand-off: the application does not contact an LLM, store an
@@ -157,7 +192,7 @@ a substantive review.
 
 ![Local review of the generated script](assets/user-guide/en/07-llm-review.png)
 
-## 6. Safe exchange and recovery
+## 8. Safe exchange and recovery
 
 - Export the complete workspace as JSON for a local recovery point before
   loading another model.

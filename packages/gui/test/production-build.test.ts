@@ -48,11 +48,11 @@ test('production guides ship ordered localized captions without restricted CLI m
       end: Number(match[4]) * 60 + Number(match[5]) + Number(match[6]) / 1000,
     }));
 
-    assert.equal(cues.length, 11);
+    assert.equal(cues.length, 13);
     cues.forEach((cue, index) => {
       assert.ok(cue.end > cue.start, `caption ${index + 1} has a positive duration`);
       if (index > 0) assert.ok(cue.start >= cues[index - 1].end, `caption ${index + 1} does not overlap`);
     });
-    assert.equal(cues.at(-1)?.end, 36);
+    assert.equal(cues.at(-1)?.end, 44);
   });
 });

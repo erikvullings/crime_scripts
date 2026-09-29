@@ -1,6 +1,6 @@
 # 0023 Extend public walkthroughs
 
-Status: open
+Status: done
 Priority: medium
 Subsystem: documentation
 Depends on: 0022
@@ -35,3 +35,8 @@ the case-analysis and learning tools using public starter content.
 
 - 2026-09-29 GitHub Copilot: Created as a separate sequential task because the
   case-analysis capture depends on the finalized 0022 UI and starter content.
+- 2026-09-29 GitHub Copilot: Added Dutch and English public-data captures for
+  case analysis and learning mode, extended the written guides, captions,
+  seekable steps, and reproduction instructions, and regenerated both
+  walkthroughs. Verified 1440x900 VP9 output at 44 seconds and both localized
+  in-app guide routes.
