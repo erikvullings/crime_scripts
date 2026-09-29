@@ -202,6 +202,18 @@ export const CasePage: MeiosisComponent = () => {
               if (!script) return null;
               const selected = selectedScriptIds.has(result.scriptId);
               const selectionLimitReached = !selected && selectedScriptIds.size >= 3;
+              const hasPartialEvidence = result.matchedEvidence.some(
+                ({ termCoverage }) => termCoverage !== undefined && termCoverage < 1
+              );
+              const coverageLabel = t(
+                hasPartialEvidence
+                  ? 'CASE_EVIDENCE_COVERAGE_PARTIAL'
+                  : 'CASE_EVIDENCE_COVERAGE',
+                {
+                  matched: result.matchedEvidence.length,
+                  total: result.matchedEvidence.length + result.unmatchedEvidence.length,
+                }
+              );
               return m('article.case-result', { key: result.scriptId }, [
                 m('.case-result-header', [
                   m('.case-result-rank[aria-hidden=true]', index + 1),
@@ -230,18 +242,12 @@ export const CasePage: MeiosisComponent = () => {
                   ]),
                   m('.case-fit', [
                     m('strong', fitLabel(result.score)),
-                    m('span', t('CASE_EVIDENCE_COVERAGE', {
-                      matched: result.matchedEvidence.length,
-                      total: result.matchedEvidence.length + result.unmatchedEvidence.length,
-                    })),
+                    m('span', coverageLabel),
                     m('meter', {
                       min: 0,
                       max: 1,
                       value: result.coverage,
-                      'aria-label': t('CASE_EVIDENCE_COVERAGE', {
-                        matched: result.matchedEvidence.length,
-                        total: result.matchedEvidence.length + result.unmatchedEvidence.length,
-                      }),
+                      'aria-label': coverageLabel,
                     }),
                   ]),
                 ]),
@@ -250,11 +256,21 @@ export const CasePage: MeiosisComponent = () => {
                     m('h4', t('CASE_MATCHED_HEADING')),
                     m('ul.case-evidence-list', result.matchedEvidence.map((match) => {
                       const context = matchContext(match);
-                      return m('li', [
-                        m(Icon, { iconName: 'check_circle' }),
+                      const partial =
+                        match.termCoverage !== undefined && match.termCoverage < 1;
+                      return m('li', { class: partial ? 'case-evidence-partial' : '' }, [
+                        m(Icon, { iconName: partial ? 'adjust' : 'check_circle' }),
                         m('span', [
                           m('strong', match.evidence.label),
                           context && m('small', context),
+                          partial && m('small.case-evidence-parts', [
+                            m('span', t('CASE_MATCHED_PARTS', {
+                              terms: match.matchedTerms?.join(', ') || '',
+                            })),
+                            m('span', t('CASE_MISSING_PARTS', {
+                              terms: match.unmatchedTerms?.join(', ') || '',
+                            })),
+                          ]),
                         ]),
                       ]);
                     })),
@@ -270,7 +286,14 @@ export const CasePage: MeiosisComponent = () => {
                           ])
                         )
                       )
-                      : m('p.case-all-explained', t('CASE_ALL_EVIDENCE_MATCHED')),
+                      : m(
+                        'p.case-all-explained',
+                        t(
+                          hasPartialEvidence
+                            ? 'CASE_PARTIAL_EVIDENCE_NOTICE'
+                            : 'CASE_ALL_EVIDENCE_MATCHED'
+                        )
+                      ),
                   ]),
                 ]),
                 result.scenes.length > 0 && m('section.case-scenes', [

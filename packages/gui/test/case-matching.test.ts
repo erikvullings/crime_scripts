@@ -222,6 +222,69 @@ test('duplicate text cannot outweigh a more specific match', () => {
   assert.equal(results[1].matchedEvidence.length, 1);
 });
 
+test('a noun anchor yields a partial match while a modifier alone does not', () => {
+  const data = model([
+    createScript('full-phrase', { label: 'Rented delivery van' }),
+    createScript('noun-only', { label: 'Delivery van' }),
+    createScript('modifier-only', { label: 'Rented equipment' }),
+  ]);
+
+  const results = matchCaseEvidence({
+    model: data,
+    scriptMode: 'public',
+    text: 'rented delivery van',
+    tokenize,
+  });
+
+  assert.deepEqual(results.map(({ scriptId }) => scriptId), ['full-phrase', 'noun-only']);
+  assert.ok(results[0].score > results[1].score);
+  assert.deepEqual(
+    {
+      evidence: results[1].matchedEvidence[0].evidence.label,
+      matchedTerms: results[1].matchedEvidence[0].matchedTerms,
+      unmatchedTerms: results[1].matchedEvidence[0].unmatchedTerms,
+      termCoverage: results[1].matchedEvidence[0].termCoverage,
+    },
+    {
+      evidence: 'rented delivery van',
+      matchedTerms: ['delivery', 'van'],
+      unmatchedTerms: ['rented'],
+      termCoverage: 2 / 3,
+    }
+  );
+});
+
+test('delimited observations stay separate and cohesive phrases rank first', () => {
+  const data = model([
+    createScript('cohesive', {
+      label: 'Rented delivery van',
+      description: 'Broken container seal',
+    }),
+    createScript('disconnected', {
+      label: 'Rented route',
+      stages: [{
+        id: 'van-scene',
+        label: 'Delivery van',
+        variants: [],
+      }],
+    }),
+  ]);
+
+  const results = matchCaseEvidence({
+    model: data,
+    scriptMode: 'public',
+    text: 'rented delivery van, broken container seal',
+    tokenize,
+  });
+
+  assert.equal(results[0].scriptId, 'cohesive');
+  assert.deepEqual(
+    results[0].matchedEvidence.map(({ evidence }) => evidence.label),
+    ['rented delivery van', 'broken container seal']
+  );
+  assert.ok(results[0].score > results[1].score);
+});
+
 test('matching uses each script language and returns one visible counterpart per family', () => {
   const languages: string[] = [];
   const languageTokenizer: CaseTokenizer = (text, language) => {

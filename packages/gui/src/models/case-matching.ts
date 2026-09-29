@@ -46,6 +46,9 @@ export type CaseEvidenceMatch = {
   evidence: CaseEvidenceItem;
   strength: number;
   locations: CaseMatchLocation[];
+  matchedTerms?: string[];
+  unmatchedTerms?: string[];
+  termCoverage?: number;
 };
 
 export type CaseSceneMatch = {
@@ -265,21 +268,35 @@ const textEvidence = (
   text: string,
   language: ContentLanguage,
   tokenize: CaseTokenizer
-): Array<CaseEvidenceItem & { token: string }> => {
-  const labels = new Map<string, string>();
-  rawTerms(text).forEach((term) => {
-    tokenize(term, language).forEach((token) => {
-      if (!labels.has(token)) labels.set(token, term);
+): Array<{
+  evidence: CaseEvidenceItem;
+  terms: Array<{ token: string; label: string }>;
+  anchorToken: string;
+}> =>
+  text
+    .split(/[\n,;]+/)
+    .map((phrase) => phrase.trim())
+    .filter(Boolean)
+    .flatMap((phrase, index) => {
+      const terms = new Map<string, string>();
+      rawTerms(phrase).forEach((term) => {
+        tokenize(term, language).forEach((token) => {
+          if (!terms.has(token)) terms.set(token, term);
+        });
+      });
+      const tokenTerms = [...terms].map(([token, label]) => ({ token, label }));
+      const anchorToken = tokenTerms[tokenTerms.length - 1]?.token;
+      if (!anchorToken) return [];
+      return [{
+        evidence: {
+          id: `text:${index}:${normalizeComparisonLabel(phrase)}`,
+          label: phrase,
+          source: 'text' as const,
+        },
+        terms: tokenTerms,
+        anchorToken,
+      }];
     });
-  });
-
-  return unique(tokenize(text, language)).map((token) => ({
-    id: `text:${token}`,
-    label: labels.get(token) || token,
-    source: 'text' as const,
-    token,
-  }));
-};
 
 const taxonomyByFilter = (
   model: DataModel
@@ -453,6 +470,13 @@ const uniqueLocations = (locations: CaseMatchLocation[]) => {
   });
 };
 
+const recordContextKey = ({ field, label, sceneId, variantId }: SearchRecord) =>
+  variantId
+    ? `variant:${variantId}`
+    : sceneId
+      ? `scene:${sceneId}`
+      : `record:${field}:${label}`;
+
 const sceneMatches = (matches: CaseEvidenceMatch[]): CaseSceneMatch[] => {
   const scenes = new Map<string, CaseSceneMatch>();
   matches.forEach(({ evidence, strength, locations }) => {
@@ -516,27 +540,69 @@ export const matchCaseEvidence = ({
         });
       }
 
-      queryEvidence.forEach(({ token, ...evidence }) => {
-        const records = index.records.filter((record) => record.tokens.has(token));
-        if (records.length === 0) {
+      queryEvidence.forEach(({ evidence, terms, anchorToken }) => {
+        const recordsByToken = new Map(
+          terms.map(({ token }) => [
+            token,
+            index.records.filter((record) => record.tokens.has(token)),
+          ])
+        );
+        if ((recordsByToken.get(anchorToken) || []).length === 0) {
           unmatchedEvidence.push(evidence);
           return;
         }
-        const strength = Math.max(...records.map((record) => record.strength));
+
+        const matchedTerms = terms.filter(({ token }) =>
+          (recordsByToken.get(token) || []).length > 0
+        );
+        const strongestRecords = matchedTerms.flatMap(({ token }) => {
+          const records = recordsByToken.get(token) || [];
+          const strength = Math.max(...records.map((record) => record.strength));
+          return records.filter((record) => record.strength === strength);
+        });
+        const sharedContexts = matchedTerms.reduce<Set<string> | undefined>((shared, { token }) => {
+          const contexts = new Set(
+            (recordsByToken.get(token) || []).map(recordContextKey)
+          );
+          return shared === undefined
+            ? contexts
+            : new Set([...shared].filter((context) => contexts.has(context)));
+        }, undefined);
+        const termCoverage = matchedTerms.length / terms.length;
+        const cohesive = matchedTerms.length < terms.length || (sharedContexts?.size || 0) > 0;
+        const strength =
+          matchedTerms.reduce((total, { token }) => {
+            const records = recordsByToken.get(token) || [];
+            return total + Math.max(...records.map((record) => record.strength));
+          }, 0) /
+          terms.length *
+          (cohesive ? 1 : 0.85);
+
         matchedEvidence.push({
           evidence,
           strength,
-          locations: uniqueLocations(
-            records
-              .filter((record) => record.strength === strength)
-              .map(({ tokens: _tokens, strength: _strength, ...location }) => location)
+          termCoverage,
+          matchedTerms: unique(matchedTerms.map(({ label }) => label)),
+          unmatchedTerms: unique(
+            terms
+              .filter(({ token }) => (recordsByToken.get(token) || []).length === 0)
+              .map(({ label }) => label)
           ),
+          locations: uniqueLocations(strongestRecords.map(
+            ({ tokens: _tokens, strength: _strength, ...location }) => location
+          )),
         });
       });
 
       if (matchedEvidence.length === 0) return undefined;
       const evidenceCount = selectedEvidence.length + queryEvidence.length;
-      const coverage = evidenceCount === 0 ? 0 : matchedEvidence.length / evidenceCount;
+      const coverage =
+        evidenceCount === 0
+          ? 0
+          : matchedEvidence.reduce(
+            (total, match) => total + (match.termCoverage ?? 1),
+            0
+          ) / evidenceCount;
       const specificity =
         matchedEvidence.reduce((total, match) => total + match.strength / 4, 0) /
         matchedEvidence.length;

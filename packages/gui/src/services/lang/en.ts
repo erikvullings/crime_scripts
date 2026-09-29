@@ -152,7 +152,7 @@ export const messages = {
   CASE_EVIDENCE_HEADING: 'Describe the observations',
   CASE_OBSERVATIONS_LABEL: 'Observed objects and circumstances',
   CASE_OBSERVATIONS_HINT:
-    'Enter separate, concrete observations, for example: damaged container seal, rented van, port access pass.',
+    'Enter one concrete observation per line, or separate observations with commas; for example: damaged container seal, rented van, port access pass.',
   CASE_FILTERS_HEADING: 'Add required characteristics',
   CASE_FILTERS_HINT:
     'Selected characteristics are required in every suggestion. Leave them empty when they are uncertain.',
@@ -174,9 +174,15 @@ export const messages = {
   CASE_FIT_PARTIAL: 'Partial evidence overlap',
   CASE_FIT_LIMITED: 'Limited evidence overlap',
   CASE_EVIDENCE_COVERAGE: '{matched} of {total} observations matched',
+  CASE_EVIDENCE_COVERAGE_PARTIAL:
+    '{matched} of {total} observations matched at least in part',
   CASE_MATCHED_HEADING: 'Evidence found in this script',
+  CASE_MATCHED_PARTS: 'Matched: {terms}',
+  CASE_MISSING_PARTS: 'Not found: {terms}',
   CASE_UNMATCHED_HEADING: 'Entered evidence not found',
   CASE_ALL_EVIDENCE_MATCHED: 'Every entered observation appears in this script.',
+  CASE_PARTIAL_EVIDENCE_NOTICE:
+    'Some observations match only in part; their missing terms are shown alongside the match.',
   CASE_RELEVANT_SCENES: 'Most relevant scenes',
   CASE_SCENE_MATCHES: {
     1: '1 matching observation',

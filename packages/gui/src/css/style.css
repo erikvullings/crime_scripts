@@ -521,6 +521,10 @@
   font-size: 1rem;
 }
 
+.case-evidence-list .case-evidence-partial .material-icons {
+  color: #c77800;
+}
+
 .case-evidence-list li > span {
   display: grid;
   line-height: 1.4;
@@ -529,6 +533,15 @@
 .case-evidence-list small {
   margin-top: 0.1rem;
   opacity: 0.75;
+}
+
+.case-evidence-parts {
+  display: grid;
+  gap: 0.05rem;
+}
+
+.case-evidence-parts span:last-child {
+  color: color-mix(in srgb, currentColor 85%, #c77800);
 }
 
 .case-evidence-list--unmatched .material-icons {

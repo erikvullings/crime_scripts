@@ -154,7 +154,7 @@ export const messagesNL: typeof messages = {
   CASE_EVIDENCE_HEADING: 'Beschrijf de waarnemingen',
   CASE_OBSERVATIONS_LABEL: 'Aangetroffen objecten en omstandigheden',
   CASE_OBSERVATIONS_HINT:
-    'Voer afzonderlijke, concrete waarnemingen in, bijvoorbeeld: beschadigd containerzegel, gehuurde bestelbus, haventoegangspas.',
+    'Voer één concrete waarneming per regel in, of scheid waarnemingen met komma’s; bijvoorbeeld: beschadigd containerzegel, gehuurde bestelbus, haventoegangspas.',
   CASE_FILTERS_HEADING: 'Voeg vereiste kenmerken toe',
   CASE_FILTERS_HINT:
     'Geselecteerde kenmerken zijn verplicht voor iedere suggestie. Laat ze leeg wanneer ze onzeker zijn.',
@@ -176,9 +176,15 @@ export const messagesNL: typeof messages = {
   CASE_FIT_PARTIAL: 'Gedeeltelijke overeenkomst met het bewijs',
   CASE_FIT_LIMITED: 'Beperkte overeenkomst met het bewijs',
   CASE_EVIDENCE_COVERAGE: '{matched} van {total} waarnemingen komen overeen',
+  CASE_EVIDENCE_COVERAGE_PARTIAL:
+    '{matched} van {total} waarnemingen komen minstens gedeeltelijk overeen',
   CASE_MATCHED_HEADING: 'Bewijs gevonden in dit script',
+  CASE_MATCHED_PARTS: 'Overeenkomst: {terms}',
+  CASE_MISSING_PARTS: 'Niet gevonden: {terms}',
   CASE_UNMATCHED_HEADING: 'Ingevoerd bewijs niet gevonden',
   CASE_ALL_EVIDENCE_MATCHED: 'Elke ingevoerde waarneming komt in dit script voor.',
+  CASE_PARTIAL_EVIDENCE_NOTICE:
+    'Sommige waarnemingen komen slechts gedeeltelijk overeen; de ontbrekende termen staan bij de overeenkomst.',
   CASE_RELEVANT_SCENES: 'Meest relevante scènes',
   CASE_SCENE_MATCHES: {
     1: '1 overeenkomende waarneming',
