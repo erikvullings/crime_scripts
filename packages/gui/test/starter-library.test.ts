@@ -155,7 +155,7 @@ test('the Dutch harbor starter fully matches the documented case observations', 
   const [result] = matchCaseEvidence({
     model: fixture,
     scriptMode: 'public',
-    text: 'haventoegangspas, beschadigd containerzegel',
+    text: 'toegangspas, beschadigd containerzegel',
     tokenize,
   });
 
@@ -166,7 +166,7 @@ test('the Dutch harbor starter fully matches the documented case observations', 
       termCoverage,
     })),
     [
-      { label: 'haventoegangspas', termCoverage: 1 },
+      { label: 'toegangspas', termCoverage: 1 },
       { label: 'beschadigd containerzegel', termCoverage: 1 },
     ]
   );

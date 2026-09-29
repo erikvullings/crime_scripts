@@ -259,7 +259,7 @@
               "indicators": [
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:indicator:signaal",
-                  "label": "Haventoegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon.",
+                  "label": "Toegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon.",
                   "description": "Dit is een mogelijk signaal, geen bewijs op zichzelf. Beoordeel het in samenhang met andere informatie."
                 }
               ],
@@ -267,7 +267,7 @@
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:activity:kern",
                   "label": "Een facilitator probeert invloed of toegang in de havenketen te verkrijgen",
-                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over facilitator, invloed, toegang en havenketen inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Haventoegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
+                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over facilitator, invloed, toegang en havenketen inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Toegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
                   "type": 1,
                   "cast": [
                     "nl-starter:cast:facilitator",
@@ -295,7 +295,7 @@
                 {
                   "id": "nl-starter:script:cocaine-import-havens:scene:toegang:variant:hoofdroute:activity:opvolging",
                   "label": "Beperk rechten tot taken en controleer toegang en integriteit periodiek",
-                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over beperk, rechten, taken, toegang en integriteit inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Haventoegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
+                  "description": "Binnen ‘Onrechtmatige toegang’ geven gegevens over beperk, rechten, taken, toegang en integriteit inzicht in de verhouding tussen Facilitator en Logistiek medewerker. Havenbedrijf en terminalbeheerders en Politie wegen het signaal ‘Toegangspas gebruikt bij een ongebruikelijke toegangspoging, gedeeld gebruik of een afwijkend dienstpatroon’ samen met andere informatie. Eén afwijking bewijst op zichzelf geen misstand.",
                   "type": 1,
                   "cast": [
                     "nl-starter:cast:facilitator",
