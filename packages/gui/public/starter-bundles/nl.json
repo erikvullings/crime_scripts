@@ -6159,7 +6159,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:opdracht",
           "label": "Eigenaar besluit tot sanering",
-          "description": "Fase uit het openbare CCV-barrièremodel: Eigenaar besluit tot sanering.",
+          "description": "De opdrachtgever bepaalt de aanleiding, omvang en voorwaarden van de werkzaamheden en legt verantwoordelijkheden voor de keten vast.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:opdracht:variant:published",
           "variants": [
             {
@@ -6242,7 +6242,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:inventarisatie",
           "label": "Onafhankelijke inventarisatie",
-          "description": "Fase uit het openbare CCV-barrièremodel: Onafhankelijke inventarisatie.",
+          "description": "Een deskundige brengt materialen, locaties en risico's in kaart zodat de werkzaamheden op controleerbare informatie kunnen worden gebaseerd.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:inventarisatie:variant:published",
           "variants": [
             {
@@ -6325,7 +6325,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:verwijdering",
           "label": "Asbest verwijderen",
-          "description": "Fase uit het openbare CCV-barrièremodel: Asbest verwijderen.",
+          "description": "Een uitvoerende partij werkt volgens het vastgestelde plan en legt de behandeling en verpakking van risicovol materiaal vast.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:verwijdering:variant:published",
           "variants": [
             {
@@ -6408,7 +6408,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:eindcontrole",
           "label": "Onafhankelijke eindcontrole",
-          "description": "Fase uit het openbare CCV-barrièremodel: Onafhankelijke eindcontrole.",
+          "description": "Na de werkzaamheden beoordeelt een andere deskundige of de ruimte veilig kan worden vrijgegeven en documenteert de uitkomst.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:eindcontrole:variant:published",
           "variants": [
             {
@@ -6491,7 +6491,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:eerste-transport",
           "label": "Transport naar inzamel- of tussenlocatie",
-          "description": "Fase uit het openbare CCV-barrièremodel: Transport naar inzamel- of tussenlocatie.",
+          "description": "Verpakt materiaal verlaat de werklocatie met begeleidende registratie die overdracht en bestemming controleerbaar maakt.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:eerste-transport:variant:published",
           "variants": [
             {
@@ -6574,7 +6574,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:tussenlocatie",
           "label": "Ontvangst op tussenlocatie",
-          "description": "Fase uit het openbare CCV-barrièremodel: Ontvangst op tussenlocatie.",
+          "description": "De afvalstroom wordt door een volgende ketenpartij geregistreerd, gecontroleerd en tijdelijk beheerd voordat verdere verwerking plaatsvindt.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:tussenlocatie:variant:published",
           "variants": [
             {
@@ -6657,7 +6657,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:vervolgtransport",
           "label": "Vervolgtransport naar eindverwerker",
-          "description": "Fase uit het openbare CCV-barrièremodel: Vervolgtransport naar eindverwerker.",
+          "description": "De keten draagt het materiaal met bijgewerkte documenten over aan de partij die de definitieve verwerking uitvoert.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:vervolgtransport:variant:published",
           "variants": [
             {
@@ -6740,7 +6740,7 @@
         {
           "id": "nl-starter:script:asbestsaneringsketen:scene:eindverwerking",
           "label": "Ontdoen bij erkende eindverwerker",
-          "description": "Fase uit het openbare CCV-barrièremodel: Ontdoen bij erkende eindverwerker.",
+          "description": "Een bevoegde verwerker accepteert de afvalstroom, controleert de administratie en legt de definitieve verwerking vast.",
           "selectedVariantId": "nl-starter:script:asbestsaneringsketen:scene:eindverwerking:variant:published",
           "variants": [
             {
@@ -6876,7 +6876,7 @@
         {
           "id": "nl-starter:script:bijtincidenten-honden:scene:sociale-context",
           "label": "Sociale context en keuze van ouderdieren",
-          "description": "Fase uit het openbare CCV-barrièremodel: Sociale context en keuze van ouderdieren.",
+          "description": "Omstandigheden rond fokker, huishouden en dieren bepalen mede welke gedrags- en gezondheidsrisico's al vroeg kunnen ontstaan.",
           "selectedVariantId": "nl-starter:script:bijtincidenten-honden:scene:sociale-context:variant:published",
           "variants": [
             {
@@ -6959,7 +6959,7 @@
         {
           "id": "nl-starter:script:bijtincidenten-honden:scene:dracht-geboorte",
           "label": "Dekking, dracht en geboorte",
-          "description": "Fase uit het openbare CCV-barrièremodel: Dekking, dracht en geboorte.",
+          "description": "Tijdens de voortplantingsperiode zijn gezondheid, welzijn, toezicht en registratie bepalend voor een verantwoorde start.",
           "selectedVariantId": "nl-starter:script:bijtincidenten-honden:scene:dracht-geboorte:variant:published",
           "variants": [
             {
@@ -7042,7 +7042,7 @@
         {
           "id": "nl-starter:script:bijtincidenten-honden:scene:eerste-levensfase",
           "label": "Eerste levensfase en socialisatie",
-          "description": "Fase uit het openbare CCV-barrièremodel: Eerste levensfase en socialisatie.",
+          "description": "Vroege omgang, leefomgeving en blootstelling aan prikkels beïnvloeden hoe jonge dieren zich lichamelijk en gedragsmatig ontwikkelen.",
           "selectedVariantId": "nl-starter:script:bijtincidenten-honden:scene:eerste-levensfase:variant:published",
           "variants": [
             {
@@ -7125,7 +7125,7 @@
         {
           "id": "nl-starter:script:bijtincidenten-honden:scene:nieuwe-eigenaar",
           "label": "Overdracht aan nieuwe eigenaar",
-          "description": "Fase uit het openbare CCV-barrièremodel: Overdracht aan nieuwe eigenaar.",
+          "description": "Een dier wisselt van verantwoordelijke; informatie over herkomst, gezondheid en gedrag hoort daarbij zorgvuldig te worden overgedragen.",
           "selectedVariantId": "nl-starter:script:bijtincidenten-honden:scene:nieuwe-eigenaar:variant:published",
           "variants": [
             {
@@ -7208,7 +7208,7 @@
         {
           "id": "nl-starter:script:bijtincidenten-honden:scene:ontwikkeling",
           "label": "Opvoeding, socialisatie en puberteit",
-          "description": "Fase uit het openbare CCV-barrièremodel: Opvoeding, socialisatie en puberteit.",
+          "description": "Dagelijkse begeleiding en omgang met mens, dier en omgeving sturen gedrag terwijl het dier verder ontwikkelt.",
           "selectedVariantId": "nl-starter:script:bijtincidenten-honden:scene:ontwikkeling:variant:published",
           "variants": [
             {
@@ -7291,7 +7291,7 @@
         {
           "id": "nl-starter:script:bijtincidenten-honden:scene:volwassen-senior",
           "label": "Volwassenheid en seniorfase",
-          "description": "Fase uit het openbare CCV-barrièremodel: Volwassenheid en seniorfase.",
+          "description": "Veranderende gezondheid, belastbaarheid en leefomstandigheden vragen blijvende observatie en aangepaste begeleiding.",
           "selectedVariantId": "nl-starter:script:bijtincidenten-honden:scene:volwassen-senior:variant:published",
           "variants": [
             {
@@ -7374,7 +7374,7 @@
         {
           "id": "nl-starter:script:bijtincidenten-honden:scene:incidentrespons",
           "label": "Incidentrespons en nazorg",
-          "description": "Fase uit het openbare CCV-barrièremodel: Incidentrespons en nazorg.",
+          "description": "Na een incident worden veiligheid, letsel, omstandigheden en toekomstig risico beoordeeld en volgen passende maatregelen voor mens en dier.",
           "selectedVariantId": "nl-starter:script:bijtincidenten-honden:scene:incidentrespons:variant:published",
           "variants": [
             {
@@ -7511,7 +7511,7 @@
         {
           "id": "nl-starter:script:co-vergisting:scene:productie",
           "label": "Productie en classificatie van stoffen",
-          "description": "Fase uit het openbare CCV-barrièremodel: Productie en classificatie van stoffen.",
+          "description": "Aan het begin van de keten worden herkomst, samenstelling en juridische status van aangeleverde materialen vastgelegd.",
           "selectedVariantId": "nl-starter:script:co-vergisting:scene:productie:variant:published",
           "variants": [
             {
@@ -7594,7 +7594,7 @@
         {
           "id": "nl-starter:script:co-vergisting:scene:transport",
           "label": "Transport van stoffen",
-          "description": "Fase uit het openbare CCV-barrièremodel: Transport van stoffen.",
+          "description": "Materiaal beweegt tussen ketenpartijen met documenten en controles die herkomst, hoeveelheid en bestemming traceerbaar houden.",
           "selectedVariantId": "nl-starter:script:co-vergisting:scene:transport:variant:published",
           "variants": [
             {
@@ -7677,7 +7677,7 @@
         {
           "id": "nl-starter:script:co-vergisting:scene:tussenbewerking",
           "label": "Tussentijdse bewerking en opslag",
-          "description": "Fase uit het openbare CCV-barrièremodel: Tussentijdse bewerking en opslag.",
+          "description": "Voor verdere verwerking kunnen partijen materiaal mengen, behandelen of tijdelijk bewaren, waardoor administratie en feitelijke stroom moeten blijven aansluiten.",
           "selectedVariantId": "nl-starter:script:co-vergisting:scene:tussenbewerking:variant:published",
           "variants": [
             {
@@ -7760,7 +7760,7 @@
         {
           "id": "nl-starter:script:co-vergisting:scene:vergisting",
           "label": "Acceptatie en co-vergisting",
-          "description": "Fase uit het openbare CCV-barrièremodel: Acceptatie en co-vergisting.",
+          "description": "De installatie beoordeelt aangeleverde partijen en verwerkt toegestane stromen onder vastgelegde proces- en registratievoorwaarden.",
           "selectedVariantId": "nl-starter:script:co-vergisting:scene:vergisting:variant:published",
           "variants": [
             {
@@ -7843,7 +7843,7 @@
         {
           "id": "nl-starter:script:co-vergisting:scene:digestaat",
           "label": "Afvoer en toepassing van digestaat",
-          "description": "Fase uit het openbare CCV-barrièremodel: Afvoer en toepassing van digestaat.",
+          "description": "Het restproduct verlaat de installatie en krijgt een bestemming waarbij kwaliteit, hoeveelheid en toepassingsvoorwaarden controleerbaar moeten zijn.",
           "selectedVariantId": "nl-starter:script:co-vergisting:scene:digestaat:variant:published",
           "variants": [
             {
@@ -7979,7 +7979,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:bedrijfsstructuur",
           "label": "Bedrijfsstructuur en governance opzetten",
-          "description": "Fase uit het openbare CCV-barrièremodel: Bedrijfsstructuur en governance opzetten.",
+          "description": "De verdeling van zeggenschap, toezicht en financiële belangen bepaalt wie besluiten neemt en wie daarop kan worden aangesproken.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:bedrijfsstructuur:variant:published",
           "variants": [
             {
@@ -8062,7 +8062,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:poortwachters",
           "label": "Contact met poortwachters",
-          "description": "Fase uit het openbare CCV-barrièremodel: Contact met poortwachters.",
+          "description": "Externe professionals en instanties beoordelen toelating, financiering, kwaliteit of rechtmatigheid op verschillende momenten in de keten.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:poortwachters:variant:published",
           "variants": [
             {
@@ -8145,7 +8145,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:bedrijfsmiddelen",
           "label": "Bedrijfsmiddelen en contracten inrichten",
-          "description": "Fase uit het openbare CCV-barrièremodel: Bedrijfsmiddelen en contracten inrichten.",
+          "description": "De organisatie legt de praktische en juridische basis voor dienstverlening vast via personeel, leveranciers, financiering en overeenkomsten.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:bedrijfsmiddelen:variant:published",
           "variants": [
             {
@@ -8228,7 +8228,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:bedrijfsvoering",
           "label": "Reguliere bedrijfsvoering uitvoeren",
-          "description": "Fase uit het openbare CCV-barrièremodel: Reguliere bedrijfsvoering uitvoeren.",
+          "description": "Tijdens de dienstverlening ontstaan registraties over inzet, prestaties, betalingen en kwaliteit die met de feitelijke praktijk moeten overeenkomen.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:bedrijfsvoering:variant:published",
           "variants": [
             {
@@ -8311,7 +8311,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:clienten",
           "label": "Cliënten werven en plaatsen",
-          "description": "Fase uit het openbare CCV-barrièremodel: Cliënten werven en plaatsen.",
+          "description": "Vraag, indicatie en aanbod worden bij elkaar gebracht, waarbij passendheid en keuzevrijheid van betrokkenen centraal horen te staan.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:clienten:variant:published",
           "variants": [
             {
@@ -8394,7 +8394,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:verantwoording",
           "label": "Interne en externe verantwoording",
-          "description": "Fase uit het openbare CCV-barrièremodel: Interne en externe verantwoording.",
+          "description": "De organisatie legt besluiten, resultaten, geldstromen en kwaliteit vast voor toezichthouders, financiers en interne controle.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:verantwoording:variant:published",
           "variants": [
             {
@@ -8477,7 +8477,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:locatie",
           "label": "Pand en zorglocatie organiseren",
-          "description": "Fase uit het openbare CCV-barrièremodel: Pand en zorglocatie organiseren.",
+          "description": "De fysieke omgeving wordt gekozen en ingericht voor de beoogde dienstverlening, veiligheid en bereikbaarheid.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:locatie:variant:published",
           "variants": [
             {
@@ -8560,7 +8560,7 @@
         {
           "id": "nl-starter:script:complexe-zorgstructuren:scene:einde-bedrijf",
           "label": "Beëindiging, overdracht of doorstart",
-          "description": "Fase uit het openbare CCV-barrièremodel: Beëindiging, overdracht of doorstart.",
+          "description": "Bij grote veranderingen moeten verplichtingen, dossiers, cliëntenbelangen en geldstromen zorgvuldig worden afgewikkeld of overgedragen.",
           "selectedVariantId": "nl-starter:script:complexe-zorgstructuren:scene:einde-bedrijf:variant:published",
           "variants": [
             {
@@ -8697,7 +8697,7 @@
         {
           "id": "nl-starter:script:criminele-uitbuiting:scene:identificeren",
           "label": "Kwetsbare personen identificeren",
-          "description": "Fase uit het openbare CCV-barrièremodel: Kwetsbare personen identificeren.",
+          "description": "Een netwerk zoekt naar mensen wier omstandigheden hun weerbaarheid of toegang tot hulp beperken.",
           "selectedVariantId": "nl-starter:script:criminele-uitbuiting:scene:identificeren:variant:published",
           "variants": [
             {
@@ -8780,7 +8780,7 @@
         {
           "id": "nl-starter:script:criminele-uitbuiting:scene:binden",
           "label": "Binding en loyaliteit opbouwen",
-          "description": "Fase uit het openbare CCV-barrièremodel: Binding en loyaliteit opbouwen.",
+          "description": "Contacten worden intensiever en wederkerigheid, groepsgevoel of beloften kunnen de relatie steeds belangrijker maken.",
           "selectedVariantId": "nl-starter:script:criminele-uitbuiting:scene:binden:variant:published",
           "variants": [
             {
@@ -8863,7 +8863,7 @@
         {
           "id": "nl-starter:script:criminele-uitbuiting:scene:grensvervaging",
           "label": "Grenzen en normbesef verschuiven",
-          "description": "Fase uit het openbare CCV-barrièremodel: Grenzen en normbesef verschuiven.",
+          "description": "Gedrag dat eerst onacceptabel leek, wordt stapsgewijs als normaal, noodzakelijk of loyaal voorgesteld.",
           "selectedVariantId": "nl-starter:script:criminele-uitbuiting:scene:grensvervaging:variant:published",
           "variants": [
             {
@@ -8946,7 +8946,7 @@
         {
           "id": "nl-starter:script:criminele-uitbuiting:scene:beheersen",
           "label": "Controle en afhankelijkheid versterken",
-          "description": "Fase uit het openbare CCV-barrièremodel: Controle en afhankelijkheid versterken.",
+          "description": "Druk, schulden, dreiging of isolement verkleinen de feitelijke ruimte om zelfstandig keuzes te maken.",
           "selectedVariantId": "nl-starter:script:criminele-uitbuiting:scene:beheersen:variant:published",
           "variants": [
             {
@@ -9029,7 +9029,7 @@
         {
           "id": "nl-starter:script:criminele-uitbuiting:scene:uitvoeren",
           "label": "Strafbare opdrachten laten uitvoeren",
-          "description": "Fase uit het openbare CCV-barrièremodel: Strafbare opdrachten laten uitvoeren.",
+          "description": "De betrokkene wordt ingezet voor handelingen die risico en strafrechtelijke gevolgen vooral bij hem of haar neerleggen.",
           "selectedVariantId": "nl-starter:script:criminele-uitbuiting:scene:uitvoeren:variant:published",
           "variants": [
             {
@@ -9112,7 +9112,7 @@
         {
           "id": "nl-starter:script:criminele-uitbuiting:scene:voordeel",
           "label": "Voordeel afromen",
-          "description": "Fase uit het openbare CCV-barrièremodel: Voordeel afromen.",
+          "description": "Opbrengsten of andere baten komen geheel of gedeeltelijk terecht bij degene die de afhankelijkheidsrelatie beheerst.",
           "selectedVariantId": "nl-starter:script:criminele-uitbuiting:scene:voordeel:variant:published",
           "variants": [
             {
@@ -9195,7 +9195,7 @@
         {
           "id": "nl-starter:script:criminele-uitbuiting:scene:verankeren",
           "label": "Herhaling en verankering in het netwerk",
-          "description": "Fase uit het openbare CCV-barrièremodel: Herhaling en verankering in het netwerk.",
+          "description": "De werkwijze wordt herhaald, door anderen ondersteund en ingebed in relaties die nieuwe inzet mogelijk maken.",
           "selectedVariantId": "nl-starter:script:criminele-uitbuiting:scene:verankeren:variant:published",
           "variants": [
             {
@@ -9333,7 +9333,7 @@
         {
           "id": "nl-starter:script:fake-carriers:scene:voorbereiden",
           "label": "Identiteit en toegang voorbereiden",
-          "description": "Fase uit het openbare CCV-barrièremodel: Identiteit en toegang voorbereiden.",
+          "description": "Een partij bouwt een geloofwaardig digitaal en administratief profiel op om als vervoerder te kunnen optreden.",
           "selectedVariantId": "nl-starter:script:fake-carriers:scene:voorbereiden:variant:published",
           "variants": [
             {
@@ -9416,7 +9416,7 @@
         {
           "id": "nl-starter:script:fake-carriers:scene:diensten-aanbieden",
           "label": "Vervoersdienst aanbieden",
-          "description": "Fase uit het openbare CCV-barrièremodel: Vervoersdienst aanbieden.",
+          "description": "Op een vrachtplatform ontstaat contact over een opdracht, waarbij opdrachtgever en vervoerder elkaars bevoegdheid en identiteit moeten beoordelen.",
           "selectedVariantId": "nl-starter:script:fake-carriers:scene:diensten-aanbieden:variant:published",
           "variants": [
             {
@@ -9499,7 +9499,7 @@
         {
           "id": "nl-starter:script:fake-carriers:scene:goederen-ophalen",
           "label": "Goederen bij verlader ophalen",
-          "description": "Fase uit het openbare CCV-barrièremodel: Goederen bij verlader ophalen.",
+          "description": "Bij de laadlocatie worden identiteit, opdrachtgegevens, voertuig en overdracht gecontroleerd voordat de lading wordt meegegeven.",
           "selectedVariantId": "nl-starter:script:fake-carriers:scene:goederen-ophalen:variant:published",
           "variants": [
             {
@@ -9582,7 +9582,7 @@
         {
           "id": "nl-starter:script:fake-carriers:scene:vervoer-opslag",
           "label": "Vervoer, aflevering en incidentrespons",
-          "description": "Fase uit het openbare CCV-barrièremodel: Vervoer, aflevering en incidentrespons.",
+          "description": "Tijdens en na de rit moeten route, communicatie en overdracht traceerbaar blijven zodat afwijkingen snel gezamenlijk kunnen worden opgevolgd.",
           "selectedVariantId": "nl-starter:script:fake-carriers:scene:vervoer-opslag:variant:published",
           "variants": [
             {

@@ -6159,7 +6159,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:opdracht",
           "label": "Owner decides on remediation",
-          "description": "Phase from the public CCV-barrier model: Owner decides to remediate.",
+          "description": "The commissioning party defines the reason, scope, and conditions for the work and records responsibilities across the chain.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:opdracht:variant:published",
           "variants": [
             {
@@ -6242,7 +6242,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:inventarisatie",
           "label": "Independent inventory",
-          "description": "Phase from the public CCV-barrier model: Independent inventory.",
+          "description": "A qualified specialist maps materials, locations, and risks so that the work is based on verifiable information.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:inventarisatie:variant:published",
           "variants": [
             {
@@ -6325,7 +6325,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:verwijdering",
           "label": "Asbestos removal",
-          "description": "Phase from the public CCV-barrier model: Asbestos removal.",
+          "description": "A contractor follows the agreed plan and records how hazardous material is handled and packaged.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:verwijdering:variant:published",
           "variants": [
             {
@@ -6408,7 +6408,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:eindcontrole",
           "label": "Independent final inspection",
-          "description": "Phase from the public CCV-barrier model: Independent final inspection.",
+          "description": "After the work, a separate specialist determines whether the area can be released safely and documents the outcome.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:eindcontrole:variant:published",
           "variants": [
             {
@@ -6491,7 +6491,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:eerste-transport",
           "label": "Transport to collection or intermediate location",
-          "description": "Phase from the public CCV-barrier model: Transport to collection or intermediate location.",
+          "description": "Packaged material leaves the work site with records that make its transfer and destination traceable.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:eerste-transport:variant:published",
           "variants": [
             {
@@ -6574,7 +6574,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:tussenlocatie",
           "label": "Receipt at intermediate location",
-          "description": "Phase from the public CCV-barrier model: Receipt at intermediate location.",
+          "description": "The waste stream is registered, checked, and temporarily managed by the next chain partner before further processing.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:tussenlocatie:variant:published",
           "variants": [
             {
@@ -6657,7 +6657,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:vervolgtransport",
           "label": "Further transport to end processor",
-          "description": "Phase from the public CCV-barrier model: Further transport to end processor.",
+          "description": "The chain transfers the material with updated records to the party responsible for definitive processing.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:vervolgtransport:variant:published",
           "variants": [
             {
@@ -6740,7 +6740,7 @@
         {
           "id": "en-starter:script:asbestsaneringsketen:scene:eindverwerking",
           "label": "Disposal at recognized end processor",
-          "description": "Phase from the public CCV-barrier model: Disposal at recognized end processor.",
+          "description": "An authorized processor accepts the waste stream, checks its records, and documents its definitive treatment.",
           "selectedVariantId": "en-starter:script:asbestsaneringsketen:scene:eindverwerking:variant:published",
           "variants": [
             {
@@ -6876,7 +6876,7 @@
         {
           "id": "en-starter:script:bijtincidenten-honden:scene:sociale-context",
           "label": "Social context and selection of parent animals",
-          "description": "Phase from the public CCV-barrier model: Social context and selection of parent animals.",
+          "description": "Circumstances around the breeder, household, and animals influence which behavioural and health risks may arise early.",
           "selectedVariantId": "en-starter:script:bijtincidenten-honden:scene:sociale-context:variant:published",
           "variants": [
             {
@@ -6959,7 +6959,7 @@
         {
           "id": "en-starter:script:bijtincidenten-honden:scene:dracht-geboorte",
           "label": "Coverage, pregnancy, and birth",
-          "description": "Phase from the public CCV-barrier model: Coverage, gestation, and birth.",
+          "description": "Health, welfare, supervision, and registration during reproduction are important to a responsible start.",
           "selectedVariantId": "en-starter:script:bijtincidenten-honden:scene:dracht-geboorte:variant:published",
           "variants": [
             {
@@ -7042,7 +7042,7 @@
         {
           "id": "en-starter:script:bijtincidenten-honden:scene:eerste-levensfase",
           "label": "First life stage and socialization",
-          "description": "Phase from the public CCV-barrier model: First life stage and socialization.",
+          "description": "Early handling, living conditions, and exposure to stimuli influence young animals' physical and behavioural development.",
           "selectedVariantId": "en-starter:script:bijtincidenten-honden:scene:eerste-levensfase:variant:published",
           "variants": [
             {
@@ -7125,7 +7125,7 @@
         {
           "id": "en-starter:script:bijtincidenten-honden:scene:nieuwe-eigenaar",
           "label": "Transfer to new owner",
-          "description": "Phase from the public CCV-barrier model: Transfer to new owner.",
+          "description": "Responsibility for an animal changes hands, requiring careful transfer of information about origin, health, and behaviour.",
           "selectedVariantId": "en-starter:script:bijtincidenten-honden:scene:nieuwe-eigenaar:variant:published",
           "variants": [
             {
@@ -7208,7 +7208,7 @@
         {
           "id": "en-starter:script:bijtincidenten-honden:scene:ontwikkeling",
           "label": "Rearing, socialization, and puberty",
-          "description": "Phase from the public CCV-barrier model: Rearing, socialization, and puberty.",
+          "description": "Daily guidance and interactions with people, animals, and the environment shape behaviour as the animal develops.",
           "selectedVariantId": "en-starter:script:bijtincidenten-honden:scene:ontwikkeling:variant:published",
           "variants": [
             {
@@ -7291,7 +7291,7 @@
         {
           "id": "en-starter:script:bijtincidenten-honden:scene:volwassen-senior",
           "label": "Adulthood and senior phase",
-          "description": "Phase from the public CCV-barrier model: Adulthood and senior phase.",
+          "description": "Changes in health, resilience, and living conditions require continued observation and adapted support.",
           "selectedVariantId": "en-starter:script:bijtincidenten-honden:scene:volwassen-senior:variant:published",
           "variants": [
             {
@@ -7374,7 +7374,7 @@
         {
           "id": "en-starter:script:bijtincidenten-honden:scene:incidentrespons",
           "label": "Incident response and aftercare",
-          "description": "Phase from the public CCV-barrier model: Incident response and follow-up.",
+          "description": "After an incident, safety, injury, circumstances, and future risk are assessed and suitable measures follow for people and animals.",
           "selectedVariantId": "en-starter:script:bijtincidenten-honden:scene:incidentrespons:variant:published",
           "variants": [
             {
@@ -7511,7 +7511,7 @@
         {
           "id": "en-starter:script:co-vergisting:scene:productie",
           "label": "Production and classification of substances",
-          "description": "Phase from the public CCV-barrier model: Production and classification of substances.",
+          "description": "At the start of the chain, the origin, composition, and legal status of supplied materials are recorded.",
           "selectedVariantId": "en-starter:script:co-vergisting:scene:productie:variant:published",
           "variants": [
             {
@@ -7594,7 +7594,7 @@
         {
           "id": "en-starter:script:co-vergisting:scene:transport",
           "label": "Transport of substances",
-          "description": "Phase from the public CCV-barrier model: Transport of substances.",
+          "description": "Material moves between chain partners with records and checks that keep origin, quantity, and destination traceable.",
           "selectedVariantId": "en-starter:script:co-vergisting:scene:transport:variant:published",
           "variants": [
             {
@@ -7677,7 +7677,7 @@
         {
           "id": "en-starter:script:co-vergisting:scene:tussenbewerking",
           "label": "Intermediate processing and storage",
-          "description": "Phase from the public CCV-barrier model: Intermediate processing and storage.",
+          "description": "Before further processing, parties may mix, treat, or temporarily hold material, so records and actual flows must remain aligned.",
           "selectedVariantId": "en-starter:script:co-vergisting:scene:tussenbewerking:variant:published",
           "variants": [
             {
@@ -7760,7 +7760,7 @@
         {
           "id": "en-starter:script:co-vergisting:scene:vergisting",
           "label": "Acceptance and co-digestion",
-          "description": "Phase from the public CCV-barrier model: Acceptance and co-digestion.",
+          "description": "The facility assesses incoming loads and processes permitted streams under documented process and registration conditions.",
           "selectedVariantId": "en-starter:script:co-vergisting:scene:vergisting:variant:published",
           "variants": [
             {
@@ -7843,7 +7843,7 @@
         {
           "id": "en-starter:script:co-vergisting:scene:digestaat",
           "label": "Distribution and application of digestate",
-          "description": "Phase from the public CCV-barrier model: Disposal and application of digestate.",
+          "description": "The residual product leaves the facility for a destination where quality, quantity, and conditions of use remain verifiable.",
           "selectedVariantId": "en-starter:script:co-vergisting:scene:digestaat:variant:published",
           "variants": [
             {
@@ -7979,7 +7979,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:bedrijfsstructuur",
           "label": "Set up business structure and governance",
-          "description": "Phase from the public CCV-barrier model: Set up business structure and governance.",
+          "description": "The allocation of control, oversight, and financial interests determines who makes decisions and who can be held accountable.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:bedrijfsstructuur:variant:published",
           "variants": [
             {
@@ -8062,7 +8062,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:poortwachters",
           "label": "Contact with gatekeepers",
-          "description": "Phase from the public CCV-barrier model: Contact with gatekeepers.",
+          "description": "External professionals and authorities assess admission, funding, quality, or legitimacy at different points in the chain.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:poortwachters:variant:published",
           "variants": [
             {
@@ -8145,7 +8145,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:bedrijfsmiddelen",
           "label": "Set up business resources and contracts",
-          "description": "Phase from the public CCV-barrier model: Set up business resources and contracts.",
+          "description": "The organization establishes the practical and legal basis for services through staff, suppliers, funding, and agreements.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:bedrijfsmiddelen:variant:published",
           "variants": [
             {
@@ -8228,7 +8228,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:bedrijfsvoering",
           "label": "Conduct regular business operations",
-          "description": "Phase from the public CCV-barrier model: Conduct regular business operations.",
+          "description": "Service delivery produces records about staffing, performance, payments, and quality that should correspond with actual practice.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:bedrijfsvoering:variant:published",
           "variants": [
             {
@@ -8311,7 +8311,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:clienten",
           "label": "Recruit and place clients",
-          "description": "Phase from the public CCV-barrier model: Recruit and place clients.",
+          "description": "Demand, assessment, and available services are brought together, with suitability and freedom of choice kept central.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:clienten:variant:published",
           "variants": [
             {
@@ -8394,7 +8394,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:verantwoording",
           "label": "Internal and external accountability",
-          "description": "Phase from the public CCV-barrier model: Internal and external accountability.",
+          "description": "The organization records decisions, outcomes, financial flows, and quality for supervisors, funders, and internal control.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:verantwoording:variant:published",
           "variants": [
             {
@@ -8477,7 +8477,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:locatie",
           "label": "Organize property and care location",
-          "description": "Phase from the public CCV-barrier model: Organize property and care location.",
+          "description": "The physical setting is selected and arranged for the intended services, safety, and accessibility.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:locatie:variant:published",
           "variants": [
             {
@@ -8560,7 +8560,7 @@
         {
           "id": "en-starter:script:complexe-zorgstructuren:scene:einde-bedrijf",
           "label": "Termination, transfer, or continuation",
-          "description": "Phase from the public CCV-barrier model: Termination, transfer, or continuation.",
+          "description": "Major organizational changes require obligations, records, client interests, and financial flows to be settled or handed over carefully.",
           "selectedVariantId": "en-starter:script:complexe-zorgstructuren:scene:einde-bedrijf:variant:published",
           "variants": [
             {
@@ -8697,7 +8697,7 @@
         {
           "id": "en-starter:script:criminele-uitbuiting:scene:identificeren",
           "label": "Identify vulnerable persons",
-          "description": "Phase from the public CCV-barrier model: Identify vulnerable persons.",
+          "description": "A network looks for people whose circumstances limit their resilience or access to support.",
           "selectedVariantId": "en-starter:script:criminele-uitbuiting:scene:identificeren:variant:published",
           "variants": [
             {
@@ -8780,7 +8780,7 @@
         {
           "id": "en-starter:script:criminele-uitbuiting:scene:binden",
           "label": "Build engagement and loyalty",
-          "description": "Phase from the public CCV-barrier model: Build engagement and loyalty.",
+          "description": "Contact becomes more intensive, while reciprocity, group belonging, or promises can make the relationship increasingly important.",
           "selectedVariantId": "en-starter:script:criminele-uitbuiting:scene:binden:variant:published",
           "variants": [
             {
@@ -8863,7 +8863,7 @@
         {
           "id": "en-starter:script:criminele-uitbuiting:scene:grensvervaging",
           "label": "Boundaries and norm awareness shift",
-          "description": "Phase from the public CCV-barrier model: Boundaries and norm awareness shift.",
+          "description": "Behaviour that first seemed unacceptable is gradually presented as normal, necessary, or loyal.",
           "selectedVariantId": "en-starter:script:criminele-uitbuiting:scene:grensvervaging:variant:published",
           "variants": [
             {
@@ -8946,7 +8946,7 @@
         {
           "id": "en-starter:script:criminele-uitbuiting:scene:beheersen",
           "label": "Strengthen control and dependency",
-          "description": "Phase from the public CCV-barrier model: Strengthen control and dependency.",
+          "description": "Pressure, debt, threats, or isolation reduce the person's practical ability to make independent choices.",
           "selectedVariantId": "en-starter:script:criminele-uitbuiting:scene:beheersen:variant:published",
           "variants": [
             {
@@ -9029,7 +9029,7 @@
         {
           "id": "en-starter:script:criminele-uitbuiting:scene:uitvoeren",
           "label": "Instructing in criminal acts",
-          "description": "Phase from the public CCV-barrier model: Instructing in criminal acts.",
+          "description": "The person is used for acts whose risks and criminal consequences fall mainly on them.",
           "selectedVariantId": "en-starter:script:criminele-uitbuiting:scene:uitvoeren:variant:published",
           "variants": [
             {
@@ -9112,7 +9112,7 @@
         {
           "id": "en-starter:script:criminele-uitbuiting:scene:voordeel",
           "label": "Profiting from the benefit",
-          "description": "Phase from the public CCV-barrier model: Profiting from the benefit.",
+          "description": "Proceeds or other benefits are transferred wholly or partly to the person controlling the dependency relationship.",
           "selectedVariantId": "en-starter:script:criminele-uitbuiting:scene:voordeel:variant:published",
           "variants": [
             {
@@ -9195,7 +9195,7 @@
         {
           "id": "en-starter:script:criminele-uitbuiting:scene:verankeren",
           "label": "Repetition and embedding within the network",
-          "description": "Phase from the public CCV-barrier model: Repetition and embedding within the network.",
+          "description": "The method is repeated, supported by others, and embedded in relationships that enable further use of people.",
           "selectedVariantId": "en-starter:script:criminele-uitbuiting:scene:verankeren:variant:published",
           "variants": [
             {
@@ -9333,7 +9333,7 @@
         {
           "id": "en-starter:script:fake-carriers:scene:voorbereiden",
           "label": "Prepare identity and access",
-          "description": "Phase from the public CCV barrier model: Prepare identity and access.",
+          "description": "A party builds a credible digital and administrative profile so it can appear to operate as a carrier.",
           "selectedVariantId": "en-starter:script:fake-carriers:scene:voorbereiden:variant:published",
           "variants": [
             {
@@ -9416,7 +9416,7 @@
         {
           "id": "en-starter:script:fake-carriers:scene:diensten-aanbieden",
           "label": "Offer transportation service",
-          "description": "Phase from the public CCV barrier model: Offer transportation service.",
+          "description": "Contact about an assignment develops on a freight platform, where client and carrier should assess each other's authority and identity.",
           "selectedVariantId": "en-starter:script:fake-carriers:scene:diensten-aanbieden:variant:published",
           "variants": [
             {
@@ -9499,7 +9499,7 @@
         {
           "id": "en-starter:script:fake-carriers:scene:goederen-ophalen",
           "label": "Pick up goods at the shipper's location",
-          "description": "Phase from the public CCV-barrier model: Pick up goods at the shipper's location.",
+          "description": "At the loading site, identity, assignment details, vehicle, and handover are checked before the cargo is released.",
           "selectedVariantId": "en-starter:script:fake-carriers:scene:goederen-ophalen:variant:published",
           "variants": [
             {
@@ -9582,7 +9582,7 @@
         {
           "id": "en-starter:script:fake-carriers:scene:vervoer-opslag",
           "label": "Transport, delivery, and incident response",
-          "description": "Phase from the public CCV-barrier model: Transport, delivery, and incident response.",
+          "description": "During and after the journey, route, communication, and handover should remain traceable so deviations can be followed up jointly.",
           "selectedVariantId": "en-starter:script:fake-carriers:scene:vervoer-opslag:variant:published",
           "variants": [
             {

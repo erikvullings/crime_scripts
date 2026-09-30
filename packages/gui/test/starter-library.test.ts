@@ -220,6 +220,41 @@ test('the English starter fixture mirrors the complete Dutch starter library', (
   assert.doesNotMatch(raw, /nl-starter:/);
 });
 
+test('barrier-model scenes describe process context without copying their titles', () => {
+  const normalize = (value: string) =>
+    value
+      .normalize('NFKD')
+      .replace(/\p{M}/gu, '')
+      .toLowerCase()
+      .replace(/[^\p{L}\p{N}]+/gu, ' ')
+      .trim();
+
+  ['nl', 'en'].forEach((locale) => {
+    const fixture = validateStarterBundle(
+      JSON.parse(readFileSync(`public/starter-bundles/${locale}.json`, 'utf8'))
+    );
+
+    fixture.crimeScripts
+      .filter(({ literature }) =>
+        literature.some(({ label }) => /barri[eè]remodel|barrier model/i.test(label))
+      )
+      .flatMap(({ stages }) => stages)
+      .forEach(({ label, description }) => {
+        assert.ok(description?.trim(), `${locale} scene "${label}" has a description`);
+        assert.doesNotMatch(
+          description,
+          /(?:Fase uit|Phase from) (?:het |the )?openbare? ?CCV[- ]barrièremodel/i
+        );
+        assert.notEqual(normalize(description || ''), normalize(label));
+        assert.equal(
+          normalize(description || '').includes(normalize(label)),
+          false,
+          `${locale} scene description must not reveal the exact title "${label}"`
+        );
+      });
+  });
+});
+
 test('Dutch starter scripts meet source, provenance, scene, and editorial requirements', () => {
   const fixture = validateStarterBundle(JSON.parse(readFileSync('public/starter-bundles/nl.json', 'utf8')));
   const allCastIds = new Set(fixture.cast.map(({ id }) => id));
