@@ -12,6 +12,7 @@ import {
   type Labelled,
   type TaxonomyName,
   collectTaxonomyReferenceUsages,
+  findTaxonomyForItem,
   findRemovedTaxonomyItems,
   Pages,
   removeTaxonomyReferences,
@@ -77,6 +78,7 @@ export const SettingsPage: MeiosisComponent = () => {
       } = model;
 
       const labelFilter = attributeFilter ? attributeFilter.toLowerCase() : undefined;
+      const selectedTabId = findTaxonomyForItem(model, selectedId);
 
       const isAdmin = role === 'admin';
 
@@ -195,10 +197,10 @@ export const SettingsPage: MeiosisComponent = () => {
         }),
         m(Tabs, {
           tabWidth: 'auto',
-          tabs: tabs.map(([id, label, desc, type, iconName, attr], _i) => {
+          selectedTabId,
+          tabs: tabs.map(([id, label, desc, type, iconName, attr]) => {
             return {
-              id: label.replace('è', 'e'),
-              active: selectedId ? attr.some((a) => a.id === selectedId) : undefined,
+              id,
               title: `${attr.length ? `${attr.length} ` : ''}${label}`,
               vnode: edit
                 ? m(LayoutForm, {
