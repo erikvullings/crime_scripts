@@ -1,16 +1,16 @@
 {
   "schemaVersion": 3,
   "version": 1,
-  "lastUpdate": 1790208000000,
+  "lastUpdate": 1790899200000,
   "starterBundle": {
     "id": "pax-nl-starter",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "locale": "nl",
     "title": "Nederlandse starterbibliotheek",
-    "publishedAt": "2026-09-17",
+    "publishedAt": "2026-10-02",
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "attribution": "Nederlandse starterbibliotheek voor Crime Scripts, PAX/TNO, versie 1.0.1 (2026), met AI-ondersteuning",
+    "attribution": "Nederlandse starterbibliotheek voor Crime Scripts, PAX/TNO, versie 1.0.2 (2026), met AI-ondersteuning",
     "disclaimer": "AI-gegenereerd en onbeoordeeld; controleer de inhoud vóór gebruik. Geen juridisch advies."
   },
   "crimeScripts": [
@@ -19,7 +19,7 @@
       "label": "Cocaïne-import via zeehavens",
       "description": "Analytisch basisscript voor signalering en verstoring rond zeehavens. Het beschrijft rollen en controlemomenten zonder smokkelmethoden of operationele details.",
       "owner": "PAX starterbibliotheek",
-      "updated": 1789671600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -610,16 +610,14 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:cocaine-import-havens"
       },
-      "icon": "builtin:port-security",
+      "icon": "builtin:shipping-container",
       "classification": "public",
       "scriptFamilyId": "nl-starter:script:cocaine-import-havens",
       "icons": [
-        "builtin:cargo-ship",
-        "builtin:port-crane",
-        "builtin:cocaine-powder"
+        "builtin:shipping-container"
       ]
     },
     {
@@ -1213,7 +1211,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:synthetische-drugsproductie"
       },
       "icon": "builtin:laboratory",
@@ -1820,7 +1818,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:arbeidsuitbuiting"
       },
       "icon": "builtin:labour-exploitation",
@@ -2432,7 +2430,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:mensenhandel-seksuele-uitbuiting"
       },
       "icon": "builtin:human-trafficking",
@@ -3027,7 +3025,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:witwassen-legale-ondernemingen"
       },
       "icon": "builtin:money-laundering",
@@ -3619,7 +3617,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:illegale-dumping-chemisch-afval"
       },
       "icon": "builtin:illegal-dumping",
@@ -4206,7 +4204,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:stroperij-illegale-wildhandel"
       },
       "icon": "builtin:poaching",
@@ -4825,7 +4823,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:voertuigdiefstal-export"
       },
       "icon": "builtin:car-theft",
@@ -5493,7 +5491,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:phishing-betaalfraude"
       },
       "tracks": [
@@ -6109,7 +6107,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:illegale-asbestverwijdering"
       },
       "icon": "builtin:illegal-asbestos-removal",
@@ -6832,7 +6830,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:asbestsaneringsketen"
       }
     },
@@ -6840,16 +6838,14 @@
       "id": "nl-starter:script:bijtincidenten-honden",
       "label": "Risicoketen bijtincidenten met honden",
       "description": "Publieke ketenanalyse van risicofactoren, betrokkenen en interventiemomenten gedurende het leven van een hond, van fokkerij tot incidentrespons.",
-      "icon": "builtin:animal-trafficking",
+      "icon": "builtin:dog",
       "icons": [
-        "builtin:animal-trafficking",
-        "builtin:site-inspection",
-        "builtin:partner-response"
+        "builtin:dog"
       ],
       "classification": "public",
       "scriptFamilyId": "nl-starter:script:bijtincidenten-honden",
       "owner": "",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -7467,7 +7463,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:bijtincidenten-honden"
       }
     },
@@ -7475,16 +7471,14 @@
       "id": "nl-starter:script:co-vergisting",
       "label": "Co-vergisting en afvalstromen",
       "description": "Publieke ketenanalyse van productie, transport, bewerking, co-vergisting en toepassing van digestaat, met aandacht voor documentatie en milieutoezicht.",
-      "icon": "builtin:hazardous-waste",
+      "icon": "builtin:biogas-digester",
       "icons": [
-        "builtin:hazardous-waste",
-        "builtin:illegal-dumping",
-        "builtin:laboratory"
+        "builtin:biogas-digester"
       ],
       "classification": "public",
       "scriptFamilyId": "nl-starter:script:co-vergisting",
       "owner": "",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -7935,7 +7929,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:co-vergisting"
       }
     },
@@ -7943,16 +7937,14 @@
       "id": "nl-starter:script:complexe-zorgstructuren",
       "label": "Complexe juridische structuren in de zorg",
       "description": "Publieke analyse van juridische, organisatorische en financiële structuren die toezicht op zorgkwaliteit en zorggeld kunnen bemoeilijken.",
-      "icon": "builtin:financial-investigation",
+      "icon": "builtin:company-registry-document",
       "icons": [
-        "builtin:financial-investigation",
-        "builtin:finance-check",
-        "builtin:partner-response"
+        "builtin:company-registry-document"
       ],
       "classification": "public",
       "scriptFamilyId": "nl-starter:script:complexe-zorgstructuren",
       "owner": "",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -8653,7 +8645,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:complexe-zorgstructuren"
       }
     },
@@ -9288,7 +9280,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:criminele-uitbuiting"
       }
     },
@@ -9296,17 +9288,14 @@
       "id": "nl-starter:script:fake-carriers",
       "label": "Fake carriers op digitale vrachtmarktplaatsen",
       "description": "Publieke ketenanalyse van frauduleuze vervoerders die digitale vrachtmarktplaatsen misbruiken, gericht op verificatie, overdracht en snelle respons.",
-      "icon": "builtin:cargo-ship",
+      "icon": "builtin:freight-truck",
       "icons": [
-        "builtin:cargo-ship",
-        "builtin:document-check",
-        "builtin:vehicle-export",
-        11
+        "builtin:freight-truck"
       ],
       "classification": "public",
       "scriptFamilyId": "nl-starter:script:fake-carriers",
       "owner": "",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -9675,7 +9664,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:fake-carriers"
       }
     },
@@ -10588,7 +10577,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-nl-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "nl-starter:script:pijplijndiefstal-olieproducten"
       },
       "icon": "builtin:secure-transport",

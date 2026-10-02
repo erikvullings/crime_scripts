@@ -128,6 +128,20 @@
       }
     },
     {
+      "key": "builtin:biogas-digester",
+      "label": "Biogas digester",
+      "category": "Environment",
+      "file": "biogas-digester.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Biogas digester",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/biogas-digester.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
       "key": "builtin:car-theft",
       "label": "Car theft",
       "category": "Transport",
@@ -165,6 +179,20 @@
         "title": "Cocaine powder",
         "creator": "PAX Crime Scripting contributors",
         "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/public/icons/cocaine-powder.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
+      "key": "builtin:company-registry-document",
+      "label": "Company registry document",
+      "category": "Commerce",
+      "file": "company-registry-document.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Company registry document",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/company-registry-document.svg",
         "license": "MIT",
         "svgoModified": true
       }
@@ -282,6 +310,20 @@
       }
     },
     {
+      "key": "builtin:dangerous-dog",
+      "label": "Dangerous dog",
+      "category": "Animals",
+      "file": "dangerous-dog.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Dangerous dog",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/dangerous-dog.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
       "key": "builtin:dependency-network",
       "label": "Dependency network",
       "category": "People",
@@ -291,6 +333,20 @@
         "title": "Dependency network",
         "creator": "PAX Crime Scripting contributors",
         "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/public/icons/dependency-network.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
+      "key": "builtin:dog",
+      "label": "Dog",
+      "category": "Animals",
+      "file": "dog.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Dog",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/dog.svg",
         "license": "MIT",
         "svgoModified": true
       }
@@ -352,6 +408,20 @@
       }
     },
     {
+      "key": "builtin:freight-truck",
+      "label": "Freight truck",
+      "category": "Transport",
+      "file": "freight-truck.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Freight truck",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/freight-truck.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
       "key": "builtin:hazard-building",
       "label": "Hazardous production site",
       "category": "Environment",
@@ -375,6 +445,20 @@
         "title": "Hazardous waste",
         "creator": "PAX Crime Scripting contributors",
         "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/public/icons/hazardous-waste.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
+      "key": "builtin:hospital",
+      "label": "Hospital",
+      "category": "Healthcare",
+      "file": "hospital.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Hospital",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/hospital.svg",
         "license": "MIT",
         "svgoModified": true
       }
@@ -926,6 +1010,20 @@
       }
     },
     {
+      "key": "builtin:pitbull",
+      "label": "Pitbull",
+      "category": "Animals",
+      "file": "pitbull.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Pitbull",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/pitbull.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
       "key": "builtin:port-crane",
       "label": "Port crane",
       "category": "Transport",
@@ -1033,6 +1131,20 @@
         "title": "Secure transport",
         "creator": "PAX Crime Scripting contributors",
         "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/public/icons/secure-transport.svg",
+        "license": "MIT",
+        "svgoModified": true
+      }
+    },
+    {
+      "key": "builtin:shipping-container",
+      "label": "Shipping container",
+      "category": "Transport",
+      "file": "shipping-container.svg",
+      "attribution": {
+        "kind": "original",
+        "title": "Shipping container",
+        "creator": "User-contributed PAX artwork",
+        "sourceUrl": "https://github.com/TNO/crime_scripts/blob/main/packages/gui/src/assets/icons/shipping-container.svg",
         "license": "MIT",
         "svgoModified": true
       }

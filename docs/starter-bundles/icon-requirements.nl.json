@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "bundleId": "pax-nl-starter",
-  "bundleVersion": "1.0.1",
+  "bundleVersion": "1.0.2",
   "style": "Monochroom zwart, solid-fill, eenvoudige vormen rond een 100×100-viewBox; zonder tekst.",
   "requirements": [
     {
       "id": "nl-starter:icon:script-cocaine-import-havens",
-      "description": "Zwart solid-fill pictogram van een containerschip met een schild voor havenweerbaarheid.",
+      "description": "Zeecontainer als enkelvoudig pictogram voor zeehaveninvoer.",
       "appliesTo": [
         "nl-starter:script:cocaine-import-havens"
       ],
-      "iconKey": "builtin:port-security"
+      "iconKey": "builtin:shipping-container"
     },
     {
       "id": "nl-starter:icon:script-synthetische-drugsproductie",
@@ -94,27 +94,27 @@
     },
     {
       "id": "nl-starter:icon:script-bijtincidenten-honden",
-      "description": "Herbruikbaar cataloguspictogram voor het openbare model Risicoketen bijtincidenten met honden.",
+      "description": "Enkelvoudig hondenpictogram voor de keten rond bijtincidenten.",
       "appliesTo": [
         "nl-starter:script:bijtincidenten-honden"
       ],
-      "iconKey": "builtin:animal-trafficking"
+      "iconKey": "builtin:dog"
     },
     {
       "id": "nl-starter:icon:script-co-vergisting",
-      "description": "Herbruikbaar cataloguspictogram voor het openbare model Co-vergisting en afvalstromen.",
+      "description": "Enkelvoudig pictogram van een vergister voor co-vergisting.",
       "appliesTo": [
         "nl-starter:script:co-vergisting"
       ],
-      "iconKey": "builtin:hazardous-waste"
+      "iconKey": "builtin:biogas-digester"
     },
     {
       "id": "nl-starter:icon:script-complexe-zorgstructuren",
-      "description": "Herbruikbaar cataloguspictogram voor het openbare model Complexe juridische structuren in de zorg.",
+      "description": "Enkelvoudig registerdocument voor juridische bedrijfsstructuren in de zorg.",
       "appliesTo": [
         "nl-starter:script:complexe-zorgstructuren"
       ],
-      "iconKey": "builtin:financial-investigation"
+      "iconKey": "builtin:company-registry-document"
     },
     {
       "id": "nl-starter:icon:script-criminele-uitbuiting",
@@ -126,11 +126,11 @@
     },
     {
       "id": "nl-starter:icon:script-fake-carriers",
-      "description": "Herbruikbaar cataloguspictogram voor het openbare model Fake carriers op digitale vrachtmarktplaatsen.",
+      "description": "Enkelvoudig vrachtwagenpictogram voor fake carriers.",
       "appliesTo": [
         "nl-starter:script:fake-carriers"
       ],
-      "iconKey": "builtin:cargo-ship"
+      "iconKey": "builtin:freight-truck"
     },
     {
       "id": "nl-starter:icon:script-pijplijndiefstal-olieproducten",

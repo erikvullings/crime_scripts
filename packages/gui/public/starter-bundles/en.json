@@ -1,16 +1,16 @@
 {
   "schemaVersion": 3,
   "version": 1,
-  "lastUpdate": 1790208000000,
+  "lastUpdate": 1790899200000,
   "starterBundle": {
     "id": "pax-en-starter",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "locale": "en",
     "title": "English starter library",
-    "publishedAt": "2026-09-17",
+    "publishedAt": "2026-10-02",
     "license": "CC BY 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
-    "attribution": "English starter library for Crime Scripts, PAX/TNO, version 1.0.1 (2026), with AI assistance",
+    "attribution": "English starter library for Crime Scripts, PAX/TNO, version 1.0.2 (2026), with AI assistance",
     "disclaimer": "AI-generated and unreviewed; verify the content before use. Not legal advice."
   },
   "crimeScripts": [
@@ -19,7 +19,7 @@
       "label": "Cocaine import through seaports",
       "description": "Analytical base script for signaling and disruption around seaports. It describes roles and control points without smuggling methods or operational details.",
       "owner": "PAX starter library",
-      "updated": 1789671600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -610,16 +610,14 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:cocaine-import-havens"
       },
-      "icon": "builtin:port-security",
+      "icon": "builtin:shipping-container",
       "classification": "public",
       "scriptFamilyId": "en-starter:script:cocaine-import-havens",
       "icons": [
-        "builtin:cargo-ship",
-        "builtin:port-crane",
-        "builtin:cocaine-powder"
+        "builtin:shipping-container"
       ]
     },
     {
@@ -1213,7 +1211,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:synthetische-drugsproductie"
       },
       "icon": "builtin:laboratory",
@@ -1820,7 +1818,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:arbeidsuitbuiting"
       },
       "icon": "builtin:labour-exploitation",
@@ -2432,7 +2430,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:mensenhandel-seksuele-uitbuiting"
       },
       "icon": "builtin:human-trafficking",
@@ -3027,7 +3025,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:witwassen-legale-ondernemingen"
       },
       "icon": "builtin:money-laundering",
@@ -3619,7 +3617,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:illegale-dumping-chemisch-afval"
       },
       "icon": "builtin:illegal-dumping",
@@ -4206,7 +4204,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:stroperij-illegale-wildhandel"
       },
       "icon": "builtin:poaching",
@@ -4825,7 +4823,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:voertuigdiefstal-export"
       },
       "icon": "builtin:car-theft",
@@ -5493,7 +5491,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:phishing-betaalfraude"
       },
       "tracks": [
@@ -6109,7 +6107,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:illegale-asbestverwijdering"
       },
       "icon": "builtin:illegal-asbestos-removal",
@@ -6832,7 +6830,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:asbestsaneringsketen"
       }
     },
@@ -6840,16 +6838,14 @@
       "id": "en-starter:script:bijtincidenten-honden",
       "label": "Risk chain for dog-bite incidents",
       "description": "Public chain analysis of risk factors, involved parties, and intervention moments throughout a dog's life, from breeding to incident response.",
-      "icon": "builtin:animal-trafficking",
+      "icon": "builtin:dog",
       "icons": [
-        "builtin:animal-trafficking",
-        "builtin:site-inspection",
-        "builtin:partner-response"
+        "builtin:dog"
       ],
       "classification": "public",
       "scriptFamilyId": "en-starter:script:bijtincidenten-honden",
       "owner": "PAX starter library",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -7467,7 +7463,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:bijtincidenten-honden"
       }
     },
@@ -7475,16 +7471,14 @@
       "id": "en-starter:script:co-vergisting",
       "label": "Co-digestion and waste streams",
       "description": "Public chain analysis of production, transport, processing, co-digestion, and application of digestate, with attention to documentation and environmental supervision.",
-      "icon": "builtin:hazardous-waste",
+      "icon": "builtin:biogas-digester",
       "icons": [
-        "builtin:hazardous-waste",
-        "builtin:illegal-dumping",
-        "builtin:laboratory"
+        "builtin:biogas-digester"
       ],
       "classification": "public",
       "scriptFamilyId": "en-starter:script:co-vergisting",
       "owner": "PAX starter library",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -7935,7 +7929,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:co-vergisting"
       }
     },
@@ -7943,16 +7937,14 @@
       "id": "en-starter:script:complexe-zorgstructuren",
       "label": "Complex legal structures in healthcare",
       "description": "Public analysis of legal, organizational, and financial structures that may hinder oversight of care quality and care funding.",
-      "icon": "builtin:financial-investigation",
+      "icon": "builtin:company-registry-document",
       "icons": [
-        "builtin:financial-investigation",
-        "builtin:finance-check",
-        "builtin:partner-response"
+        "builtin:company-registry-document"
       ],
       "classification": "public",
       "scriptFamilyId": "en-starter:script:complexe-zorgstructuren",
       "owner": "PAX starter library",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -8653,7 +8645,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:complexe-zorgstructuren"
       }
     },
@@ -9288,7 +9280,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:criminele-uitbuiting"
       }
     },
@@ -9296,17 +9288,14 @@
       "id": "en-starter:script:fake-carriers",
       "label": "Fake carriers on digital freight marketplaces",
       "description": "Public chain analysis of fraudulent transporters misusing digital freight marketplaces, focused on verification, transfer, and rapid response.",
-      "icon": "builtin:cargo-ship",
+      "icon": "builtin:freight-truck",
       "icons": [
-        "builtin:cargo-ship",
-        "builtin:document-check",
-        "builtin:vehicle-export",
-        11
+        "builtin:freight-truck"
       ],
       "classification": "public",
       "scriptFamilyId": "en-starter:script:fake-carriers",
       "owner": "PAX starter library",
-      "updated": 1789941600000,
+      "updated": 1790899200000,
       "reviewer": [],
       "status": 1,
       "literature": [
@@ -9675,7 +9664,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:fake-carriers"
       }
     },
@@ -10588,7 +10577,7 @@
       "unreviewed": true,
       "starterOrigin": {
         "bundleId": "pax-en-starter",
-        "bundleVersion": "1.0.1",
+        "bundleVersion": "1.0.2",
         "scriptId": "en-starter:script:pijplijndiefstal-olieproducten"
       },
       "icon": "builtin:secure-transport",

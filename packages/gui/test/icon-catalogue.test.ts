@@ -75,6 +75,37 @@ test('every icon requirement and starter target resolves to a stable catalogue k
   });
 });
 
+test('supplied icons are selectable and public starter scripts show one appropriate icon', () => {
+  const catalogue = readJson<CatalogueManifest>('icons/catalogue.json');
+  const supplied = [
+    'biogas-digester', 'company-registry-document', 'dangerous-dog', 'dog',
+    'freight-truck', 'hospital', 'pitbull', 'shipping-container',
+  ];
+  for (const name of supplied) {
+    assert.ok(existsSync(`src/assets/icons/${name}.svg`), `source asset ${name} is missing`);
+    assert.ok(catalogue.icons.some(({ key }) => key === `builtin:${name}`));
+    assert.ok(IconOpts.some(({ id }) => id === `builtin:${name}`));
+  }
+
+  const expected = new Map([
+    ['cocaine-import-havens', 'builtin:shipping-container'],
+    ['bijtincidenten-honden', 'builtin:dog'],
+    ['co-vergisting', 'builtin:biogas-digester'],
+    ['complexe-zorgstructuren', 'builtin:company-registry-document'],
+    ['fake-carriers', 'builtin:freight-truck'],
+  ]);
+  for (const lang of ['nl', 'en']) {
+    const bundle = readJson<DataModel>(`starter-bundles/${lang}.json`);
+    for (const [suffix, icon] of expected) {
+      const script = bundle.crimeScripts.find(({ id }) => id === `${lang}-starter:script:${suffix}`);
+      assert.ok(script, `${lang} starter script ${suffix} is missing`);
+      assert.equal(script.icon, icon);
+      assert.deepEqual(script.icons, [icon]);
+      assert.deepEqual(resolveIconSources(script.icons, script.icon), [`icons/${icon.slice(8)}.svg`]);
+    }
+  }
+});
+
 test('catalogue files are optimized monochrome SVGs with complete attribution', () => {
   const catalogue = readJson<CatalogueManifest>('icons/catalogue.json');
   const notice = readFileSync(publicFile('icons/NOTICE.md'), 'utf8');

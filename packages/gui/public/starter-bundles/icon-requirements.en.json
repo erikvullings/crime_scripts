@@ -1,16 +1,16 @@
 {
   "schemaVersion": 1,
   "bundleId": "pax-en-starter",
-  "bundleVersion": "1.0.1",
+  "bundleVersion": "1.0.2",
   "style": "Monochrome black, solid fill, simple shapes within a 100×100 viewBox; no text.",
   "requirements": [
     {
       "id": "en-starter:icon:script-cocaine-import-havens",
-      "description": "Black solid-fill icon of a container ship with a shield representing port resilience.",
+      "description": "Single shipping-container icon for seaport imports.",
       "appliesTo": [
         "en-starter:script:cocaine-import-havens"
       ],
-      "iconKey": "builtin:port-security"
+      "iconKey": "builtin:shipping-container"
     },
     {
       "id": "en-starter:icon:script-synthetische-drugsproductie",
@@ -94,27 +94,27 @@
     },
     {
       "id": "en-starter:icon:script-bijtincidenten-honden",
-      "description": "Reusable catalogue icon for the public Risk chain for dog-bite incidents model.",
+      "description": "Single dog icon for the dog-bite risk chain.",
       "appliesTo": [
         "en-starter:script:bijtincidenten-honden"
       ],
-      "iconKey": "builtin:animal-trafficking"
+      "iconKey": "builtin:dog"
     },
     {
       "id": "en-starter:icon:script-co-vergisting",
-      "description": "Reusable catalogue icon for the public Co-digestion and waste streams model.",
+      "description": "Single biogas-digester icon for co-digestion.",
       "appliesTo": [
         "en-starter:script:co-vergisting"
       ],
-      "iconKey": "builtin:hazardous-waste"
+      "iconKey": "builtin:biogas-digester"
     },
     {
       "id": "en-starter:icon:script-complexe-zorgstructuren",
-      "description": "Reusable catalogue icon for the public Complex legal structures in healthcare model.",
+      "description": "Single company-registry document for legal structures in healthcare.",
       "appliesTo": [
         "en-starter:script:complexe-zorgstructuren"
       ],
-      "iconKey": "builtin:financial-investigation"
+      "iconKey": "builtin:company-registry-document"
     },
     {
       "id": "en-starter:icon:script-criminele-uitbuiting",
@@ -126,11 +126,11 @@
     },
     {
       "id": "en-starter:icon:script-fake-carriers",
-      "description": "Reusable catalogue icon for the public Fake carriers on digital freight marketplaces model.",
+      "description": "Single freight-truck icon for fake carriers.",
       "appliesTo": [
         "en-starter:script:fake-carriers"
       ],
-      "iconKey": "builtin:cargo-ship"
+      "iconKey": "builtin:freight-truck"
     },
     {
       "id": "en-starter:icon:script-pijplijndiefstal-olieproducten",
